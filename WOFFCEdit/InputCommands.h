@@ -1,7 +1,6 @@
 #pragma once
 
-struct InputCommands
-{
+struct InputCommands {
 	bool forward;
 	bool back;
 	bool right;
