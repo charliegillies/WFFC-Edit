@@ -19,6 +19,7 @@ BOOL MFCMain::InitInstance()
 	m_frame = new CMyFrame();
 	m_pMainWnd = m_frame;
 
+	// Initialises the window that is displayed 
 	m_frame->Create(
 		NULL,
 		_T("World Of Flim-Flam Craft Editor"),

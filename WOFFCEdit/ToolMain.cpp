@@ -287,10 +287,8 @@ void ToolMain::Tick(MSG *msg)
 
 void ToolMain::UpdateInput(MSG * msg)
 {
-
 	switch (msg->message)
 	{
-		//Global inputs,  mouse position and keys etc
 	case WM_KEYDOWN:
 		m_keyArray[msg->wParam] = true;
 		break;
@@ -302,18 +300,27 @@ void ToolMain::UpdateInput(MSG * msg)
 	case WM_MOUSEMOVE:
 		break;
 
-	case WM_LBUTTONDOWN:	//mouse button down,  you will probably need to check when its up too
-		//set some flag for the mouse button in inputcommands
+	case WM_LBUTTONDOWN:
+		m_toolInputCommands.LeftMouse = MouseState::DOWN;
+		break;
+	case WM_LBUTTONUP:
+		m_toolInputCommands.LeftMouse = MouseState::UP;
 		break;
 
+	case WM_RBUTTONDOWN:
+		m_toolInputCommands.RightMouse = MouseState::DOWN;
+		break;
+	case WM_RBUTTONUP:
+		m_toolInputCommands.RightMouse = MouseState::UP;
+		break;
 	}
 
-	// Tidied this to just assign the input command modules from their direct
-	// key sources, rather than checking if/else to set true/false.
 	m_toolInputCommands.forward = m_keyArray['W'];
 	m_toolInputCommands.back = m_keyArray['S'];
 	m_toolInputCommands.left = m_keyArray['A'];
 	m_toolInputCommands.right = m_keyArray['D'];
-	m_toolInputCommands.rotLeft = m_keyArray['Q'];
-	m_toolInputCommands.rotRight = m_keyArray['E'];
+	m_toolInputCommands.rotateLeft = m_keyArray['Q'];
+	m_toolInputCommands.rotateRight = m_keyArray['E'];
+	m_toolInputCommands.moveDown = m_keyArray['Z'];
+	m_toolInputCommands.moveUp = m_keyArray['X'];
 }
