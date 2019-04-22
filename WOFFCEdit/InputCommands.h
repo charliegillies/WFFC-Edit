@@ -1,6 +1,6 @@
 #pragma once
 
-enum class MouseState {
+enum class ClickState {
 	UP = 0, DOWN = 1, HELD = 2
 };
 
@@ -14,8 +14,10 @@ struct InputCommands {
 	bool moveDown, moveUp;
 
 	// Mouse input - right/left.
-	MouseState LeftMouse;
-	MouseState RightMouse;
+	ClickState LeftMouse;
+	ClickState RightMouse;
 
-
+	// Mouse position and mouse movement velocity
+	int mouseX, mouseY;
+	float mouseVelocityX, mouseVelocityY;
 };

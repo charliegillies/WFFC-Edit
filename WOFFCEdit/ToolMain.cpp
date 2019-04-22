@@ -12,7 +12,7 @@ ToolMain::ToolMain()
 	m_sceneGraph.clear();	//clear the vector for the scenegraph
 	m_databaseConnection = NULL;
 
-	ZeroMemory(&m_toolInputCommands, sizeof(InputCommands));
+	ZeroMemory(&m_inputCommands, sizeof(InputCommands));
 }
 
 
@@ -273,6 +273,13 @@ void ToolMain::onActionSaveTerrain()
 
 void ToolMain::Tick(MSG *msg)
 {
+	// calculate the mouse velocity from current mouse and last mouse position
+	m_inputCommands.mouseVelocityX = (float)m_inputCommands.mouseX - m_lastMouseX;
+	m_inputCommands.mouseVelocityY = (float)m_inputCommands.mouseY - m_lastMouseY;
+	m_lastMouseX = m_inputCommands.mouseX;
+	m_lastMouseY = m_inputCommands.mouseY;
+
+
 	//do we have a selection
 	//do we have a mode
 	//are we clicking / dragging /releasing
@@ -282,13 +289,12 @@ void ToolMain::Tick(MSG *msg)
 		//resend scenegraph to Direct X renderer
 
 	//Renderer Update Call
-	m_d3dRenderer.Tick(&m_toolInputCommands);
+	m_d3dRenderer.Tick(&m_inputCommands);
 }
 
 void ToolMain::UpdateInput(MSG * msg)
 {
-	switch (msg->message)
-	{
+	switch (msg->message) {
 	case WM_KEYDOWN:
 		m_keyArray[msg->wParam] = true;
 		break;
@@ -298,29 +304,32 @@ void ToolMain::UpdateInput(MSG * msg)
 		break;
 
 	case WM_MOUSEMOVE:
+		m_inputCommands.mouseX = msg->pt.x;
+		m_inputCommands.mouseY = msg->pt.y;
 		break;
 
 	case WM_LBUTTONDOWN:
-		m_toolInputCommands.LeftMouse = MouseState::DOWN;
+		m_inputCommands.LeftMouse = ClickState::DOWN;
 		break;
 	case WM_LBUTTONUP:
-		m_toolInputCommands.LeftMouse = MouseState::UP;
+		m_inputCommands.LeftMouse = ClickState::UP;
 		break;
 
 	case WM_RBUTTONDOWN:
-		m_toolInputCommands.RightMouse = MouseState::DOWN;
+		m_inputCommands.RightMouse = ClickState::DOWN;
 		break;
 	case WM_RBUTTONUP:
-		m_toolInputCommands.RightMouse = MouseState::UP;
+		m_inputCommands.RightMouse = ClickState::UP;
 		break;
 	}
 
-	m_toolInputCommands.forward = m_keyArray['W'];
-	m_toolInputCommands.back = m_keyArray['S'];
-	m_toolInputCommands.left = m_keyArray['A'];
-	m_toolInputCommands.right = m_keyArray['D'];
-	m_toolInputCommands.rotateLeft = m_keyArray['Q'];
-	m_toolInputCommands.rotateRight = m_keyArray['E'];
-	m_toolInputCommands.moveDown = m_keyArray['Z'];
-	m_toolInputCommands.moveUp = m_keyArray['X'];
+	// Map actions if their appropriate keybinds are down
+	m_inputCommands.forward = m_keyArray['W'];
+	m_inputCommands.back = m_keyArray['S'];
+	m_inputCommands.left = m_keyArray['A'];
+	m_inputCommands.right = m_keyArray['D'];
+	m_inputCommands.rotateLeft = m_keyArray['Q'];
+	m_inputCommands.rotateRight = m_keyArray['E'];
+	m_inputCommands.moveDown = m_keyArray['Z'];
+	m_inputCommands.moveUp = m_keyArray['X'];
 }

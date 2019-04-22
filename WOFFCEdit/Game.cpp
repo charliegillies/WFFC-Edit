@@ -172,7 +172,9 @@ void Game::Render()
 	m_sprites->Begin();
 	WCHAR   Buffer[256];
 	std::wstring var = m_camera.getDebugPosition();
-	m_font->DrawString(m_sprites.get(), var.c_str(), XMFLOAT2(100, 10), Colors::Yellow);
+	//std::wstring var = L"Mouse X: " + std::to_wstring(m_InputCommands.mouseVelocityX) + L" Mouse Y: " + std::to_wstring(m_InputCommands.mouseVelocityY);
+	m_font->DrawString(m_sprites.get(), var.c_str(), XMFLOAT2(100, 10), Colors::Yellow);	
+
 	m_sprites->End();
 
 	//RENDER OBJECTS FROM SCENEGRAPH
