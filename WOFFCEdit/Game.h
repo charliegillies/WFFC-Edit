@@ -56,9 +56,12 @@ public:
 	void NewAudioDevice();
 #endif
 
+	std::vector<int> MousePicking();
+
 private:
 
 	void Update(DX::StepTimer const& timer);
+
 
 	void CreateDeviceDependentResources();
 	void CreateWindowSizeDependentResources();
@@ -118,6 +121,7 @@ private:
     DirectX::SimpleMath::Matrix                                             m_view;
     DirectX::SimpleMath::Matrix                                             m_projection;
 
+	int m_windowWidth, m_windowHeight;
 
 };
 

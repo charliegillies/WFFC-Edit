@@ -14,8 +14,8 @@ struct InputCommands {
 	bool moveDown, moveUp;
 
 	// Mouse input - right/left.
-	ClickState LeftMouse;
-	ClickState RightMouse;
+	ClickState leftMouse;
+	ClickState rightMouse;
 
 	// Mouse position and mouse movement velocity
 	int mouseX, mouseY;

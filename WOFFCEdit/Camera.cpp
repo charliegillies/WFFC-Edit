@@ -4,6 +4,7 @@
 #include <string>
 
 typedef DirectX::SimpleMath::Vector3 Vector3;
+typedef DirectX::SimpleMath::Vector2 Vector2;
 
 Camera::Camera()
 {
@@ -42,13 +43,21 @@ void Camera::handleInput(InputCommands const & input)
 	Vector3 planarMotionVector = m_camLookDirection;
 	planarMotionVector.y = 0.0;
 
-	if (input.rotateRight)
-	{
+	if (input.rotateRight) {
 		m_camOrientation.y -= m_camRotRate;
 	}
-	if (input.rotateLeft)
-	{
+	if (input.rotateLeft) {
 		m_camOrientation.y += m_camRotRate;
+	}
+
+	// Allow right click & drag to change our camera rotation
+	// this needs to be improved when we allow rotation around 
+	// the other axis as well as the y axis.
+	if (input.rightMouse == ClickState::DOWN) {
+		Vector2 mVelocity = Vector2(input.mouseVelocityX, input.mouseVelocityY);
+		mVelocity.Normalize();
+		mVelocity *= m_moveSpeed * 5.0f;
+		m_camOrientation += Vector3(0.0f, mVelocity.x, 0.0f);
 	}
 
 	//create look direction from Euler angles in m_camOrientation

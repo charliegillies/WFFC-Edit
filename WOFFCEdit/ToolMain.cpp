@@ -279,6 +279,8 @@ void ToolMain::Tick(MSG *msg)
 	m_lastMouseX = m_inputCommands.mouseX;
 	m_lastMouseY = m_inputCommands.mouseY;
 
+	// Allow tool picking?
+
 
 	//do we have a selection
 	//do we have a mode
@@ -309,17 +311,17 @@ void ToolMain::UpdateInput(MSG * msg)
 		break;
 
 	case WM_LBUTTONDOWN:
-		m_inputCommands.LeftMouse = ClickState::DOWN;
+		m_inputCommands.leftMouse = ClickState::DOWN;
 		break;
 	case WM_LBUTTONUP:
-		m_inputCommands.LeftMouse = ClickState::UP;
+		m_inputCommands.leftMouse = ClickState::UP;
 		break;
 
 	case WM_RBUTTONDOWN:
-		m_inputCommands.RightMouse = ClickState::DOWN;
+		m_inputCommands.rightMouse = ClickState::DOWN;
 		break;
 	case WM_RBUTTONUP:
-		m_inputCommands.RightMouse = ClickState::UP;
+		m_inputCommands.rightMouse = ClickState::UP;
 		break;
 	}
 
