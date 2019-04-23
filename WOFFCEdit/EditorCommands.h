@@ -14,7 +14,7 @@ public:
 	AddNewSceneObjectCommand(ToolMain* tool);
 
 	// Inherited via Command
-	virtual void execute() override;
+	virtual void execute(bool asRedo) override;
 	virtual void undo() override;
 	virtual std::wstring get_label() override;
 };

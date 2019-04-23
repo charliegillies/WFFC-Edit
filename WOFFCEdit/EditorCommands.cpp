@@ -4,7 +4,7 @@
 
 AddNewSceneObjectCommand::AddNewSceneObjectCommand(ToolMain * tool) : m_tool(tool) {}
 
-void AddNewSceneObjectCommand::execute()
+void AddNewSceneObjectCommand::execute(bool asRedo)
 {
 	m_tool->createNewSceneObject();
 }

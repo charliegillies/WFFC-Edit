@@ -115,10 +115,8 @@ void MFCMain::Button_SaveScene()
 void MFCMain::Button_NewSceneObject()
 {
 	m_history.log(m_ToolSystem.createAddNewSceneObjectCommand());
-	m_ToolSystem.createNewSceneObject();
-
-
-	//m_frame->m_wndStatusBar.SetPaneText(1, statusString.c_str(), 1);
+	// Change the bottom info to show the new history command label
+	m_frame->m_wndStatusBar.SetPaneText(1, m_history.get_top_cmd_label().c_str(), 1);
 }
 
 

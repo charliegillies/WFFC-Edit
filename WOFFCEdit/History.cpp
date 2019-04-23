@@ -3,7 +3,9 @@
 
 void History::log(Command* cmd)
 {
-	cmd->execute();
+	// Execute the command, but not as a redo, as this is the first
+	// time the command is being executed in the history
+	cmd->execute(false);
 	m_commandHistory.push_back(cmd);
 }
 
