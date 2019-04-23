@@ -27,7 +27,7 @@ bool History::undo()
 {
 	if (m_commandHistory.size() == 0) return false;
 	// First check. Can we go back?
-	if ((m_index - 1) < 0) return false;
+	if ((m_index - 1) < -1) return false;
 
 	// Undo the last command that was executed
 	Command* last = m_commandHistory[m_index];
@@ -47,12 +47,15 @@ bool History::redo()
 	m_index += 1;
 	Command* next = m_commandHistory[m_index];
 	next->execute(true);
-
-	return false;
+	return true;
 }
 
 std::wstring History::get_current_cmd_label()
 {
-	Command* current = m_commandHistory.size() > 0 ? m_commandHistory[m_index] : nullptr;
+	// wrap the index so it does not go out of bounds
+	int index = m_index;
+	if (index < 0) index = 0;
+
+	Command* current = m_commandHistory.size() > 0 ? m_commandHistory[index] : nullptr;
 	return current == nullptr ? L"" : current->get_label();
 }
