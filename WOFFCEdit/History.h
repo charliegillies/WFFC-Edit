@@ -11,12 +11,16 @@ class Command;
 class History {
 private:
 	std::vector<Command*> m_commandHistory;
+	int m_index;
 
 public:
-	void log(Command* cmd);
+	History();
 
+	void log(Command* cmd);
 	bool undo();
 	bool redo();
 
-	std::wstring get_top_cmd_label();
+
+
+	std::wstring get_current_cmd_label();
 };
