@@ -59,7 +59,6 @@ int CMyFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;      // fail to create
 	}
 
-
 	CRect rect;
 	GetClientRect(&rect);
 	if (!m_wndStatusBar.Create(this))

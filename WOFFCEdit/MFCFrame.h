@@ -12,8 +12,7 @@ protected:
 //	DECLARE_DYNAMIC(CMainFrame)
 
 public:
-
-	CMenu			m_menu1;	//menu bar
+	CMenu			m_menu1;
 	CStatusBar		m_wndStatusBar;
 	CToolBar		m_toolBar;
 	CChildRender	m_DirXView;
@@ -24,8 +23,8 @@ public:
 	afx_msg void OnUpdatePage(CCmdUI *pCmdUI);
 
 
-private:	//overrides
-	int		m_selectionID;	//
+private:
+	int	m_selectionID;
 
 	//note the afx_message keyword is linking this method to message map access.
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
