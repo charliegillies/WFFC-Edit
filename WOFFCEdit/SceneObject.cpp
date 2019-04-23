@@ -54,3 +54,14 @@ SceneObject::SceneObject()
 SceneObject::~SceneObject()
 {
 }
+
+SceneObject SceneObject::CreatePrimitive()
+{
+	SceneObject primitive;
+	// Assign some default data for our new scene object
+	primitive.name = "New Object";
+	primitive.model_path = "database/data/placeholder.cmo";
+	primitive.tex_diffuse_path = "database/data/placeholder.dds";
+
+	return primitive;
+}

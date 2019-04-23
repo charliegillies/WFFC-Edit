@@ -52,5 +52,6 @@ public:
 	float light_linear;
 	float light_quadratic;
 
+	static SceneObject CreatePrimitive();
 };
 

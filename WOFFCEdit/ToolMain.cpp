@@ -378,11 +378,7 @@ Command* ToolMain::createAddNewSceneObjectCommand()
 SceneObject& ToolMain::createNewSceneObject()
 {
 	// Push an empty scene object into the graph, then get a reference to it
-	SceneObject& new_obj = insertSceneObject(SceneObject());
-	// Assign some default data for our new scene object
-	new_obj.name = "New Object";
-	new_obj.model_path = "database/data/placeholder.cmo";
-	new_obj.tex_diffuse_path = "database/data/placeholder.dds";
+	SceneObject& new_obj = insertSceneObject(SceneObject::CreatePrimitive());
 	return new_obj;
 }
 
@@ -392,7 +388,6 @@ SceneObject & ToolMain::insertSceneObject(SceneObject && obj)
 	m_sceneGraph.push_back(obj);
 	SceneObject& new_obj = m_sceneGraph.back();
 	new_obj.ID = getNewSceneObjectID();
-
 	return new_obj;
 }
 
@@ -426,7 +421,7 @@ bool ToolMain::removeSceneObject(SceneObject & target)
 	return false;
 }
 
-InputCommands & ToolMain::getInputCommands()
+InputCommands& ToolMain::getInputCommands()
 {
 	return m_inputCommands;
 }
