@@ -41,7 +41,8 @@ int CMyFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
 	if (CFrameWnd::OnCreate(lpCreateStruct) == -1) return -1;
 
-	// create a view to occupy the client area of the frame //This is where DirectX is rendered
+	// create a view to occupy the client area of the frame 
+	// this is where DirectX is rendered
 	if (!m_DirXView.Create(NULL, NULL, AFX_WS_DEFAULT_VIEW, CRect(0, 0, 0, 0), this, AFX_IDW_PANE_FIRST, NULL))
 	{
 		TRACE0("Failed to create view window\n");
@@ -57,7 +58,8 @@ int CMyFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		TRACE0("Failed to create toolbar\n");
 		return -1;      // fail to create
 	}
-	
+
+
 	CRect rect;
 	GetClientRect(&rect);
 	if (!m_wndStatusBar.Create(this))
