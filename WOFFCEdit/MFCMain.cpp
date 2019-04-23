@@ -6,7 +6,8 @@ BEGIN_MESSAGE_MAP(MFCMain, CWinApp)
 	ON_COMMAND(ID_FILE_QUIT, &MFCMain::MenuFileQuit)
 	ON_COMMAND(ID_FILE_SAVETERRAIN, &MFCMain::MenuFileSaveTerrain)
 	ON_COMMAND(ID_EDIT_SELECT, &MFCMain::MenuEditSelect)
-	ON_COMMAND(ID_BUTTON40001, &MFCMain::ToolBarButton1)
+	ON_COMMAND(ID_BUTTON40001, &MFCMain::Button_SaveScene)
+	ON_COMMAND(ID_BUTTON_ADD_OBJECT, &MFCMain::Button_NewSceneObject)
 	ON_UPDATE_COMMAND_UI(ID_INDICATOR_TOOL, &CMyFrame::OnUpdatePage)
 END_MESSAGE_MAP()
 
@@ -99,18 +100,22 @@ void MFCMain::MenuFileSaveTerrain()
 
 void MFCMain::MenuEditSelect()
 {
-	//SelectDialogue m_ToolSelectDialogue(NULL, &m_ToolSystem.m_sceneGraph);		//create our dialoguebox //modal constructor
-	//m_ToolSelectDialogue.DoModal();	// start it up modal
-
-	//modeless dialogue must be declared in the class.   If we do local it will go out of scope instantly and destroy itself
-	m_ToolSelectDialogue.Create(IDD_DIALOG1);	//Start up modeless
-	m_ToolSelectDialogue.ShowWindow(SW_SHOW);	//show modeless
+	m_ToolSelectDialogue.Create(IDD_DIALOG1);
+	m_ToolSelectDialogue.ShowWindow(SW_SHOW);
 	m_ToolSelectDialogue.SetObjectData(&m_ToolSystem.m_sceneGraph, &m_ToolSystem.m_selectedObject);
 }
 
-void MFCMain::ToolBarButton1()
+void MFCMain::Button_SaveScene()
 {
 	m_ToolSystem.onActionSave();
+}
+
+void MFCMain::Button_NewSceneObject()
+{
+	// We want to add a new scene object to the world
+	// this means that we need to open the dialogue that
+	// allows the user to configure its settings
+
 }
 
 

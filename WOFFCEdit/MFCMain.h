@@ -34,8 +34,8 @@ private:
 	afx_msg void MenuFileQuit();
 	afx_msg void MenuFileSaveTerrain();
 	afx_msg void MenuEditSelect();
-	afx_msg	void ToolBarButton1();
-
+	afx_msg	void Button_SaveScene();
+	afx_msg void Button_NewSceneObject();
 
 	DECLARE_MESSAGE_MAP()	// required macro for message map functionality  One per class
 };
