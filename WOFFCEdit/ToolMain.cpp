@@ -380,6 +380,7 @@ SceneObject& ToolMain::createNewSceneObject()
 	new_obj.name = "New Object";
 	new_obj.model_path = "database/data/placeholder.cmo";
 	new_obj.tex_diffuse_path = "database/data/placeholder.dds";
+	new_obj.scaX = 1.0; new_obj.scaY = 1.0f; new_obj.scaZ = 1.0f;
 
 	m_d3dRenderer.BuildDisplayList(&m_sceneGraph);
 	return new_obj;
