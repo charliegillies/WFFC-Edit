@@ -6,8 +6,9 @@
 #include "sqlite3.h"
 #include "SceneObject.h"
 #include "InputCommands.h"
-#include <vector>
+#include "Command.h"
 
+#include <vector>
 
 class ToolMain
 {
@@ -26,7 +27,10 @@ public: //methods
 	void	Tick(MSG *msg);
 	void	UpdateInput(MSG *msg);
 
-	SceneObject& onActionNewSceneObject();
+	Command* createAddNewSceneObjectCommand();
+	SceneObject& createNewSceneObject();
+	SceneObject& insertSceneObject(SceneObject&& obj);
+	int getNewSceneObjectID();
 
 public:	//variables
 	std::vector<SceneObject>    m_sceneGraph;	//our scenegraph storing all the objects in the current chunk

@@ -3,6 +3,8 @@
 #include <vector>
 #include <sstream>
 
+#include "EditorCommands.h"
+
 //
 //ToolMain Class
 ToolMain::ToolMain()
@@ -345,29 +347,41 @@ void ToolMain::UpdateInput(MSG * msg)
 	m_inputCommands.moveUp = m_keyArray['X'];
 }
 
-SceneObject& ToolMain::onActionNewSceneObject()
+Command* ToolMain::createAddNewSceneObjectCommand()
+{
+	return new AddNewSceneObjectCommand(this);
+}
+
+SceneObject& ToolMain::createNewSceneObject()
 {
 	// First things first, we want to generate an ID for our scene object
 	// this can be done multiple ways, including just allowing the database 
 	// to do it, but since we have local records of the entities, we should be
 	// able to just get a new id from our local records
-	int new_id = -1;
-	for (SceneObject& sObj : m_sceneGraph)
-		new_id = max(new_id, sObj.ID);
-	new_id += 1;
-
-	// Push an empty scene object into the graph, then get a ref
-	m_sceneGraph.push_back(SceneObject());
-	SceneObject& new_obj = m_sceneGraph.back();
-	new_obj.ID = new_id;
-
+	
+	// Push an empty scene object into the graph, then get a reference to it
+	SceneObject& new_obj = insertSceneObject(SceneObject());
 	// Assign some default data for our new scene object
 	new_obj.name = "New Object";
 	new_obj.model_path = "database/data/placeholder.cmo";
 	new_obj.tex_diffuse_path = "database/data/placeholder.dds";
 
-	// TODO:
-	// Rebuild display list to show new mesh.
-
+	m_d3dRenderer.BuildDisplayList(&m_sceneGraph);
 	return new_obj;
+}
+
+SceneObject & ToolMain::insertSceneObject(SceneObject && obj)
+{
+	m_sceneGraph.push_back(obj);
+	SceneObject& new_obj = m_sceneGraph.back();
+	new_obj.ID = getNewSceneObjectID();
+	return new_obj;
+}
+
+int ToolMain::getNewSceneObjectID()
+{
+	int new_id = -1;
+	for (SceneObject& sObj : m_sceneGraph)
+		new_id = max(new_id, sObj.ID);
+	return new_id + 1;
 }

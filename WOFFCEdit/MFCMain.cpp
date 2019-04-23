@@ -75,12 +75,14 @@ int MFCMain::Run()
 		}
 		else
 		{
-			int ID = m_ToolSystem.getCurrentSelectionID();
-			std::wstring statusString = L"Selected Object: " + std::to_wstring(ID);
 			m_ToolSystem.Tick(&msg);
 
+			/*
+			int ID = m_ToolSystem.getCurrentSelectionID();
+			std::wstring statusString = L"Selected Object: " + std::to_wstring(ID);
 			//send current object ID to status bar in The main frame
 			m_frame->m_wndStatusBar.SetPaneText(1, statusString.c_str(), 1);
+			*/
 		}
 	}
 
@@ -112,10 +114,11 @@ void MFCMain::Button_SaveScene()
 
 void MFCMain::Button_NewSceneObject()
 {
-	// We want to add a new scene object to the world
-	// this means that we need to open the dialogue that
-	// allows the user to configure its settings
-	m_ToolSystem.onActionNewSceneObject();
+	m_history.log(m_ToolSystem.createAddNewSceneObjectCommand());
+	m_ToolSystem.createNewSceneObject();
+
+
+	//m_frame->m_wndStatusBar.SetPaneText(1, statusString.c_str(), 1);
 }
 
 

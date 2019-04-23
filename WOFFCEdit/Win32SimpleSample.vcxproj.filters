@@ -17,6 +17,9 @@
     <Filter Include="SQLITE">
       <UniqueIdentifier>{a006b0b6-46b2-4c4f-808a-ec8fe3e790eb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tool\History">
+      <UniqueIdentifier>{b280d141-0823-4b22-8a1b-5cb68864fa7b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -62,6 +65,8 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="History.cpp" />
+    <ClCompile Include="EditorCommands.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DeviceResources.h">
@@ -113,6 +118,15 @@
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="History.h">
+      <Filter>Tool\History</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorCommands.h">
+      <Filter>Tool\History</Filter>
+    </ClInclude>
+    <ClInclude Include="Command.h">
+      <Filter>Tool\History</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

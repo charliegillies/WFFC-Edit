@@ -9,7 +9,7 @@
 #include "resource.h"
 #include "MFCFrame.h"
 #include "SelectDialogue.h"
-
+#include "History.h"
 
 class MFCMain : public CWinApp 
 {
@@ -25,6 +25,8 @@ private:
 	ToolMain m_ToolSystem;	//Instance of Tool System that we interface to. 
 	CRect WindowRECT;	//Window area rectangle. 
 	SelectDialogue m_ToolSelectDialogue;			//for modeless dialogue, declare it here
+
+	History m_history;
 
 	int m_width;		
 	int m_height;
