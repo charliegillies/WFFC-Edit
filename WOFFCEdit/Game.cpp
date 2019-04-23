@@ -167,9 +167,11 @@ std::vector<int> Game::MousePicking()
 		const XMVECTORF32 translate = { m_displayList[i].m_position.x,	m_displayList[i].m_position.y,	m_displayList[i].m_position.z };
 
 		//convert euler angles into a quaternion for the rotation of the object
-		XMVECTOR rotate = Quaternion::CreateFromYawPitchRoll(m_displayList[i].m_orientation.y *3.1415 / 180,
+		XMVECTOR rotate = Quaternion::CreateFromYawPitchRoll(
+			m_displayList[i].m_orientation.y *3.1415 / 180,
 			m_displayList[i].m_orientation.x *3.1415 / 180.0,
-			m_displayList[i].m_orientation.z *3.1415 / 180.0);
+			m_displayList[i].m_orientation.z *3.1415 / 180.0
+		);
 
 		//create set the matrix of the selected object in the world based on the translation, scale and rotation.
 		XMMATRIX local = m_world * XMMatrixTransformation(g_XMZero, Quaternion::Identity, scale, g_XMZero, rotate, translate);

@@ -41,9 +41,18 @@ int CMyFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
 	if (CFrameWnd::OnCreate(lpCreateStruct) == -1) return -1;
 
+	
+	const CRect viewportWindow = CRect(0, 0, 1024/2, 768/2);
+	if (!m_hierarchyWindow.Create(NULL, NULL,
+		AFX_WS_DEFAULT_VIEW, viewportWindow, this, AFX_IDW_PANE_FIRST, NULL))
+	{
+		TRACE0("Failed to create hierarchy window\n");
+		return -1;
+	}
+
 	// create a view to occupy the client area of the frame 
 	// this is where DirectX is rendered
-	if (!m_DirXView.Create(NULL, NULL, AFX_WS_DEFAULT_VIEW, CRect(0, 0, 0, 0), this, AFX_IDW_PANE_FIRST, NULL))
+	if (!m_DirXView.Create(NULL, NULL, AFX_WS_DEFAULT_VIEW, viewportWindow, &m_hierarchyWindow, AFX_IDW_PANE_FIRST, NULL))
 	{
 		TRACE0("Failed to create view window\n");
 		return -1;

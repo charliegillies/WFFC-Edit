@@ -2,7 +2,10 @@
 #include <afxwin.h> 
 #include <afxext.h>
 #include "MFCRenderFrame.h"
+
 #include "ToolMain.h"
+#include "CHierarchy.h"
+#include "SelectDialogue.h"
 
 
 
@@ -16,6 +19,8 @@ public:
 	CStatusBar		m_wndStatusBar;
 	CToolBar		m_toolBar;
 	CChildRender	m_DirXView;
+	CWnd m_hierarchyWindow;
+	//CHierarchy m_hierarchy;
 
 public:
 	CMyFrame();
