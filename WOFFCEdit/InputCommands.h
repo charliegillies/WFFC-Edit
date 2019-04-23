@@ -13,6 +13,9 @@ struct InputCommands {
 	bool rotateRight, rotateLeft;
 	bool moveDown, moveUp;
 
+	// Input shortcuts for actions
+	bool undo, redo, save;
+
 	// Mouse input - right/left.
 	ClickState leftMouse;
 	ClickState rightMouse;

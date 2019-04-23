@@ -12,7 +12,9 @@
 
 class ToolMain
 {
-public: //methods
+public:
+	static const int NUM_KEYS = 256;
+
 	ToolMain();
 	~ToolMain();
 
@@ -32,6 +34,9 @@ public: //methods
 	SceneObject& insertSceneObject(SceneObject&& obj);
 	int getNewSceneObjectID();
 
+	bool removeSceneObject(SceneObject& target);
+	InputCommands& getInputCommands();
+
 public:	//variables
 	std::vector<SceneObject>    m_sceneGraph;	//our scenegraph storing all the objects in the current chunk
 	ChunkObject					m_chunk;		//our landscape chunk
@@ -47,7 +52,7 @@ private:	//variables
 	Game	m_d3dRenderer;		//Instance of D3D rendering system for our tool
 	InputCommands m_inputCommands;		//input commands that we want to use and possibly pass over to the renderer
 	CRect	WindowRECT;		//Window area rectangle. 
-	char	m_keyArray[256];
+	char	m_keyArray[NUM_KEYS], m_lastKeyArray[NUM_KEYS];
 	sqlite3 *m_databaseConnection;	//sqldatabase handle
 
 	int m_width;		//dimensions passed to directX

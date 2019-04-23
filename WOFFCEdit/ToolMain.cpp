@@ -277,6 +277,11 @@ void ToolMain::onActionSaveTerrain()
 
 void ToolMain::Tick(MSG *msg)
 {
+	// Copy the keys from the this input frame
+	// to the last input frame, so we can compare
+	for (int i = 0; i < NUM_KEYS; i++)
+		m_lastKeyArray[i] = m_keyArray[i];
+
 	// calculate the mouse velocity from current mouse and last mouse position
 	m_inputCommands.mouseVelocityX = (float)m_inputCommands.mouseX - m_lastMouseX;
 	m_inputCommands.mouseVelocityY = (float)m_inputCommands.mouseY - m_lastMouseY;
@@ -336,15 +341,25 @@ void ToolMain::UpdateInput(MSG * msg)
 		break;
 	}
 
-	// Map actions if their appropriate keybinds are down
-	m_inputCommands.forward = m_keyArray['W'];
-	m_inputCommands.back = m_keyArray['S'];
-	m_inputCommands.left = m_keyArray['A'];
-	m_inputCommands.right = m_keyArray['D'];
-	m_inputCommands.rotateLeft = m_keyArray['Q'];
-	m_inputCommands.rotateRight = m_keyArray['E'];
-	m_inputCommands.moveDown = m_keyArray['Z'];
-	m_inputCommands.moveUp = m_keyArray['X'];
+	bool ctrlDown = m_keyArray[VK_CONTROL];
+	if (!ctrlDown) {
+		// Map actions if their appropriate keybinds are down
+		// and the control modifier is NOT down
+		m_inputCommands.forward = m_keyArray['W'];
+		m_inputCommands.back = m_keyArray['S'];
+		m_inputCommands.left = m_keyArray['A'];
+		m_inputCommands.right = m_keyArray['D'];
+		m_inputCommands.rotateLeft = m_keyArray['Q'];
+		m_inputCommands.rotateRight = m_keyArray['E'];
+		m_inputCommands.moveDown = m_keyArray['Z'];
+		m_inputCommands.moveUp = m_keyArray['X'];
+	}
+	else {
+		// Ctrl modifier is down, so check shortcuts!
+		m_inputCommands.undo = m_keyArray['Z'] && !m_lastKeyArray['Z'];
+		m_inputCommands.redo = m_keyArray['Y'] && !m_lastKeyArray['Y'];
+		m_inputCommands.save = m_keyArray['S'] && !m_lastKeyArray['S'];
+	}
 }
 
 Command* ToolMain::createAddNewSceneObjectCommand()
@@ -384,4 +399,25 @@ int ToolMain::getNewSceneObjectID()
 	for (SceneObject& sObj : m_sceneGraph)
 		new_id = max(new_id, sObj.ID);
 	return new_id + 1;
+}
+
+bool ToolMain::removeSceneObject(SceneObject & target)
+{
+	// The target ref is probably out of date
+	// and so we will need to get the up to date one with the equal id
+	for (auto it = m_sceneGraph.begin(); it != m_sceneGraph.end(); it++) {
+		SceneObject& obj = *it;
+		if (obj.ID == target.ID) {
+			// update reference
+			target = obj;
+			m_sceneGraph.erase(it);
+			return true;
+		}
+	}
+	return false;
+}
+
+InputCommands & ToolMain::getInputCommands()
+{
+	return m_inputCommands;
 }

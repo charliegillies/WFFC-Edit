@@ -15,5 +15,8 @@ private:
 public:
 	void log(Command* cmd);
 
+	bool undo();
+	bool redo();
+
 	std::wstring get_top_cmd_label();
 };

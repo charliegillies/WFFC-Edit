@@ -9,6 +9,16 @@ void History::log(Command* cmd)
 	m_commandHistory.push_back(cmd);
 }
 
+bool History::undo()
+{
+	return false;
+}
+
+bool History::redo()
+{
+	return false;
+}
+
 std::wstring History::get_top_cmd_label()
 {
 	Command* top = m_commandHistory.size() > 0 ? m_commandHistory.back() : nullptr;

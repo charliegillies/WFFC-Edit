@@ -77,12 +77,25 @@ int MFCMain::Run()
 		{
 			m_ToolSystem.Tick(&msg);
 
-			/*
-			int ID = m_ToolSystem.getCurrentSelectionID();
-			std::wstring statusString = L"Selected Object: " + std::to_wstring(ID);
-			//send current object ID to status bar in The main frame
-			m_frame->m_wndStatusBar.SetPaneText(1, statusString.c_str(), 1);
-			*/
+			InputCommands& input = m_ToolSystem.getInputCommands();
+			if (input.undo) {
+				// attempt to undo the history, change the label if we succeed
+				if (m_history.undo()) {
+					std::wstring label = L"Undo: " + m_history.get_top_cmd_label();
+					m_frame->m_wndStatusBar.SetPaneText(1, label.c_str(), 1);
+				}
+			}
+			if (input.redo) {
+				// attempt to redo the history, change the label if we succeed
+				if (m_history.redo()) {
+					std::wstring label = L"Redid: " + m_history.get_top_cmd_label();
+					m_frame->m_wndStatusBar.SetPaneText(1, label.c_str(), 1);
+				}
+			}
+			if (input.save) {
+				// Emulate the button save using the keybind
+				Button_SaveScene();
+			}
 		}
 	}
 
@@ -114,6 +127,7 @@ void MFCMain::Button_SaveScene()
 
 void MFCMain::Button_NewSceneObject()
 {
+	// Log the command for creating a new blank scene object
 	m_history.log(m_ToolSystem.createAddNewSceneObjectCommand());
 	// Change the bottom info to show the new history command label
 	m_frame->m_wndStatusBar.SetPaneText(1, m_history.get_top_cmd_label().c_str(), 1);
