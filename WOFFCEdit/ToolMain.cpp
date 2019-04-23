@@ -13,6 +13,7 @@ ToolMain::ToolMain()
 	m_selectedObject = 0;	//initial selection ID
 	m_sceneGraph.clear();	//clear the vector for the scenegraph
 	m_databaseConnection = NULL;
+	m_doRebuildDisplay = false;
 
 	ZeroMemory(&m_inputCommands, sizeof(InputCommands));
 }
@@ -277,6 +278,13 @@ void ToolMain::onActionSaveTerrain()
 
 void ToolMain::Tick(MSG *msg)
 {
+	// Dirty flag that indicates if the display list requires
+	// to be rebuilt or not.
+	if (m_doRebuildDisplay) {
+		m_d3dRenderer.BuildDisplayList(&m_sceneGraph);
+		m_doRebuildDisplay = false;
+	}
+
 	// Copy the keys from the this input frame
 	// to the last input frame, so we can compare
 	for (int i = 0; i < NUM_KEYS; i++)
@@ -369,33 +377,32 @@ Command* ToolMain::createAddNewSceneObjectCommand()
 
 SceneObject& ToolMain::createNewSceneObject()
 {
-	// First things first, we want to generate an ID for our scene object
-	// this can be done multiple ways, including just allowing the database 
-	// to do it, but since we have local records of the entities, we should be
-	// able to just get a new id from our local records
-	
 	// Push an empty scene object into the graph, then get a reference to it
 	SceneObject& new_obj = insertSceneObject(SceneObject());
 	// Assign some default data for our new scene object
 	new_obj.name = "New Object";
 	new_obj.model_path = "database/data/placeholder.cmo";
 	new_obj.tex_diffuse_path = "database/data/placeholder.dds";
-	new_obj.scaX = 1.0; new_obj.scaY = 1.0f; new_obj.scaZ = 1.0f;
-
-	m_d3dRenderer.BuildDisplayList(&m_sceneGraph);
 	return new_obj;
 }
 
 SceneObject & ToolMain::insertSceneObject(SceneObject && obj)
 {
+	m_doRebuildDisplay = true;
 	m_sceneGraph.push_back(obj);
 	SceneObject& new_obj = m_sceneGraph.back();
 	new_obj.ID = getNewSceneObjectID();
+
 	return new_obj;
 }
 
 int ToolMain::getNewSceneObjectID()
 {
+	// We want to generate an ID for our scene object
+	// this can be done multiple ways, including just allowing the database 
+	// to do it with auto-increment, but since we have 
+	// local records of the entities, we should be
+	// able to just get a new id from our local records
 	int new_id = -1;
 	for (SceneObject& sObj : m_sceneGraph)
 		new_id = max(new_id, sObj.ID);
@@ -412,6 +419,7 @@ bool ToolMain::removeSceneObject(SceneObject & target)
 			// update reference
 			target = obj;
 			m_sceneGraph.erase(it);
+			m_doRebuildDisplay = true;
 			return true;
 		}
 	}
