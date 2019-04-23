@@ -4,10 +4,8 @@
 #include "MFCRenderFrame.h"
 
 #include "ToolMain.h"
-#include "CHierarchy.h"
 #include "SelectDialogue.h"
-
-
+#include "CHierarchy.h"
 
 class CMyFrame : public CFrameWnd
 {
@@ -19,8 +17,8 @@ public:
 	CStatusBar		m_wndStatusBar;
 	CToolBar		m_toolBar;
 	CChildRender	m_DirXView;
-	CWnd m_hierarchyWindow;
-	//CHierarchy m_hierarchy;
+	CWnd m_viewportWindow;
+	CHierarchy m_hierarchy;
 
 public:
 	CMyFrame();

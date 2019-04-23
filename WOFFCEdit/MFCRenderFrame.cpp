@@ -1,4 +1,3 @@
-
 #include "MFCRenderFrame.h"
 
 #ifdef _DEBUG
