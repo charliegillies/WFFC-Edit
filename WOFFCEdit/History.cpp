@@ -8,10 +8,16 @@ History::History() : m_index(0)
 void History::log(Command* cmd)
 {
 	if (m_commandHistory.size() > 0) {
-		// We must get rid of all history onwards, from the point of index
-		// if that is necessary
-
-
+		// Delete all recorded history between index+1:size
+		for (int i = m_index + 1, right = m_commandHistory.size(); i < right; i++) {
+			Command* cmd = m_commandHistory.at(i);
+			delete cmd;
+		}
+		// now remove those elements from the vector
+		// TODO: Remove to STL to tidy this up.
+		for (int i = m_index + 1, right = m_commandHistory.size(); i < right; i++) {
+			m_commandHistory.pop_back();
+		}
 	}
 
 	// Execute the command, but not as a redo, as this is the first
