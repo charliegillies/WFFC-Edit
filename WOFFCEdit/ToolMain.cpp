@@ -280,6 +280,13 @@ void ToolMain::Tick(MSG *msg)
 	m_lastMouseY = m_inputCommands.mouseY;
 
 	// Allow tool picking?
+	if (m_inputCommands.leftMouse == ClickState::DOWN) {
+		std::vector<int> picked = m_d3dRenderer.MousePicking();
+		
+		if (picked.size() > 0) {
+
+		}
+	}
 
 
 	//do we have a selection
