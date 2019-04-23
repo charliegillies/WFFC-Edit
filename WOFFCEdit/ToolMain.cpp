@@ -170,7 +170,7 @@ void ToolMain::onActionLoad()
 	m_chunk.tex_splat_4_tiling = sqlite3_column_int(pResultsChunk, 18);
 
 
-	//Process REsults into renderable
+	//Process results into renderable
 	m_d3dRenderer.BuildDisplayList(&m_sceneGraph);
 	//build the renderable chunk 
 	m_d3dRenderer.BuildDisplayChunk(&m_chunk);
@@ -198,65 +198,67 @@ void ToolMain::onActionSave()
 
 	for (int i = 0; i < numObjects; i++)
 	{
-		std::stringstream command;
-		command << "INSERT INTO Objects " 
-			<<"VALUES(" << m_sceneGraph.at(i).ID << ","
-			<< m_sceneGraph.at(i).chunk_ID  << ","
-			<< "'" << m_sceneGraph.at(i).model_path <<"'" << ","
-			<< "'" << m_sceneGraph.at(i).tex_diffuse_path << "'" << ","
-			<< m_sceneGraph.at(i).posX << ","
-			<< m_sceneGraph.at(i).posY << ","
-			<< m_sceneGraph.at(i).posZ << ","
-			<< m_sceneGraph.at(i).rotX << ","
-			<< m_sceneGraph.at(i).rotY << ","
-			<< m_sceneGraph.at(i).rotZ << ","
-			<< m_sceneGraph.at(i).scaX << ","
-			<< m_sceneGraph.at(i).scaY << ","
-			<< m_sceneGraph.at(i).scaZ << ","
-			<< m_sceneGraph.at(i).render << ","
-			<< m_sceneGraph.at(i).collision << ","
-			<< "'" << m_sceneGraph.at(i).collision_mesh << "'" << ","
-			<< m_sceneGraph.at(i).collectable << ","
-			<< m_sceneGraph.at(i).destructable << ","
-			<< m_sceneGraph.at(i).health_amount << ","
-			<< m_sceneGraph.at(i).editor_render << ","
-			<< m_sceneGraph.at(i).editor_texture_vis << ","
-			<< m_sceneGraph.at(i).editor_normals_vis << ","
-			<< m_sceneGraph.at(i).editor_collision_vis << ","
-			<< m_sceneGraph.at(i).editor_pivot_vis << ","
-			<< m_sceneGraph.at(i).pivotX << ","
-			<< m_sceneGraph.at(i).pivotY << ","
-			<< m_sceneGraph.at(i).pivotZ << ","
-			<< m_sceneGraph.at(i).snapToGround << ","
-			<< m_sceneGraph.at(i).AINode << ","
-			<< "'" << m_sceneGraph.at(i).audio_path << "'" << ","
-			<< m_sceneGraph.at(i).volume << ","
-			<< m_sceneGraph.at(i).pitch << ","
-			<< m_sceneGraph.at(i).pan << ","
-			<< m_sceneGraph.at(i).one_shot << ","
-			<< m_sceneGraph.at(i).play_on_init << ","
-			<< m_sceneGraph.at(i).play_in_editor << ","
-			<< m_sceneGraph.at(i).min_dist << ","
-			<< m_sceneGraph.at(i).max_dist << ","
-			<< m_sceneGraph.at(i).camera << ","
-			<< m_sceneGraph.at(i).path_node << ","
-			<< m_sceneGraph.at(i).path_node_start << ","
-			<< m_sceneGraph.at(i).path_node_end << ","
-			<< m_sceneGraph.at(i).parent_id << ","
-			<< m_sceneGraph.at(i).editor_wireframe << ","
-			<< "'" << m_sceneGraph.at(i).name << "'" << ","
+		SceneObject& obj = m_sceneGraph.at(i);
 
-			<< m_sceneGraph.at(i).light_type << ","
-			<< m_sceneGraph.at(i).light_diffuse_r << ","
-			<< m_sceneGraph.at(i).light_diffuse_g << ","
-			<< m_sceneGraph.at(i).light_diffuse_b << ","
-			<< m_sceneGraph.at(i).light_specular_r << ","
-			<< m_sceneGraph.at(i).light_specular_g << ","
-			<< m_sceneGraph.at(i).light_specular_b << ","
-			<< m_sceneGraph.at(i).light_spot_cutoff << ","
-			<< m_sceneGraph.at(i).light_constant << ","
-			<< m_sceneGraph.at(i).light_linear << ","
-			<< m_sceneGraph.at(i).light_quadratic
+		std::stringstream command;
+		command << "INSERT INTO Objects "
+			<< "VALUES(" << obj.ID << ","
+			<< obj.chunk_ID << ","
+			<< "'" << obj.model_path << "'" << ","
+			<< "'" << obj.tex_diffuse_path << "'" << ","
+			<< obj.posX << ","
+			<< obj.posY << ","
+			<< obj.posZ << ","
+			<< obj.rotX << ","
+			<< obj.rotY << ","
+			<< obj.rotZ << ","
+			<< obj.scaX << ","
+			<< obj.scaY << ","
+			<< obj.scaZ << ","
+			<< obj.render << ","
+			<< obj.collision << ","
+			<< "'" << obj.collision_mesh << "'" << ","
+			<< obj.collectable << ","
+			<< obj.destructable << ","
+			<< obj.health_amount << ","
+			<< obj.editor_render << ","
+			<< obj.editor_texture_vis << ","
+			<< obj.editor_normals_vis << ","
+			<< obj.editor_collision_vis << ","
+			<< obj.editor_pivot_vis << ","
+			<< obj.pivotX << ","
+			<< obj.pivotY << ","
+			<< obj.pivotZ << ","
+			<< obj.snapToGround << ","
+			<< obj.AINode << ","
+			<< "'" << obj.audio_path << "'" << ","
+			<< obj.volume << ","
+			<< obj.pitch << ","
+			<< obj.pan << ","
+			<< obj.one_shot << ","
+			<< obj.play_on_init << ","
+			<< obj.play_in_editor << ","
+			<< obj.min_dist << ","
+			<< obj.max_dist << ","
+			<< obj.camera << ","
+			<< obj.path_node << ","
+			<< obj.path_node_start << ","
+			<< obj.path_node_end << ","
+			<< obj.parent_id << ","
+			<< obj.editor_wireframe << ","
+			<< "'" << obj.name << "'" << ","
+
+			<< obj.light_type << ","
+			<< obj.light_diffuse_r << ","
+			<< obj.light_diffuse_g << ","
+			<< obj.light_diffuse_b << ","
+			<< obj.light_specular_r << ","
+			<< obj.light_specular_g << ","
+			<< obj.light_specular_b << ","
+			<< obj.light_spot_cutoff << ","
+			<< obj.light_constant << ","
+			<< obj.light_linear << ","
+			<< obj.light_quadratic
 
 			<< ")";
 		std::string sqlCommand2 = command.str();
@@ -280,14 +282,14 @@ void ToolMain::Tick(MSG *msg)
 	m_lastMouseY = m_inputCommands.mouseY;
 
 	// Allow tool picking?
-	if (m_inputCommands.leftMouse == ClickState::DOWN) {
+	/*if (m_inputCommands.leftMouse == ClickState::DOWN) {
 		std::vector<int> picked = m_d3dRenderer.MousePicking();
 		
 		if (picked.size() > 0) {
 
 		}
 	}
-
+	*/
 
 	//do we have a selection
 	//do we have a mode
@@ -341,4 +343,31 @@ void ToolMain::UpdateInput(MSG * msg)
 	m_inputCommands.rotateRight = m_keyArray['E'];
 	m_inputCommands.moveDown = m_keyArray['Z'];
 	m_inputCommands.moveUp = m_keyArray['X'];
+}
+
+SceneObject& ToolMain::onActionNewSceneObject()
+{
+	// First things first, we want to generate an ID for our scene object
+	// this can be done multiple ways, including just allowing the database 
+	// to do it, but since we have local records of the entities, we should be
+	// able to just get a new id from our local records
+	int new_id = -1;
+	for (SceneObject& sObj : m_sceneGraph)
+		new_id = max(new_id, sObj.ID);
+	new_id += 1;
+
+	// Push an empty scene object into the graph, then get a ref
+	m_sceneGraph.push_back(SceneObject());
+	SceneObject& new_obj = m_sceneGraph.back();
+	new_obj.ID = new_id;
+
+	// Assign some default data for our new scene object
+	new_obj.name = "New Object";
+	new_obj.model_path = "database/data/placeholder.cmo";
+	new_obj.tex_diffuse_path = "database/data/placeholder.dds";
+
+	// TODO:
+	// Rebuild display list to show new mesh.
+
+	return new_obj;
 }

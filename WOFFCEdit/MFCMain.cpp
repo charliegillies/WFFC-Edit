@@ -115,7 +115,7 @@ void MFCMain::Button_NewSceneObject()
 	// We want to add a new scene object to the world
 	// this means that we need to open the dialogue that
 	// allows the user to configure its settings
-
+	m_ToolSystem.onActionNewSceneObject();
 }
 
 
