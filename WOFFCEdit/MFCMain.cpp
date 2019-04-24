@@ -11,8 +11,8 @@ BEGIN_MESSAGE_MAP(MFCMain, CWinApp)
 	ON_UPDATE_COMMAND_UI(ID_INDICATOR_TOOL, &CMyFrame::OnUpdatePage)
 END_MESSAGE_MAP()
 
-const int DEFAULT_WINDOW_WIDTH = 1240;
-const int DEFAULT_WINDOW_HEIGHT = 768;
+const int DEFAULT_WINDOW_WIDTH = 1600;
+const int DEFAULT_WINDOW_HEIGHT = 900;
 
 BOOL MFCMain::InitInstance()
 {
@@ -35,7 +35,6 @@ BOOL MFCMain::InitInstance()
 	//show and set the window to run and update. 
 	m_frame->ShowWindow(SW_SHOW);
 	m_frame->UpdateWindow();
-
 
 	//get the rect from the MFC window so we can get its dimensions
 	m_toolHandle = m_frame->m_DirXView.GetSafeHwnd();				//handle of directX child window
