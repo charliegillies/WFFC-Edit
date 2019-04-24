@@ -43,26 +43,25 @@ void CMyFrame::OnUpdatePage(CCmdUI * pCmdUI)
 int CMyFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
 	if (CFrameWnd::OnCreate(lpCreateStruct) == -1) return -1;
-	
-	const CRect viewSize = SimplerRect(0, 0, 1024, 576);
-	if (!m_viewportWindow.Create(NULL, NULL, AFX_WS_DEFAULT_VIEW, viewSize, this, AFX_IDW_PANE_FIRST, NULL))
-	{
-		TRACE0("Failed to create hierarchy window\n");
+
+	// Attempt to create the direct X viewport window & renderer
+	const CRect viewSize = SimplerRect(0, 40, 1024, 576);
+	if (!m_viewportWindow.Create(NULL, NULL, AFX_WS_DEFAULT_VIEW, viewSize, this, AFX_IDW_PANE_LAST - 1, NULL)){
+		TRACE0("Failed to create viewport window\n");
 		return -1;
 	}
-	// create a view to occupy the client area of the frame. this is where DirectX is rendered
-	if (!m_DirXView.Create(NULL, NULL, AFX_WS_DEFAULT_VIEW, viewSize, &m_viewportWindow, AFX_IDW_PANE_FIRST + 1, NULL))
-	{
+	if (!m_DirXView.Create(NULL, NULL, AFX_WS_DEFAULT_VIEW, viewSize, &m_viewportWindow, AFX_IDW_PANE_LAST, NULL)) {
 		TRACE0("Failed to create view window\n");
 		return -1;
 	}
 
-	if (!m_hierarchy.Create(NULL, NULL, AFX_WS_DEFAULT_VIEW, SimplerRect(1024, 40, 440, 200), this, AFX_IDW_PANE_FIRST + 2, NULL)) 
-	{
+	// Attempt to create the hierarchy window that displays
+	// all of the active items within the scene graph
+	if (!m_hierarchyWindow.Create(NULL, NULL, AFX_WS_DEFAULT_VIEW, SimplerRect(1024, 40, 440, 200), this, AFX_IDW_PANE_FIRST + 1, NULL)) {
 		TRACE0("Failed to create hierarchy window\n");
 		return -1;
 	}
-	m_hierarchy.Setup();
+	m_hierarchyWindow.Setup();
 
 	m_menu1.LoadMenuW(IDR_MENU1);
 	SetMenu(&m_menu1);

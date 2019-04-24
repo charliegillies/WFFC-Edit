@@ -18,7 +18,7 @@ public:
 	CToolBar		m_toolBar;
 	CChildRender	m_DirXView;
 	CWnd m_viewportWindow;
-	CHierarchy m_hierarchy;
+	CHierarchy m_hierarchyWindow;
 
 public:
 	CMyFrame();

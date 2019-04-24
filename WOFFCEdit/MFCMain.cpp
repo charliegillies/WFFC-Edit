@@ -43,6 +43,7 @@ BOOL MFCMain::InitInstance()
 	m_height = WindowRECT.Height();
 
 	m_ToolSystem.onActionInitialise(m_toolHandle, m_width, m_height);
+	m_frame->m_hierarchyWindow.SetObjectData(&m_ToolSystem.m_sceneGraph);
 
 	return TRUE;
 }
