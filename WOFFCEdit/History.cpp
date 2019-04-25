@@ -56,6 +56,11 @@ bool History::redo()
 	return true;
 }
 
+int History::num_commands()
+{
+	return m_commandHistory.size();
+}
+
 std::wstring History::get_current_cmd_label()
 {
 	// wrap the index so it does not go out of bounds

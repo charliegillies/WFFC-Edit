@@ -20,7 +20,7 @@ public:
 	bool undo();
 	bool redo();
 
-
+	int num_commands();
 
 	std::wstring get_current_cmd_label();
 };

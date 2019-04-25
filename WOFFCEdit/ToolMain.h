@@ -26,16 +26,18 @@ public:
 	afx_msg	void	onActionSave();											//save the current chunk
 	afx_msg void	onActionSaveTerrain();									//save chunk geometry
 
-	void	Tick(MSG *msg);
+	void	Tick(MSG *msg, class History* history);
 	void	UpdateInput(MSG *msg);
 
 	Command* createAddNewSceneObjectCommand();
 	SceneObject& createNewSceneObject();
 	SceneObject& insertSceneObject(SceneObject&& obj);
-	int getNewSceneObjectID();
+	int createNewSceneObjectID();
 
 	bool removeSceneObject(SceneObject& target);
 	InputCommands& getInputCommands();
+
+	void forceSetSelectionID(int id);
 
 public:	//variables
 	std::vector<SceneObject>    m_sceneGraph;	//our scenegraph storing all the objects in the current chunk

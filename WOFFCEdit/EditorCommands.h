@@ -7,13 +7,29 @@
 // the compile time of other objects just needing to include
 // the history header, instead of HistoryCommands
 
+class ToolMain;
+
 class AddNewSceneObjectCommand : public Command {
 private:
-	class ToolMain* m_tool;
+	ToolMain* m_tool;
 	SceneObject m_sceneObject;
 
 public:
 	AddNewSceneObjectCommand(ToolMain* tool);
+
+	// Inherited via Command
+	virtual void execute(bool asRedo) override;
+	virtual void undo() override;
+	virtual std::wstring get_label() override;
+};
+
+class ChangeSelectionCommand : public Command {
+private:
+	ToolMain* m_tool;
+	int m_newSelectionId, m_lastSelectionId;
+
+public:
+	ChangeSelectionCommand(int newId, int lastId, ToolMain* tool);
 
 	// Inherited via Command
 	virtual void execute(bool asRedo) override;

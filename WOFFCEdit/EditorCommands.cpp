@@ -2,6 +2,7 @@
 
 #include "ToolMain.h"
 
+// Add new scene object command implementation .. 
 AddNewSceneObjectCommand::AddNewSceneObjectCommand(ToolMain * tool) : m_tool(tool) {}
 
 void AddNewSceneObjectCommand::execute(bool asRedo)
@@ -26,3 +27,22 @@ std::wstring AddNewSceneObjectCommand::get_label()
 	return L"Added new scene object";
 }
 
+
+// Change selection command implementation .. 
+ChangeSelectionCommand::ChangeSelectionCommand(int newId, int lastId, ToolMain* tool)
+	: m_lastSelectionId(lastId), m_newSelectionId(newId), m_tool(tool) {}
+
+void ChangeSelectionCommand::execute(bool asRedo)
+{
+	m_tool->forceSetSelectionID(m_newSelectionId);
+}
+
+void ChangeSelectionCommand::undo()
+{
+	m_tool->forceSetSelectionID(m_lastSelectionId);
+}
+
+std::wstring ChangeSelectionCommand::get_label()
+{
+	return L"Selected object: " + std::to_wstring(m_newSelectionId);
+}

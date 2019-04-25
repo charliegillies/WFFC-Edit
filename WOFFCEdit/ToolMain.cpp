@@ -4,6 +4,7 @@
 #include <sstream>
 
 #include "EditorCommands.h"
+#include "History.h"
 
 //
 //ToolMain Class
@@ -27,7 +28,6 @@ ToolMain::~ToolMain()
 
 int ToolMain::getCurrentSelectionID()
 {
-
 	return m_selectedObject;
 }
 
@@ -139,7 +139,6 @@ void ToolMain::onActionLoad()
 		newSceneObject.light_linear = sqlite3_column_double(pResults, 54);
 		newSceneObject.light_quadratic = sqlite3_column_double(pResults, 55);
 	
-
 		//send completed object to scenegraph
 		m_sceneGraph.push_back(newSceneObject);
 	}
@@ -276,15 +275,8 @@ void ToolMain::onActionSaveTerrain()
 	m_d3dRenderer.SaveDisplayChunk(&m_chunk);
 }
 
-void ToolMain::Tick(MSG *msg)
+void ToolMain::Tick(MSG *msg, History* history)
 {
-	// Dirty flag that indicates if the display list requires
-	// to be rebuilt or not.
-	if (m_doRebuildDisplay) {
-		m_d3dRenderer.BuildDisplayList(&m_sceneGraph);
-		m_doRebuildDisplay = false;
-	}
-
 	// Copy the keys from the this input frame
 	// to the last input frame, so we can compare
 	for (int i = 0; i < NUM_KEYS; i++)
@@ -296,13 +288,24 @@ void ToolMain::Tick(MSG *msg)
 	m_lastMouseX = m_inputCommands.mouseX;
 	m_lastMouseY = m_inputCommands.mouseY;
 
-	// Allow tool picking?
+	// If we click, then we need to perform a raycast to see
+	// if we have selected an entity from the cameras perspective
 	if (m_inputCommands.leftMouse == ClickState::DOWN) {
 		std::vector<int> picked = m_d3dRenderer.FindMouseRayTargets();
 		
+		int new_pick = -1;
 		if (picked.size() > 0) {
-			// We selected an entity in the world.
+			if (picked.size() == 1) {
+				new_pick = picked[0];
+			}
+			else {
+				// TODO: sort by distance to find the guys we want!
+			}
+		}
 
+		if (new_pick != -1 && new_pick != m_selectedObject) {
+			// log the selection change - so the user can undo it
+			history->log(new ChangeSelectionCommand(new_pick, m_selectedObject, this));
 		}
 	}
 
@@ -313,6 +316,13 @@ void ToolMain::Tick(MSG *msg)
 		//update Scenegraph
 		//add to scenegraph
 		//resend scenegraph to Direct X renderer
+
+	// Dirty flag that indicates if the display list requires
+	// to be rebuilt or not.
+	if (m_doRebuildDisplay) {
+		m_d3dRenderer.BuildDisplayList(&m_sceneGraph);
+		m_doRebuildDisplay = false;
+	}
 
 	//Renderer Update Call
 	m_d3dRenderer.Tick(&m_inputCommands);
@@ -387,11 +397,11 @@ SceneObject & ToolMain::insertSceneObject(SceneObject && obj)
 	m_doRebuildDisplay = true;
 	m_sceneGraph.push_back(obj);
 	SceneObject& new_obj = m_sceneGraph.back();
-	new_obj.ID = getNewSceneObjectID();
+	new_obj.ID = createNewSceneObjectID();
 	return new_obj;
 }
 
-int ToolMain::getNewSceneObjectID()
+int ToolMain::createNewSceneObjectID()
 {
 	// We want to generate an ID for our scene object
 	// this can be done multiple ways, including just allowing the database 
@@ -424,4 +434,9 @@ bool ToolMain::removeSceneObject(SceneObject & target)
 InputCommands& ToolMain::getInputCommands()
 {
 	return m_inputCommands;
+}
+
+void ToolMain::forceSetSelectionID(int id)
+{
+	m_selectedObject = id;
 }

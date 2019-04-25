@@ -75,7 +75,14 @@ int MFCMain::Run()
 		}
 		else
 		{
-			m_ToolSystem.Tick(&msg);
+			int commands = m_history.num_commands();
+			m_ToolSystem.Tick(&msg, &m_history);
+
+			// Check if there has been a change in the command history
+			// if there has, update the label.
+			if (commands != m_history.num_commands()) {
+				m_frame->m_wndStatusBar.SetPaneText(1, m_history.get_current_cmd_label().c_str(), 1);
+			}
 
 			InputCommands& input = m_ToolSystem.getInputCommands();
 			if (input.undo) {
