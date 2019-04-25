@@ -439,4 +439,11 @@ InputCommands& ToolMain::getInputCommands()
 void ToolMain::forceSetSelectionID(int id)
 {
 	m_selectedObject = id;
+
+	for (auto& obj : m_sceneGraph) {
+		if (obj.ID == id) {
+			obj.tex_diffuse_path = "database/data/rock.dds";
+			m_doRebuildDisplay = true;
+		}
+	}
 }

@@ -6,7 +6,7 @@
 #include "Game.h"
 #include "DisplayObject.h"
 #include <string>
-
+#include "Utils.h"
 
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
@@ -220,14 +220,12 @@ void Game::Render()
 		const XMVECTORF32 yaxis = { 0.f, 0.f, 512.f };
 		DrawGrid(xaxis, yaxis, g_XMZero, 512, 512, Colors::Gray);
 	}
-	//CAMERA POSITION ON HUD
-	m_sprites->Begin();
-	WCHAR   Buffer[256];
-	std::wstring var = m_camera.getDebugPosition();
-	//std::wstring var = L"Mouse X: " + std::to_wstring(m_InputCommands.mouseVelocityX) + L" Mouse Y: " + std::to_wstring(m_InputCommands.mouseVelocityY);
-	m_font->DrawString(m_sprites.get(), var.c_str(), XMFLOAT2(100, 10), Colors::Yellow);	
 
-	m_sprites->End();
+	//CAMERA POSITION ON HUD
+	//m_sprites->Begin();
+	//std::wstring var = m_camera.getDebugPosition();
+	//m_font->DrawString(m_sprites.get(), var.c_str(), XMFLOAT2(100, 10), Colors::Yellow);	
+	//m_sprites->End();
 
 	//RENDER OBJECTS FROM SCENEGRAPH
 	int numRenderObjects = m_displayList.size();
@@ -238,9 +236,11 @@ void Game::Render()
 		const XMVECTORF32 translate = { m_displayList[i].m_position.x, m_displayList[i].m_position.y, m_displayList[i].m_position.z };
 
 		//convert degrees into radians for rotation matrix
-		XMVECTOR rotate = Quaternion::CreateFromYawPitchRoll(m_displayList[i].m_orientation.y *3.1415 / 180,
+		XMVECTOR rotate = Quaternion::CreateFromYawPitchRoll(
+			m_displayList[i].m_orientation.y *3.1415 / 180,
 			m_displayList[i].m_orientation.x *3.1415 / 180,
-			m_displayList[i].m_orientation.z *3.1415 / 180);
+			m_displayList[i].m_orientation.z *3.1415 / 180
+		);
 
 		XMMATRIX local = m_world * XMMatrixTransformation(g_XMZero, Quaternion::Identity, scale, g_XMZero, rotate, translate);
 
@@ -379,22 +379,20 @@ void Game::BuildDisplayList(std::vector<SceneObject> * SceneGraph)
 	int numObjects = SceneGraph->size();
 	for (int i = 0; i < numObjects; i++)
 	{
-
 		//create a temp display object that we will populate then append to the display list.
 		DisplayObject newDisplayObject;
 
 		//load model
-		std::wstring modelwstr = StringToWCHART(SceneGraph->at(i).model_path);							//convect string to Wchar
+		std::wstring modelwstr = Utils::StringToWCHART(SceneGraph->at(i).model_path);							//convect string to Wchar
 		newDisplayObject.m_model = Model::CreateFromCMO(device, modelwstr.c_str(), *m_fxFactory, true);	//get DXSDK to load model "False" for LH coordinate system (maya)
 
 		//Load Texture
-		std::wstring texturewstr = StringToWCHART(SceneGraph->at(i).tex_diffuse_path);								//convect string to Wchar
+		std::wstring texturewstr = Utils::StringToWCHART(SceneGraph->at(i).tex_diffuse_path);								//convect string to Wchar
 		HRESULT rs;
 		rs = CreateDDSTextureFromFile(device, texturewstr.c_str(), nullptr, &newDisplayObject.m_texture_diffuse);	//load tex into Shader resource
 
 		//if texture fails.  load error default
-		if (rs)
-		{
+		if (rs) {
 			CreateDDSTextureFromFile(device, L"database/data/Error.dds", nullptr, &newDisplayObject.m_texture_diffuse);	//load tex into Shader resource
 		}
 
@@ -578,16 +576,3 @@ void Game::OnDeviceRestored()
 	CreateWindowSizeDependentResources();
 }
 #pragma endregion
-
-std::wstring StringToWCHART(std::string s)
-{
-
-	int len;
-	int slength = (int)s.length() + 1;
-	len = MultiByteToWideChar(CP_ACP, 0, s.c_str(), slength, 0, 0);
-	wchar_t* buf = new wchar_t[len];
-	MultiByteToWideChar(CP_ACP, 0, s.c_str(), slength, buf, len);
-	std::wstring r(buf);
-	delete[] buf;
-	return r;
-}

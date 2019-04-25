@@ -126,5 +126,3 @@ private:
     DirectX::SimpleMath::Matrix                                             m_view;
     DirectX::SimpleMath::Matrix                                             m_projection;
 };
-
-std::wstring StringToWCHART(std::string s);

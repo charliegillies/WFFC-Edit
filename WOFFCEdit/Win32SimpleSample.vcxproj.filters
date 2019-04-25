@@ -67,6 +67,7 @@
     </ClCompile>
     <ClCompile Include="History.cpp" />
     <ClCompile Include="EditorCommands.cpp" />
+    <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DeviceResources.h">
@@ -128,6 +129,7 @@
     <ClInclude Include="Command.h">
       <Filter>Tool\History</Filter>
     </ClInclude>
+    <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
