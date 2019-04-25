@@ -52,10 +52,18 @@ int CMyFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_menu1.LoadMenuW(IDR_MENU1);
 	SetMenu(&m_menu1);
 	
-	if (!m_toolBar.CreateEx(this, TBSTYLE_TRANSPARENT, WS_CHILD | WS_VISIBLE | CBRS_TOP | CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC) ||
+	// Primary toolbar
+	if (!m_toolBar.CreateEx(this, TBSTYLE_TRANSPARENT, WS_CHILD | WS_VISIBLE | CBRS_TOP | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC) ||
 		!m_toolBar.LoadToolBar(IDR_TOOLBAR1))
 	{
 		TRACE0("Failed to create toolbar\n");
+		return -1;      // fail to create
+	}
+
+	// World edit toolbar
+	if (!m_worldEditToolbar.CreateEx(this, TBSTYLE_TRANSPARENT, WS_CHILD | WS_VISIBLE | CBRS_LEFT | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC) ||
+		!m_worldEditToolbar.LoadToolBar(IDR_WORLD_EDIT)) {
+		TRACE0("Failed to create world toolbar\n");
 		return -1;      // fail to create
 	}
 

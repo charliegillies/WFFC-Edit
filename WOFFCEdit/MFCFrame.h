@@ -16,6 +16,7 @@ public:
 	CMenu			m_menu1;	//menu bar
 	CStatusBar		m_wndStatusBar;
 	CToolBar		m_toolBar;
+	CToolBar		m_worldEditToolbar;
 	CChildRender	m_DirXView;
 
 public:
