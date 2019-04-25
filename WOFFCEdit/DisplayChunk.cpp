@@ -1,8 +1,7 @@
 #include <string>
 #include "DisplayChunk.h"
 #include "Game.h"
-
-
+#include "Utils.h"
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
 
@@ -109,7 +108,7 @@ void DisplayChunk::LoadHeightMap(std::shared_ptr<DX::DeviceResources>  DevResour
 	//load in texture diffuse
 	
 	//load the diffuse texture
-	std::wstring texturewstr = StringToWCHART(m_tex_diffuse_path);
+	std::wstring texturewstr = Utils::StringToWCHART(m_tex_diffuse_path);
 	HRESULT rs;	
 	rs = CreateDDSTextureFromFile(device, texturewstr.c_str(), NULL, &m_texture_diffuse);	//load tex into Shader resource	view and resource
 	

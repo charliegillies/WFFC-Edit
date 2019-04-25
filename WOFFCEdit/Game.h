@@ -20,7 +20,6 @@
 class Game : public DX::IDeviceNotify
 {
 public:
-
 	Game();
 	~Game();
 
@@ -52,6 +51,9 @@ public:
 	void SaveDisplayChunk(ChunkObject *SceneChunk);	//saves geometry et al
 	void ClearDisplayList();
 
+	// Wireframe
+	bool toggleWireframe();
+
 #ifdef DXTK_AUDIO
 	void NewAudioDevice();
 #endif
@@ -82,6 +84,7 @@ private:
 
 	//control variables
 	bool m_grid;							//grid rendering on / off
+	bool m_wireframe;
 	// Device resources.
     std::shared_ptr<DX::DeviceResources>    m_deviceResources;
 

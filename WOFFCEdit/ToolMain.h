@@ -39,6 +39,8 @@ public:
 
 	void forceSetSelectionID(int id);
 
+	bool onToggleWireframe();
+
 public:	//variables
 	std::vector<SceneObject>    m_sceneGraph;	//our scenegraph storing all the objects in the current chunk
 	ChunkObject					m_chunk;		//our landscape chunk

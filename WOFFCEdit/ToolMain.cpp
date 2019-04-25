@@ -447,3 +447,8 @@ void ToolMain::forceSetSelectionID(int id)
 		}
 	}
 }
+
+bool ToolMain::onToggleWireframe()
+{
+	return m_d3dRenderer.toggleWireframe();
+}

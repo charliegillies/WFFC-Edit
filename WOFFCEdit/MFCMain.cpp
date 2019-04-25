@@ -8,6 +8,7 @@ BEGIN_MESSAGE_MAP(MFCMain, CWinApp)
 	ON_COMMAND(ID_EDIT_SELECT, &MFCMain::MenuEditSelect)
 	ON_COMMAND(ID_BUTTON40001, &MFCMain::Button_SaveScene)
 	ON_COMMAND(ID_BUTTON_ADD_OBJECT, &MFCMain::Button_NewSceneObject)
+	ON_COMMAND(ID_BUTTON_WIREFRAME, &MFCMain::Button_ToggleWireframe)
 	ON_UPDATE_COMMAND_UI(ID_INDICATOR_TOOL, &CMyFrame::OnUpdatePage)
 END_MESSAGE_MAP()
 
@@ -138,6 +139,13 @@ void MFCMain::Button_NewSceneObject()
 	m_history.log(m_ToolSystem.createAddNewSceneObjectCommand());
 	// Change the bottom info to show the new history command label
 	m_frame->m_wndStatusBar.SetPaneText(1, m_history.get_current_cmd_label().c_str(), 1);
+}
+
+void MFCMain::Button_ToggleWireframe()
+{
+
+	bool toggled = m_ToolSystem.onToggleWireframe();
+
 }
 
 

@@ -37,6 +37,7 @@ private:
 	afx_msg void MenuEditSelect();
 	afx_msg	void Button_SaveScene();
 	afx_msg void Button_NewSceneObject();
+	afx_msg void Button_ToggleWireframe();
 
 	DECLARE_MESSAGE_MAP()	// required macro for message map functionality  One per class
 };
