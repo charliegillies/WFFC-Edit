@@ -297,14 +297,14 @@ void ToolMain::Tick(MSG *msg)
 	m_lastMouseY = m_inputCommands.mouseY;
 
 	// Allow tool picking?
-	/*if (m_inputCommands.leftMouse == ClickState::DOWN) {
-		std::vector<int> picked = m_d3dRenderer.MousePicking();
+	if (m_inputCommands.leftMouse == ClickState::DOWN) {
+		std::vector<int> picked = m_d3dRenderer.FindMouseRayTargets();
 		
 		if (picked.size() > 0) {
+			// We selected an entity in the world.
 
 		}
 	}
-	*/
 
 	//do we have a selection
 	//do we have a mode
@@ -330,8 +330,8 @@ void ToolMain::UpdateInput(MSG * msg)
 		break;
 
 	case WM_MOUSEMOVE:
-		m_inputCommands.mouseX = msg->pt.x;
-		m_inputCommands.mouseY = msg->pt.y;
+		m_inputCommands.mouseX = GET_X_LPARAM(msg->lParam);
+		m_inputCommands.mouseY = GET_Y_LPARAM(msg->lParam);
 		break;
 
 	case WM_LBUTTONDOWN:

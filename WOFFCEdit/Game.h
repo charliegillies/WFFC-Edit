@@ -56,7 +56,9 @@ public:
 	void NewAudioDevice();
 #endif
 
-	std::vector<int> MousePicking();
+	// Raycasts from the cameras near plane in range of given distance
+	// returns a vector of IDs for each scene object that collided
+	std::vector<int> FindMouseRayTargets();
 
 private:
 
@@ -67,6 +69,9 @@ private:
 	void CreateWindowSizeDependentResources();
 
 	void XM_CALLCONV DrawGrid(DirectX::FXMVECTOR xAxis, DirectX::FXMVECTOR yAxis, DirectX::FXMVECTOR origin, size_t xdivs, size_t ydivs, DirectX::GXMVECTOR color);
+
+
+	RECT m_screenDimensions;
 
 	//tool specific
 	std::vector<DisplayObject>			m_displayList;
@@ -120,9 +125,6 @@ private:
     DirectX::SimpleMath::Matrix                                             m_world;
     DirectX::SimpleMath::Matrix                                             m_view;
     DirectX::SimpleMath::Matrix                                             m_projection;
-
-	int m_windowWidth, m_windowHeight;
-
 };
 
 std::wstring StringToWCHART(std::string s);

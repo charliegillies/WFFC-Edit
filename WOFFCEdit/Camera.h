@@ -19,6 +19,8 @@ public:
 
 	void handleInput(InputCommands const& commands);
 
+	DirectX::SimpleMath::Matrix createViewMatrix();
+
 	DirectX::SimpleMath::Vector3 getPosition() const;
 	DirectX::SimpleMath::Vector3 getLookAt() const;
 	DirectX::SimpleMath::Vector3 getUp() const;

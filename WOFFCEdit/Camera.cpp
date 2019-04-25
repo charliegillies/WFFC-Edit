@@ -92,6 +92,13 @@ void Camera::handleInput(InputCommands const & input)
 	m_camLookAt = m_camPosition + m_camLookDirection;
 }
 
+DirectX::SimpleMath::Matrix Camera::createViewMatrix()
+{
+	// TODO:
+	// Cache, rather than generate per frame.
+	return DirectX::SimpleMath::Matrix::CreateLookAt(getPosition(), getLookAt(), getUp());
+}
+
 DirectX::SimpleMath::Vector3 Camera::getPosition() const
 {
 	return m_camPosition;

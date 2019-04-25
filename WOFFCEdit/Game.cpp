@@ -44,8 +44,6 @@ void Game::Initialize(HWND window, int width, int height)
 	m_mouse = std::make_unique<Mouse>();
 	m_mouse->SetWindow(window);
 
-	m_windowWidth = width;
-	m_windowHeight = height;
 	m_deviceResources->SetWindow(window, width, height);
 
 	m_deviceResources->CreateDeviceResources();
@@ -76,6 +74,8 @@ void Game::Initialize(HWND window, int width, int height)
 	m_effect1->Play(true);
 	m_effect2->Play();
 #endif
+
+	GetClientRect(window, &m_screenDimensions);
 }
 
 void Game::SetGridState(bool state)
@@ -112,7 +112,7 @@ void Game::Update(DX::StepTimer const& timer)
 {
 	//apply camera vectors
 	m_camera.handleInput(m_InputCommands);
-	m_view = Matrix::CreateLookAt(m_camera.getPosition(), m_camera.getLookAt(), m_camera.getUp());
+	m_view = m_camera.createViewMatrix();
 
 	m_batchEffect->SetView(m_view);
 	m_batchEffect->SetWorld(Matrix::Identity);
@@ -148,11 +148,10 @@ void Game::Update(DX::StepTimer const& timer)
 }
 #pragma endregion
 
-std::vector<int> Game::MousePicking()
+std::vector<int> Game::FindMouseRayTargets()
 {
 	std::vector<int> hits;
-
-	float pickedDistance = 0;
+	float dst;
 
 	//setup near and far planes of frustum with mouse X and mouse y passed down from Toolmain. 
 	//they may look the same but note, the difference in Z
@@ -167,16 +166,19 @@ std::vector<int> Game::MousePicking()
 		const XMVECTORF32 translate = { m_displayList[i].m_position.x,	m_displayList[i].m_position.y,	m_displayList[i].m_position.z };
 
 		//convert euler angles into a quaternion for the rotation of the object
-		XMVECTOR rotate = Quaternion::CreateFromYawPitchRoll(m_displayList[i].m_orientation.y *3.1415 / 180,
+		XMVECTOR rotate = Quaternion::CreateFromYawPitchRoll(
+			m_displayList[i].m_orientation.y *3.1415 / 180,
 			m_displayList[i].m_orientation.x *3.1415 / 180.0,
-			m_displayList[i].m_orientation.z *3.1415 / 180.0);
+			m_displayList[i].m_orientation.z *3.1415 / 180.0
+		);
 
 		//create set the matrix of the selected object in the world based on the translation, scale and rotation.
 		XMMATRIX local = m_world * XMMatrixTransformation(g_XMZero, Quaternion::Identity, scale, g_XMZero, rotate, translate);
 
 		//Unproject the points on the near and far plane, with respect to the matrix we just created.
-		XMVECTOR nearPoint = XMVector3Unproject(nearSource, 0.0f, 0.0f, m_windowWidth, m_windowHeight, m_deviceResources->GetScreenViewport().MinDepth, m_deviceResources->GetScreenViewport().MaxDepth, m_projection, m_view, local);
-		XMVECTOR farPoint = XMVector3Unproject(farSource, 0.0f, 0.0f, m_windowWidth, m_windowHeight, m_deviceResources->GetScreenViewport().MinDepth, m_deviceResources->GetScreenViewport().MaxDepth, m_projection, m_view, local);
+		D3D11_VIEWPORT viewport = m_deviceResources->GetScreenViewport();
+		XMVECTOR nearPoint = XMVector3Unproject(nearSource, 0.0f, 0.0f, m_screenDimensions.right, m_screenDimensions.bottom, viewport.MinDepth, viewport.MaxDepth, m_projection, m_view, local);
+		XMVECTOR farPoint = XMVector3Unproject(farSource, 0.0f, 0.0f, m_screenDimensions.right, m_screenDimensions.bottom, viewport.MinDepth, viewport.MaxDepth, m_projection, m_view, local);
 
 		//turn the transformed points into our picking vector. 
 		XMVECTOR pickingVector = farPoint - nearPoint;
@@ -186,7 +188,7 @@ std::vector<int> Game::MousePicking()
 		for (int y = 0; y < m_displayList[i].m_model.get()->meshes.size(); y++)
 		{
 			//checking for ray intersection
-			if (m_displayList[i].m_model.get()->meshes[y]->boundingBox.Intersects(nearPoint, pickingVector, pickedDistance))
+			if (m_displayList[i].m_model.get()->meshes[y]->boundingBox.Intersects(nearPoint, pickingVector, dst))
 			{
 				hits.push_back(i);
 			}
@@ -359,9 +361,6 @@ void Game::OnWindowSizeChanged(int width, int height)
 {
 	if (!m_deviceResources->WindowSizeChanged(width, height))
 		return;
-
-	m_windowWidth = width;
-	m_windowHeight = height;
 
 	CreateWindowSizeDependentResources();
 }

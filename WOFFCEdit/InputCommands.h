@@ -20,7 +20,8 @@ struct InputCommands {
 	ClickState leftMouse;
 	ClickState rightMouse;
 
-	// Mouse position and mouse movement velocity
+	// Mouse position 
 	int mouseX, mouseY;
+	// Mouse velocity
 	float mouseVelocityX, mouseVelocityY;
 };
