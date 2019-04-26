@@ -30,10 +30,10 @@ bool ManipulationTool::rotate(const InputCommands * input, SceneObject * selecte
 	if (input->back) {
 		change += Vector3::Backward;
 	}
-	if (input->moveDown) {
+	if (input->down) {
 		change += Vector3::Down;
 	}
-	if (input->moveUp) {
+	if (input->up) {
 		change += Vector3::Up;
 	}
 
@@ -63,10 +63,10 @@ bool ManipulationTool::scale(const InputCommands * input, SceneObject * selected
 	if (input->back) {
 		change += Vector3::Backward;
 	}
-	if (input->moveDown) {
+	if (input->down) {
 		change += Vector3::Down;
 	}
-	if (input->moveUp) {
+	if (input->up) {
 		change += Vector3::Up;
 	}
 
@@ -96,10 +96,10 @@ bool ManipulationTool::translate(const InputCommands * input, SceneObject * sele
 	if (input->back) {
 		movement += Vector3::Backward;
 	}
-	if (input->moveDown) {
+	if (input->down) {
 		movement += Vector3::Down;
 	}
-	if (input->moveUp) {
+	if (input->up) {
 		movement += Vector3::Up;
 	}
 

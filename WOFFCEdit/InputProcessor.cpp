@@ -58,8 +58,8 @@ void InputProcessor::process_msg(const MSG * msg)
 		m_inputCommands.right = m_keyArray['D'];
 		m_inputCommands.rotateLeft = m_keyArray['Q'];
 		m_inputCommands.rotateRight = m_keyArray['E'];
-		m_inputCommands.moveDown = m_keyArray['Z'];
-		m_inputCommands.moveUp = m_keyArray['X'];
+		m_inputCommands.down = m_keyArray['Z'];
+		m_inputCommands.up = m_keyArray['X'];
 	}
 	else {
 		// Ctrl modifier is down, so check shortcuts!

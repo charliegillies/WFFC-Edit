@@ -81,10 +81,10 @@ void Camera::handleInput(InputCommands const & input)
 	if (input.left) {
 		m_camPosition -= m_camRight * m_moveSpeed;
 	}
-	if (input.moveDown) {
+	if (input.down) {
 		m_camPosition -= Vector3::UnitY * m_moveSpeed;
 	}
-	if (input.moveUp) {
+	if (input.up) {
 		m_camPosition += Vector3::UnitY * m_moveSpeed;
 	}
 

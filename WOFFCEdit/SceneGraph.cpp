@@ -93,7 +93,3 @@ bool SceneGraph::removeSceneObject(SceneObject & target)
 	}
 	return false;
 }
-
-
-
-

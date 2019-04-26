@@ -8,7 +8,7 @@ struct InputCommands {
 	// Keyboard input command results
 	bool forward, back, right, left;
 	bool rotateRight, rotateLeft;
-	bool moveDown, moveUp;
+	bool down, up;
 
 	// Input shortcuts for actions
 	bool undo, redo, save;
