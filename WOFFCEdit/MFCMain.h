@@ -11,6 +11,10 @@
 #include "SelectDialogue.h"
 #include "History.h"
 
+enum class EditorMode {
+	CAMERA, MOVE, ROTATE, SCALE
+};
+
 class MFCMain : public CWinApp 
 {
 public:
@@ -25,7 +29,8 @@ private:
 	ToolMain m_ToolSystem;	//Instance of Tool System that we interface to. 
 	CRect WindowRECT;	//Window area rectangle. 
 	SelectDialogue m_ToolSelectDialogue;			//for modeless dialogue, declare it here
-
+	
+	EditorMode m_mode;
 	History m_history;
 
 	int m_width;		
@@ -38,6 +43,12 @@ private:
 	afx_msg	void Button_SaveScene();
 	afx_msg void Button_NewSceneObject();
 	afx_msg void Button_ToggleWireframe();
+
+	// Editor controls
+	afx_msg void Button_CameraToggle();
+	afx_msg void Button_TranslateToggle();
+	afx_msg void Button_RotateToggle();
+	afx_msg void Button_ScaleToggle();
 
 	DECLARE_MESSAGE_MAP()	// required macro for message map functionality  One per class
 };

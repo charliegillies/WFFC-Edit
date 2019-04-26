@@ -3,7 +3,7 @@
 // 23-04-2019
 
 #include <vector>
-class Command;
+struct Command;
 
 // The history is a list of the actions/commands performed by the user
 // within the editor. We want the user to be able to use undo

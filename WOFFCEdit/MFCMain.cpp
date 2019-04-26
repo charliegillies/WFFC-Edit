@@ -9,6 +9,12 @@ BEGIN_MESSAGE_MAP(MFCMain, CWinApp)
 	ON_COMMAND(ID_BUTTON40001, &MFCMain::Button_SaveScene)
 	ON_COMMAND(ID_BUTTON_ADD_OBJECT, &MFCMain::Button_NewSceneObject)
 	ON_COMMAND(ID_BUTTON_WIREFRAME, &MFCMain::Button_ToggleWireframe)
+
+	ON_COMMAND(ID_BUTTON_CAMERA, &MFCMain::Button_CameraToggle)
+	ON_COMMAND(ID_BUTTON_ROTATE, &MFCMain::Button_RotateToggle)
+	ON_COMMAND(ID_BUTTON_SCALE, &MFCMain::Button_ScaleToggle)
+	ON_COMMAND(ID_BUTTON_MOVE, &MFCMain::Button_TranslateToggle)
+	
 	ON_UPDATE_COMMAND_UI(ID_INDICATOR_TOOL, &CMyFrame::OnUpdatePage)
 END_MESSAGE_MAP()
 
@@ -143,14 +149,32 @@ void MFCMain::Button_NewSceneObject()
 
 void MFCMain::Button_ToggleWireframe()
 {
-
 	bool toggled = m_ToolSystem.onToggleWireframe();
-
 }
 
+void MFCMain::Button_CameraToggle()
+{
+	m_mode = EditorMode::CAMERA;
+}
+
+void MFCMain::Button_TranslateToggle()
+{
+	m_mode = EditorMode::MOVE;
+}
+
+void MFCMain::Button_RotateToggle()
+{
+	m_mode = EditorMode::ROTATE;
+}
+
+void MFCMain::Button_ScaleToggle()
+{
+	m_mode = EditorMode::SCALE;
+}
 
 MFCMain::MFCMain()
 {
+	m_mode = EditorMode::CAMERA;
 }
 
 
