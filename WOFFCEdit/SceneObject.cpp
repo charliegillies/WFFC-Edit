@@ -9,9 +9,10 @@ SceneObject::SceneObject()
 	model_path ="";
 	tex_diffuse_path = "";
 	
-	posX = 0.0f;	posY = 0.0f;	posZ = 0.0f;
-	rotX = 0.0f;	rotY = 0.0f;	rotZ = 0.0f;
-	scaX = 1.0f;	scaY = 1.0f;	scaZ = 1.0f;
+	// Default transform
+	setPosition(0.0f, 0.0f, 0.0f);
+	setRotation(0.0f, 0.0f, 0.0f);
+	setScale(1.0f, 1.0f, 1.0f);
 
 	render = true;
 	collision = false;
