@@ -20,6 +20,7 @@ public:
 	CChildRender	m_DirXView;
 
 	void EditorModeChanged(const EditorMode mode);
+	void ChangeWireframeButtonState(const bool enabled);
 
 public:
 	CMyFrame();

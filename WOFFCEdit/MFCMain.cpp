@@ -149,7 +149,9 @@ void MFCMain::Button_NewSceneObject()
 
 void MFCMain::Button_ToggleWireframe()
 {
+	// Toggle wireframe on/off, and change the interface button mode appropriately
 	bool toggled = m_ToolSystem.onToggleWireframe();
+	m_frame->ChangeWireframeButtonState(toggled);
 }
 
 void MFCMain::Button_CameraToggle()

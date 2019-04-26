@@ -27,6 +27,11 @@ void CMyFrame::EditorModeChanged(const EditorMode mode)
 	m_worldEditToolbar.GetToolBarCtrl().PressButton(ID_BUTTON_ROTATE, mode == EditorMode::ROTATE ? 1 : 0);
 }
 
+void CMyFrame::ChangeWireframeButtonState(const bool enabled)
+{
+	m_toolBar.GetToolBarCtrl().PressButton(ID_BUTTON_WIREFRAME, enabled ? 1 : 0);
+}
+
 //frame initialiser
 CMyFrame::CMyFrame()
 {
