@@ -52,6 +52,9 @@ public:
 	float light_linear;
 	float light_quadratic;
 
+	void setPosition(const float x, const float y, const float z);
+
+
 	static SceneObject CreatePrimitive();
 };
 

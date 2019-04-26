@@ -6,10 +6,7 @@ enum class ClickState {
 
 struct InputCommands {
 	// Keyboard input command results
-	bool forward;
-	bool back;
-	bool right;
-	bool left;
+	bool forward, back, right, left;
 	bool rotateRight, rotateLeft;
 	bool moveDown, moveUp;
 

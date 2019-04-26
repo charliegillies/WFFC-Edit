@@ -55,6 +55,11 @@ SceneObject::~SceneObject()
 {
 }
 
+void SceneObject::setPosition(const float x, const float y, const float z)
+{
+	posX = x; posY = y; posZ = z;
+}
+
 SceneObject SceneObject::CreatePrimitive()
 {
 	SceneObject primitive;
