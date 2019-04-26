@@ -10,6 +10,10 @@
 
 #include <vector>
 
+enum class EditorMode {
+	CAMERA, MOVE, ROTATE, SCALE
+};
+
 class ToolMain
 {
 public:

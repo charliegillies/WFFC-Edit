@@ -1,4 +1,5 @@
 #pragma once
+
 #include <afxwin.h> 
 #include <afxext.h>
 #include "MFCRenderFrame.h"
@@ -12,12 +13,13 @@ protected:
 //	DECLARE_DYNAMIC(CMainFrame)
 
 public:
-
 	CMenu			m_menu1;	//menu bar
 	CStatusBar		m_wndStatusBar;
 	CToolBar		m_toolBar;
 	CToolBar		m_worldEditToolbar;
 	CChildRender	m_DirXView;
+
+	void EditorModeChanged(const EditorMode mode);
 
 public:
 	CMyFrame();

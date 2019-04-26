@@ -11,10 +11,6 @@
 #include "SelectDialogue.h"
 #include "History.h"
 
-enum class EditorMode {
-	CAMERA, MOVE, ROTATE, SCALE
-};
-
 class MFCMain : public CWinApp 
 {
 public:

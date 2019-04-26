@@ -1,6 +1,7 @@
 #include "MFCFrame.h"
 #include "resource.h"
 
+#include <afxcmn.h>
 
 
 BEGIN_MESSAGE_MAP(CMyFrame, CFrameWnd)
@@ -16,6 +17,15 @@ static UINT indicators[] =
 };
 //FRAME CLASS
 
+
+void CMyFrame::EditorModeChanged(const EditorMode mode)
+{
+	// Toggle buttons appropriately 
+	m_worldEditToolbar.GetToolBarCtrl().PressButton(ID_BUTTON_CAMERA, mode == EditorMode::CAMERA ? 1 : 0);
+	m_worldEditToolbar.GetToolBarCtrl().PressButton(ID_BUTTON_MOVE, mode == EditorMode::MOVE ? 1 : 0);
+	m_worldEditToolbar.GetToolBarCtrl().PressButton(ID_BUTTON_SCALE, mode == EditorMode::SCALE ? 1 : 0);
+	m_worldEditToolbar.GetToolBarCtrl().PressButton(ID_BUTTON_ROTATE, mode == EditorMode::ROTATE ? 1 : 0);
+}
 
 //frame initialiser
 CMyFrame::CMyFrame()
@@ -66,7 +76,6 @@ int CMyFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		TRACE0("Failed to create world toolbar\n");
 		return -1;      // fail to create
 	}
-
 
 	CRect rect;
 	GetClientRect(&rect);

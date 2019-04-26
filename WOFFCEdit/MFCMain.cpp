@@ -160,21 +160,29 @@ void MFCMain::Button_CameraToggle()
 void MFCMain::Button_TranslateToggle()
 {
 	m_mode = EditorMode::MOVE;
+	if (m_frame != nullptr)
+		m_frame->EditorModeChanged(m_mode);
 }
 
 void MFCMain::Button_RotateToggle()
 {
 	m_mode = EditorMode::ROTATE;
+	if (m_frame != nullptr)
+		m_frame->EditorModeChanged(m_mode);
 }
 
 void MFCMain::Button_ScaleToggle()
 {
 	m_mode = EditorMode::SCALE;
+	if (m_frame != nullptr)
+		m_frame->EditorModeChanged(m_mode);
 }
 
 MFCMain::MFCMain()
 {
 	m_mode = EditorMode::CAMERA;
+	if (m_frame != nullptr)
+		m_frame->EditorModeChanged(m_mode);
 }
 
 
