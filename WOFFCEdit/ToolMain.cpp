@@ -36,22 +36,12 @@ void ToolMain::onActionInitialise(HWND handle, int width, int height)
 	//window size, handle etc for directX
 	m_width		= width;
 	m_height	= height;
-	
+	// Initialize our directX 3d renderer
 	m_d3dRenderer.Initialize(handle, m_width, m_height);
 
-	//database connection establish
-	int rc;
-	rc = sqlite3_open_v2("database/test.db",&m_databaseConnection, SQLITE_OPEN_READWRITE, NULL);
-
-	if (rc) 
-	{
-		TRACE("Can't open database");
-		//if the database cant open. Perhaps a more catastrophic error would be better here
-	}
-	else 
-	{
-		TRACE("Opened database successfully");
-	}
+	// Attempt to open the databsae with  read/write permissions.
+	int rc = sqlite3_open_v2("database/test.db", &m_databaseConnection, SQLITE_OPEN_READWRITE, NULL);
+	assert(("Failed to open database connection", rc == SQLITE_OK));
 
 	onActionLoad();
 }

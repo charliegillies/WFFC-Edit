@@ -74,7 +74,9 @@
     <ClCompile Include="History.cpp">
       <Filter>Tool\History</Filter>
     </ClCompile>
-    <ClCompile Include="InputProcessor.cpp" />
+    <ClCompile Include="InputProcessor.cpp">
+      <Filter>Tool</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DeviceResources.h">
