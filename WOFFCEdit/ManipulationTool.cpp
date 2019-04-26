@@ -2,17 +2,23 @@
 
 #include "InputCommands.h"
 #include "SceneObject.h"
+#include "ToolMain.h"
+#include "History.h"
 
 #include <d3d11.h>
 #include "SimpleMath.h"
 
-using Vector3 = DirectX::SimpleMath::Vector3;
+using namespace DirectX::SimpleMath;
 
 ManipulationTool::ManipulationTool()
 {
+	translator = inactive;
+	rotator = inactive;
+	scalar = inactive;
+	x = 0; y = 0; z = 0;
 }
 
-bool ManipulationTool::rotate(const InputCommands * input, SceneObject * selected)
+bool ManipulationTool::rotate(const InputCommands* input, SceneObject* selected, History* history)
 {
 	// Manipulate object rotation according to input
 	Vector3 rotation = { selected->rotX, selected->rotY, selected->rotZ };
@@ -38,14 +44,25 @@ bool ManipulationTool::rotate(const InputCommands * input, SceneObject * selecte
 	}
 
 	if (change.Length() > 0.0f) {
+		if (rotator == inactive) {
+			rotator = processing;
+			x = rotation.x; y = rotation.z; z = rotation.z;
+		}
+
 		rotation += change;
 		selected->setRotation(rotation.x, rotation.y, rotation.z);
 		return true;
 	}
+
+	if (rotator == processing) {
+		rotator = inactive;
+		history->log(TransformEdit::Rotate(selected, x, y, z, rotation.x, rotation.y, rotation.z));
+	}
+
 	return false;
 }
 
-bool ManipulationTool::scale(const InputCommands * input, SceneObject * selected)
+bool ManipulationTool::scale(const InputCommands* input, SceneObject* selected, History* history)
 {
 	// Manipulate scale according to the input
 	Vector3 scale = { selected->scaX, selected->scaY, selected->scaZ };
@@ -78,7 +95,7 @@ bool ManipulationTool::scale(const InputCommands * input, SceneObject * selected
 	return false;
 }
 
-bool ManipulationTool::translate(const InputCommands * input, SceneObject * selected)
+bool ManipulationTool::translate(const InputCommands * input, SceneObject * selected, History* history)
 {
 	// Manipulate position according to the input
 	Vector3 position = { selected->posX, selected->posY, selected->posZ };
@@ -109,4 +126,31 @@ bool ManipulationTool::translate(const InputCommands * input, SceneObject * sele
 		return true;
 	}
 	return false;
+}
+
+TransformEdit * TransformEdit::Rotate(SceneObject * obj, float x, float y, float z, float x1, float y1, float z1)
+{
+	auto edit = new TransformEdit();
+	edit->obj = obj;
+	edit->mode = ROTATE;
+	edit->bx = x; edit->by = y; edit->bz = z;
+	edit->fx = x1; edit->fy = y1; edit->fz = z1;
+	return edit;
+}
+
+void TransformEdit::execute(ToolMain* tool, bool asRedo)
+{
+	obj->setRotation(fx, fy, fz);
+	tool->setDirty(true);
+}
+
+void TransformEdit::undo(ToolMain* tool)
+{
+	obj->setRotation(bx, by, bz);
+	tool->setDirty(true);
+}
+
+std::wstring TransformEdit::get_label()
+{
+	return L"Edited transform";
 }

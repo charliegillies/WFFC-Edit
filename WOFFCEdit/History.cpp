@@ -1,7 +1,7 @@
 #include "History.h"
 #include "Command.h"
 
-History::History() : m_index(0)
+History::History(ToolMain* tool) : m_index(0), m_tool(tool)
 {
 }
 
@@ -22,7 +22,7 @@ void History::log(Command* cmd)
 
 	// Execute the command, but not as a redo, as this is the first
 	// time the command is being executed in the history
-	cmd->execute(false);
+	cmd->execute(m_tool, false);
 	m_commandHistory.push_back(cmd);
 
 	// Move the index to be equal to the 
@@ -37,7 +37,7 @@ bool History::undo()
 
 	// Undo the last command that was executed
 	Command* last = m_commandHistory[m_index];
-	last->undo();
+	last->undo(m_tool);
 	// and move the index back one
 	m_index -= 1;
 
@@ -52,7 +52,7 @@ bool History::redo()
 
 	m_index += 1;
 	Command* next = m_commandHistory[m_index];
-	next->execute(true);
+	next->execute(m_tool, true);
 	return true;
 }
 

@@ -49,6 +49,7 @@ public:
 	int m_selectedObject;						//ID of current Selection
 
 	SceneGraph* getGraph();
+	void setDirty(bool dirty);
 
 private:
 	SceneObject* getSelectedObject();

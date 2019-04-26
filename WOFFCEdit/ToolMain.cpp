@@ -93,7 +93,7 @@ void ToolMain::Tick(MSG *msg, History* history)
 
 		if (new_pick != -1 && new_pick != m_selectedObject) {
 			// log the selection change - so the user can undo it
-			history->log(new ChangeSelectionCommand(new_pick, m_selectedObject, this));
+			history->log(new ChangeSelectionCommand(new_pick, m_selectedObject));
 		}
 	}
 
@@ -109,13 +109,13 @@ void ToolMain::Tick(MSG *msg, History* history)
 		// and if the tool is used - change the flag to rebuild our display
 		if (selected != nullptr) {
 			if (m_mode == EditorMode::MOVE) {
-				m_doRebuildDisplay |= m_manipulator.translate(&m_inputCommands, selected);
+				m_doRebuildDisplay |= m_manipulator.translate(&m_inputCommands, selected, history);
 			}
 			else if (m_mode == EditorMode::ROTATE) {
-				m_doRebuildDisplay |= m_manipulator.rotate(&m_inputCommands, selected);
+				m_doRebuildDisplay |= m_manipulator.rotate(&m_inputCommands, selected, history);
 			}
 			else if (m_mode == EditorMode::SCALE) {
-				m_doRebuildDisplay |= m_manipulator.scale(&m_inputCommands, selected);
+				m_doRebuildDisplay |= m_manipulator.scale(&m_inputCommands, selected, history);
 			}
 		}
 	}
@@ -140,7 +140,7 @@ void ToolMain::UpdateInput(MSG * msg)
 
 Command* ToolMain::createAddNewSceneObjectCommand()
 {
-	return new AddNewSceneObjectCommand(this);
+	return new AddNewSceneObjectCommand();
 }
 
 InputCommands& ToolMain::getInputCommands()
@@ -166,6 +166,11 @@ void ToolMain::editorModeChanged(const EditorMode mode)
 SceneGraph * ToolMain::getGraph()
 {
 	return &m_graph;
+}
+
+void ToolMain::setDirty(bool dirty)
+{
+	m_doRebuildDisplay = dirty;
 }
 
 SceneObject * ToolMain::getSelectedObject()

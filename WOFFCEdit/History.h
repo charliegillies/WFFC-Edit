@@ -4,6 +4,7 @@
 
 #include <vector>
 struct Command;
+class ToolMain;
 
 // The history is a list of the actions/commands performed by the user
 // within the editor. We want the user to be able to use undo
@@ -12,9 +13,10 @@ class History {
 private:
 	std::vector<Command*> m_commandHistory;
 	int m_index;
+	ToolMain* m_tool;
 
 public:
-	History();
+	History(ToolMain* tool);
 
 	void log(Command* cmd);
 	bool undo();

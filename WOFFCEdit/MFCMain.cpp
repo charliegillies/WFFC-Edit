@@ -52,7 +52,7 @@ BOOL MFCMain::InitInstance()
 	m_width = WindowRECT.Width();
 	m_height = WindowRECT.Height();
 
-	m_ToolSystem.onActionInitialise(m_toolHandle, m_width, m_height);
+	m_toolSystem.onActionInitialise(m_toolHandle, m_width, m_height);
 
 	return TRUE;
 }
@@ -80,12 +80,12 @@ int MFCMain::Run()
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 
-			m_ToolSystem.UpdateInput(&msg);
+			m_toolSystem.UpdateInput(&msg);
 		}
 		else
 		{
 			int numCommands = m_history.num_commands();
-			m_ToolSystem.Tick(&msg, &m_history);
+			m_toolSystem.Tick(&msg, &m_history);
 
 			// Check if there has been a change in the command history
 			// if there has, update the label.
@@ -93,7 +93,7 @@ int MFCMain::Run()
 				m_frame->m_wndStatusBar.SetPaneText(1, m_history.get_current_cmd_label().c_str(), 1);
 			}
 
-			InputCommands& input = m_ToolSystem.getInputCommands();
+			InputCommands& input = m_toolSystem.getInputCommands();
 			if (input.undo) {
 				// attempt to undo the history, change the label if we succeed
 				if (m_history.undo()) {
@@ -126,25 +126,25 @@ void MFCMain::MenuFileQuit()
 
 void MFCMain::MenuFileSaveTerrain()
 {
-	m_ToolSystem.onActionSaveTerrain();
+	m_toolSystem.onActionSaveTerrain();
 }
 
 void MFCMain::MenuEditSelect()
 {
 	m_ToolSelectDialogue.Create(IDD_DIALOG1);
 	m_ToolSelectDialogue.ShowWindow(SW_SHOW);
-	m_ToolSelectDialogue.SetObjectData(m_ToolSystem.getGraph()->getObjects(), &m_ToolSystem.m_selectedObject);
+	m_ToolSelectDialogue.SetObjectData(m_toolSystem.getGraph()->getObjects(), &m_toolSystem.m_selectedObject);
 }
 
 void MFCMain::Button_SaveScene()
 {
-	m_ToolSystem.onActionSave();
+	m_toolSystem.onActionSave();
 }
 
 void MFCMain::Button_NewSceneObject()
 {
 	// Log the command for creating a new blank scene object
-	m_history.log(m_ToolSystem.createAddNewSceneObjectCommand());
+	m_history.log(m_toolSystem.createAddNewSceneObjectCommand());
 	// Change the bottom info to show the new history command label
 	m_frame->m_wndStatusBar.SetPaneText(1, m_history.get_current_cmd_label().c_str(), 1);
 }
@@ -152,7 +152,7 @@ void MFCMain::Button_NewSceneObject()
 void MFCMain::Button_ToggleWireframe()
 {
 	// Toggle wireframe on/off, and change the interface button mode appropriately
-	bool toggled = m_ToolSystem.onToggleWireframe();
+	bool toggled = m_toolSystem.onToggleWireframe();
 	m_frame->ChangeWireframeButtonState(toggled);
 }
 
@@ -183,10 +183,10 @@ void MFCMain::ChangeEditorMode(const EditorMode mode)
 		// informs the frame so the appropriate button states will change.
 		m_frame->EditorModeChanged(mode);
 	}
-	m_ToolSystem.editorModeChanged(mode);
+	m_toolSystem.editorModeChanged(mode);
 }
 
-MFCMain::MFCMain()
+MFCMain::MFCMain() : m_history(&m_toolSystem)
 {
 	ChangeEditorMode(EditorMode::CAMERA);
 }

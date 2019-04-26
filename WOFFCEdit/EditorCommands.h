@@ -15,11 +15,11 @@ private:
 	SceneObject m_sceneObject;
 
 public:
-	AddNewSceneObjectCommand(ToolMain* tool);
+	AddNewSceneObjectCommand();
 
 	// Inherited via Command
-	virtual void execute(bool asRedo) override;
-	virtual void undo() override;
+	virtual void execute(ToolMain* tool, bool asRedo) override;
+	virtual void undo(ToolMain* tool) override;
 	virtual std::wstring get_label() override;
 };
 
@@ -29,10 +29,10 @@ private:
 	int m_newSelectionId, m_lastSelectionId;
 
 public:
-	ChangeSelectionCommand(int newId, int lastId, ToolMain* tool);
+	ChangeSelectionCommand(int newId, int lastId);
 
 	// Inherited via Command
-	virtual void execute(bool asRedo) override;
-	virtual void undo() override;
+	virtual void execute(ToolMain* tool, bool asRedo) override;
+	virtual void undo(ToolMain* tool) override;
 	virtual std::wstring get_label() override;
 };
