@@ -133,7 +133,7 @@ void MFCMain::MenuEditSelect()
 {
 	m_ToolSelectDialogue.Create(IDD_DIALOG1);
 	m_ToolSelectDialogue.ShowWindow(SW_SHOW);
-	m_ToolSelectDialogue.SetObjectData(&m_ToolSystem.m_sceneGraph, &m_ToolSystem.m_selectedObject);
+	m_ToolSelectDialogue.SetObjectData(m_ToolSystem.getGraph()->getObjects(), &m_ToolSystem.m_selectedObject);
 }
 
 void MFCMain::Button_SaveScene()

@@ -5,15 +5,15 @@
 #include "EditorCommands.h"
 #include "History.h"
 
-const int NO_SELECTION = -1;
+const int NO_SELECTION_ID = -1;
 
 //
 //ToolMain Class
 ToolMain::ToolMain() : m_manipulator()
 {
 	m_currentChunk = 0;		//default value
-	m_selectedObject = NO_SELECTION;	//initial selection ID
-	m_sceneGraph.clear();	//clear the vector for the scenegraph
+	m_selectedObject = NO_SELECTION_ID;	//initial selection ID
+	m_graph.clear();	//clear the scenegraph
 	m_doRebuildDisplay = false;
 
 	ZeroMemory(&m_inputCommands, sizeof(InputCommands));
@@ -47,14 +47,14 @@ void ToolMain::onActionInitialise(HWND handle, int width, int height)
 void ToolMain::onActionLoad()
 {
 	// Load the current chunk and scene objects into our data
-	if (!m_sceneGraph.empty()) {
-		m_sceneGraph.clear();
+	if (!m_graph.empty()) {
+		m_graph.clear();
 	}
 
 	// read our scene graph & chunk data from the database IO
-	m_database.read(&m_sceneGraph, &m_chunk);
+	m_database.read(&m_graph, &m_chunk);
 	//Process results into renderable
-	m_d3dRenderer.BuildDisplayList(&m_sceneGraph);
+	m_d3dRenderer.BuildDisplayList(m_graph.getObjects());
 	//build the renderable chunk 
 	m_d3dRenderer.BuildDisplayChunk(&m_chunk);
 }
@@ -62,7 +62,7 @@ void ToolMain::onActionLoad()
 void ToolMain::onActionSave()
 {
 	// Write the scene graph to the database
-	m_database.writeGraph(&m_sceneGraph);
+	m_database.writeGraph(&m_graph);
 	MessageBox(NULL, L"Objects Saved", L"Notification", MB_OK);
 }
 
@@ -122,9 +122,10 @@ void ToolMain::Tick(MSG *msg, History* history)
 	
 	// Dirty flag that indicates if the display list requires
 	// to be rebuilt or not.
-	if (m_doRebuildDisplay) {
-		m_d3dRenderer.BuildDisplayList(&m_sceneGraph);
+	if (m_doRebuildDisplay || m_graph.isDirty()) {
+		m_d3dRenderer.BuildDisplayList(m_graph.getObjects());
 		m_doRebuildDisplay = false;
+		m_graph.setDirty(false);
 	}
 
 	//Renderer Update Call
@@ -140,52 +141,6 @@ void ToolMain::UpdateInput(MSG * msg)
 Command* ToolMain::createAddNewSceneObjectCommand()
 {
 	return new AddNewSceneObjectCommand(this);
-}
-
-SceneObject& ToolMain::createNewSceneObject()
-{
-	// Push an empty scene object into the graph, then get a reference to it
-	SceneObject& new_obj = insertSceneObject(SceneObject::CreatePrimitive());
-	return new_obj;
-}
-
-SceneObject & ToolMain::insertSceneObject(SceneObject && obj)
-{
-	m_doRebuildDisplay = true;
-	m_sceneGraph.push_back(obj);
-	SceneObject& new_obj = m_sceneGraph.back();
-	new_obj.ID = createNewSceneObjectID();
-	return new_obj;
-}
-
-int ToolMain::createNewSceneObjectID()
-{
-	// We want to generate an ID for our scene object
-	// this can be done multiple ways, including just allowing the database 
-	// to do it with auto-increment, but since we have 
-	// local records of the entities, we should be
-	// able to just get a new id from our local records
-	int new_id = -1;
-	for (SceneObject& sObj : m_sceneGraph)
-		new_id = max(new_id, sObj.ID);
-	return new_id + 1;
-}
-
-bool ToolMain::removeSceneObject(SceneObject & target)
-{
-	// The target ref is probably out of date
-	// and so we will need to get the up to date one with the equal id
-	for (auto it = m_sceneGraph.begin(); it != m_sceneGraph.end(); it++) {
-		SceneObject& obj = *it;
-		if (obj.ID == target.ID) {
-			// update reference
-			target = obj;
-			m_sceneGraph.erase(it);
-			m_doRebuildDisplay = true;
-			return true;
-		}
-	}
-	return false;
 }
 
 InputCommands& ToolMain::getInputCommands()
@@ -208,17 +163,15 @@ void ToolMain::editorModeChanged(const EditorMode mode)
 	m_mode = mode;
 }
 
+SceneGraph * ToolMain::getGraph()
+{
+	return &m_graph;
+}
+
 SceneObject * ToolMain::getSelectedObject()
 {
 	// No selection? nullptr!
-	if (m_selectedObject == NO_SELECTION) return nullptr;
-
+	if (m_selectedObject == NO_SELECTION_ID) return nullptr;
 	// otherwise, search through the graph for our selection!
-	// TODO: Move this to a map for no linear lookup time.
-	for (SceneObject& obj : m_sceneGraph) {
-		if (obj.ID == m_selectedObject) {
-			return &obj;
-		}
-	}
-	return nullptr;
+	return m_graph.getObjectById(m_selectedObject);
 }

@@ -2,6 +2,8 @@
 #include <string>
 #include <sstream>
 
+#include "SceneGraph.h"
+
 DatabaseIO::DatabaseIO()
 {
 	m_databaseConnection = nullptr;
@@ -23,7 +25,7 @@ bool DatabaseIO::tryOpenConnection()
 	return rc == SQLITE_OK;
 }
 
-void DatabaseIO::read(std::vector<SceneObject>* graph, ChunkObject* chunk)
+void DatabaseIO::read(SceneGraph* graph, ChunkObject* chunk)
 {
 	//SQL
 	int rc;
@@ -101,7 +103,7 @@ void DatabaseIO::read(std::vector<SceneObject>* graph, ChunkObject* chunk)
 		newSceneObject.light_quadratic = sqlite3_column_double(pResults, 55);
 
 		//send completed object to scenegraph
-		graph->push_back(newSceneObject);
+		graph->getObjects()->push_back(newSceneObject);
 	}
 
 	//THE WORLD CHUNK
@@ -133,7 +135,7 @@ void DatabaseIO::read(std::vector<SceneObject>* graph, ChunkObject* chunk)
 	chunk->tex_splat_4_tiling = sqlite3_column_int(pResultsChunk, 18);
 }
 
-void DatabaseIO::writeGraph(std::vector<SceneObject>* graph)
+void DatabaseIO::writeGraph(SceneGraph* graph)
 {
 	//SQL
 	int rc;
@@ -151,9 +153,11 @@ void DatabaseIO::writeGraph(std::vector<SceneObject>* graph)
 	std::wstring sqlCommand2;
 	int numObjects = graph->size();	//Loop thru the scengraph.
 
+	std::vector<SceneObject>* objects = graph->getObjects();
+
 	for (int i = 0; i < numObjects; i++)
 	{
-		SceneObject& obj = graph->at(i);
+		SceneObject& obj = objects->at(i);
 
 		std::stringstream command;
 		command << "INSERT INTO Objects "

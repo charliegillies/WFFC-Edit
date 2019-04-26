@@ -9,6 +9,7 @@
 #include "InputProcessor.h"
 #include "DatabaseIO.h"
 #include "ManipulationTool.h"
+#include "SceneGraph.h"
 
 #include <vector>
 
@@ -34,11 +35,7 @@ public:
 	void	UpdateInput(MSG *msg);
 
 	Command* createAddNewSceneObjectCommand();
-	SceneObject& createNewSceneObject();
-	SceneObject& insertSceneObject(SceneObject&& obj);
-	int createNewSceneObjectID();
 
-	bool removeSceneObject(SceneObject& target);
 	InputCommands& getInputCommands();
 
 	void setSelectionID(int id);
@@ -48,9 +45,10 @@ public:
 	void editorModeChanged(const EditorMode mode);
 
 public:
-	std::vector<SceneObject>    m_sceneGraph;	//our scenegraph storing all the objects in the current chunk
 	ChunkObject					m_chunk;		//our landscape chunk
 	int m_selectedObject;						//ID of current Selection
+
+	SceneGraph* getGraph();
 
 private:
 	SceneObject* getSelectedObject();
@@ -58,6 +56,7 @@ private:
 private:
 	EditorMode m_mode;
 
+	SceneGraph m_graph;
 	DatabaseIO m_database;
 	InputProcessor m_input;
 	ManipulationTool m_manipulator;

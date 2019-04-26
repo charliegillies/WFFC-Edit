@@ -8,16 +8,16 @@ AddNewSceneObjectCommand::AddNewSceneObjectCommand(ToolMain * tool) : m_tool(too
 void AddNewSceneObjectCommand::execute(bool asRedo)
 {
 	if (asRedo) {
-		m_sceneObject = m_tool->insertSceneObject(std::move(m_sceneObject));
+		m_sceneObject = m_tool->getGraph()->insertSceneObject(std::move(m_sceneObject));
 	}
 	else {
-		m_sceneObject = m_tool->createNewSceneObject();
+		m_sceneObject = m_tool->getGraph()->createNewSceneObject();
 	}
 }
 void AddNewSceneObjectCommand::undo()
 {
 	// Attempt to remove the scene object that we added
-	bool removed = m_tool->removeSceneObject(m_sceneObject);
+	bool removed = m_tool->getGraph()->removeSceneObject(m_sceneObject);
 	if (!removed) {
 		// TODO: Debug log an error!
 	}

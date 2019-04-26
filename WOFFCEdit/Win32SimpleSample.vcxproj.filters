@@ -77,8 +77,15 @@
     <ClCompile Include="InputProcessor.cpp">
       <Filter>Tool</Filter>
     </ClCompile>
-    <ClCompile Include="DatabaseIO.cpp" />
-    <ClCompile Include="ManipulationTool.cpp" />
+    <ClCompile Include="ManipulationTool.cpp">
+      <Filter>Tool</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseIO.cpp">
+      <Filter>Tool</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneGraph.cpp">
+      <Filter>Tool</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DeviceResources.h">
@@ -150,6 +157,9 @@
       <Filter>Tool</Filter>
     </ClInclude>
     <ClInclude Include="ManipulationTool.h">
+      <Filter>Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneGraph.h">
       <Filter>Tool</Filter>
     </ClInclude>
   </ItemGroup>
