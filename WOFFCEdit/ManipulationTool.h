@@ -14,15 +14,19 @@ private:
 		SCALE, ROTATE, TRANSLATE
 	} mode;
 
-public:
 	// Beginning x/y/z
 	float bx, by, bz;
 	// Final x/y/z
 	float fx, fy, fz;
+	int objID;
 
-	SceneObject* obj;
+	void setValues(SceneObject* obj, float x, float y, float z);
 
-	static TransformEdit* Rotate(SceneObject* obj, float x, float y, float z, float x1, float y1, float z1);
+public:
+	// Static factory methods for each transform tool
+	static TransformEdit* Rotate(int objId, float x, float y, float z, float x1, float y1, float z1);
+	static TransformEdit* Scale(int objId, float x, float y, float z, float x1, float y1, float z1);
+	static TransformEdit* Translate(int objId, float x, float y, float z, float x1, float y1, float z1);
 
 	// Inherited via Command
 	virtual void execute(ToolMain* tool, bool asRedo) override;
@@ -35,7 +39,7 @@ public:
 class ManipulationTool {
 private:
 	enum {
-		inactive, processing, stopped
+		inactive, processing
 	} rotator, scalar, translator;
 
 	float x, y, z;

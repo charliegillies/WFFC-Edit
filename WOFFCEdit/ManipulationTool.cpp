@@ -44,9 +44,11 @@ bool ManipulationTool::rotate(const InputCommands* input, SceneObject* selected,
 	}
 
 	if (change.Length() > 0.0f) {
+		// if the manipulator hasn't been used, cache the original position
+		// for the undo history
 		if (rotator == inactive) {
 			rotator = processing;
-			x = rotation.x; y = rotation.z; z = rotation.z;
+			x = rotation.x; y = rotation.y; z = rotation.z;
 		}
 
 		rotation += change;
@@ -56,7 +58,7 @@ bool ManipulationTool::rotate(const InputCommands* input, SceneObject* selected,
 
 	if (rotator == processing) {
 		rotator = inactive;
-		history->log(TransformEdit::Rotate(selected, x, y, z, rotation.x, rotation.y, rotation.z));
+		history->log(TransformEdit::Rotate(selected->ID, x, y, z, rotation.x, rotation.y, rotation.z));
 	}
 
 	return false;
@@ -88,9 +90,21 @@ bool ManipulationTool::scale(const InputCommands* input, SceneObject* selected, 
 	}
 
 	if (change.Length() > 0.0f) {
+		// if the manipulator hasn't been used, cache the original position
+		// for the undo history
+		if (scalar == inactive) {
+			scalar = processing;
+			x = scale.x; y = scale.y; z = scale.z;
+		}
+
 		scale += change;
 		selected->setScale(scale.x, scale.y, scale.z);
 		return true;
+	}
+
+	if (scalar == processing) {
+		scalar = inactive;
+		history->log(TransformEdit::Scale(selected->ID, x, y, z, scale.x, scale.y, scale.z));
 	}
 	return false;
 }
@@ -121,18 +135,64 @@ bool ManipulationTool::translate(const InputCommands * input, SceneObject * sele
 	}
 
 	if (movement.Length() > 0.0f) {
+		// if the manipulator hasn't been used, cache the original position
+		// for the undo history
+		if (translator == inactive) {
+			translator = processing;
+			x = position.x; y = position.y; z = position.z;
+		}
 		position += movement;
 		selected->setPosition(position.x, position.y, position.z);
 		return true;
 	}
+
+	if (translator == processing) {
+		translator = inactive;
+		history->log(TransformEdit::Translate(selected->ID, x, y, z, position.x, position.y, position.z));
+	}
 	return false;
 }
 
-TransformEdit * TransformEdit::Rotate(SceneObject * obj, float x, float y, float z, float x1, float y1, float z1)
+void TransformEdit::setValues(SceneObject * obj, float x, float y, float z)
+{
+	switch (mode) {
+	case ROTATE:
+		obj->setRotation(x, y, z);
+		break;
+	case TRANSLATE:
+		obj->setPosition(x, y, z);
+		break;
+	case SCALE:
+		obj->setScale(x, y, z);
+		break;
+	}
+}
+
+TransformEdit * TransformEdit::Rotate(int objId, float x, float y, float z, float x1, float y1, float z1)
 {
 	auto edit = new TransformEdit();
-	edit->obj = obj;
+	edit->objID = objId;
 	edit->mode = ROTATE;
+	edit->bx = x; edit->by = y; edit->bz = z;
+	edit->fx = x1; edit->fy = y1; edit->fz = z1;
+	return edit;
+}
+
+TransformEdit * TransformEdit::Scale(int objId, float x, float y, float z, float x1, float y1, float z1)
+{
+	auto edit = new TransformEdit();
+	edit->objID = objId;
+	edit->mode = SCALE;
+	edit->bx = x; edit->by = y; edit->bz = z;
+	edit->fx = x1; edit->fy = y1; edit->fz = z1;
+	return edit;
+}
+
+TransformEdit * TransformEdit::Translate(int objId, float x, float y, float z, float x1, float y1, float z1)
+{
+	auto edit = new TransformEdit();
+	edit->objID = objId;
+	edit->mode = TRANSLATE;
 	edit->bx = x; edit->by = y; edit->bz = z;
 	edit->fx = x1; edit->fy = y1; edit->fz = z1;
 	return edit;
@@ -140,13 +200,19 @@ TransformEdit * TransformEdit::Rotate(SceneObject * obj, float x, float y, float
 
 void TransformEdit::execute(ToolMain* tool, bool asRedo)
 {
-	obj->setRotation(fx, fy, fz);
+	SceneObject* target = tool->getGraph()->getObjectById(objID);
+	if (target == nullptr) return;
+
+	setValues(target, fx, fy, fz);
 	tool->setDirty(true);
 }
 
 void TransformEdit::undo(ToolMain* tool)
 {
-	obj->setRotation(bx, by, bz);
+	SceneObject* target = tool->getGraph()->getObjectById(objID);
+	if (target == nullptr) return;
+
+	setValues(target, bx, by, bz);
 	tool->setDirty(true);
 }
 
