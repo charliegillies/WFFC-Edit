@@ -77,6 +77,7 @@
     <ClCompile Include="InputProcessor.cpp">
       <Filter>Tool</Filter>
     </ClCompile>
+    <ClCompile Include="DatabaseIO.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DeviceResources.h">
@@ -142,6 +143,9 @@
       <Filter>Tool</Filter>
     </ClInclude>
     <ClInclude Include="InputProcessor.h">
+      <Filter>Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseIO.h">
       <Filter>Tool</Filter>
     </ClInclude>
   </ItemGroup>

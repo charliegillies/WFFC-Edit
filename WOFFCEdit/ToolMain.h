@@ -3,11 +3,11 @@
 #include <afxext.h>
 #include "pch.h"
 #include "Game.h"
-#include "sqlite3.h"
 #include "SceneObject.h"
 #include "InputCommands.h"
 #include "Command.h"
 #include "InputProcessor.h"
+#include "DatabaseIO.h"
 
 #include <vector>
 
@@ -56,6 +56,7 @@ private:	//methods
 
 private:
 	EditorMode m_mode;
+	DatabaseIO m_database;
 	InputProcessor m_input;
 
 	bool m_doRebuildDisplay;
@@ -63,7 +64,6 @@ private:
 	Game	m_d3dRenderer;		//Instance of D3D rendering system for our tool
 	InputCommands m_inputCommands;		//input commands that we want to use and possibly pass over to the renderer
 	CRect	WindowRECT;		//Window area rectangle. 
-	sqlite3 *m_databaseConnection;	//sqldatabase handle
 
 	int m_width;		//dimensions passed to directX
 	int m_height;
