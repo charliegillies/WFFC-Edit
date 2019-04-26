@@ -317,6 +317,9 @@ void ToolMain::Tick(MSG *msg, History* history)
 		//add to scenegraph
 		//resend scenegraph to Direct X renderer
 
+
+
+
 	// Dirty flag that indicates if the display list requires
 	// to be rebuilt or not.
 	if (m_doRebuildDisplay) {
@@ -359,8 +362,9 @@ void ToolMain::UpdateInput(MSG * msg)
 		break;
 	}
 
-	bool ctrlDown = m_keyArray[VK_CONTROL];
-	if (!ctrlDown) {
+	m_inputCommands.ctrl = m_keyArray[VK_CONTROL];
+	m_inputCommands.shift = m_keyArray[VK_SHIFT];
+	if (!m_inputCommands.ctrl) {
 		// Map actions if their appropriate keybinds are down
 		// and the control modifier is NOT down
 		m_inputCommands.forward = m_keyArray['W'];
@@ -444,6 +448,7 @@ void ToolMain::forceSetSelectionID(int id)
 		if (obj.ID == id) {
 			obj.tex_diffuse_path = "database/data/rock.dds";
 			m_doRebuildDisplay = true;
+			break;
 		}
 	}
 }
@@ -451,4 +456,9 @@ void ToolMain::forceSetSelectionID(int id)
 bool ToolMain::onToggleWireframe()
 {
 	return m_d3dRenderer.toggleWireframe();
+}
+
+void ToolMain::editorModeChanged(const EditorMode mode)
+{
+	m_mode = mode;
 }

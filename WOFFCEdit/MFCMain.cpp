@@ -38,6 +38,8 @@ BOOL MFCMain::InitInstance()
 		0,
 		NULL
 	);
+	// Set the appropriate mode button down
+	m_frame->EditorModeChanged(m_mode);
 
 	//show and set the window to run and update. 
 	m_frame->ShowWindow(SW_SHOW);
@@ -156,35 +158,37 @@ void MFCMain::Button_ToggleWireframe()
 
 void MFCMain::Button_CameraToggle()
 {
-	m_mode = EditorMode::CAMERA;
+	ChangeEditorMode(EditorMode::CAMERA);
 }
 
 void MFCMain::Button_TranslateToggle()
 {
-	m_mode = EditorMode::MOVE;
-	if (m_frame != nullptr)
-		m_frame->EditorModeChanged(m_mode);
+	ChangeEditorMode(EditorMode::MOVE);
 }
 
 void MFCMain::Button_RotateToggle()
 {
-	m_mode = EditorMode::ROTATE;
-	if (m_frame != nullptr)
-		m_frame->EditorModeChanged(m_mode);
+	ChangeEditorMode(EditorMode::ROTATE);
 }
 
 void MFCMain::Button_ScaleToggle()
 {
-	m_mode = EditorMode::SCALE;
-	if (m_frame != nullptr)
-		m_frame->EditorModeChanged(m_mode);
+	ChangeEditorMode(EditorMode::SCALE);
+}
+
+void MFCMain::ChangeEditorMode(const EditorMode mode)
+{
+	m_mode = mode;
+	if (m_frame != nullptr) {
+		// informs the frame so the appropriate button states will change.
+		m_frame->EditorModeChanged(mode);
+	}
+	m_ToolSystem.editorModeChanged(mode);
 }
 
 MFCMain::MFCMain()
 {
-	m_mode = EditorMode::CAMERA;
-	if (m_frame != nullptr)
-		m_frame->EditorModeChanged(m_mode);
+	ChangeEditorMode(EditorMode::CAMERA);
 }
 
 

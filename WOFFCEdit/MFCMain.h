@@ -46,5 +46,7 @@ private:
 	afx_msg void Button_RotateToggle();
 	afx_msg void Button_ScaleToggle();
 
+	void ChangeEditorMode(const EditorMode mode);
+
 	DECLARE_MESSAGE_MAP()	// required macro for message map functionality  One per class
 };

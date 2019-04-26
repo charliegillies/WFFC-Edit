@@ -45,7 +45,9 @@ public:
 
 	bool onToggleWireframe();
 
-public:	//variables
+	void editorModeChanged(const EditorMode mode);
+
+public:
 	std::vector<SceneObject>    m_sceneGraph;	//our scenegraph storing all the objects in the current chunk
 	ChunkObject					m_chunk;		//our landscape chunk
 	int m_selectedObject;						//ID of current Selection
@@ -53,9 +55,9 @@ public:	//variables
 private:	//methods
 	void	onContentAdded();
 
-
-		
 private:
+	EditorMode m_mode;
+
 	bool m_doRebuildDisplay;
 	HWND	m_toolHandle;		//Handle to the  window
 	Game	m_d3dRenderer;		//Instance of D3D rendering system for our tool
