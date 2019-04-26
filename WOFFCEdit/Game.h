@@ -28,7 +28,7 @@ public:
 	void SetGridState(bool state);
 
 	// Basic game loop
-	void Tick(InputCommands * Input);
+	void Tick(const InputCommands * Input);
 	void Render();
 
 	// Rendering helpers

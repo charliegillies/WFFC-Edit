@@ -15,8 +15,6 @@ ToolMain::ToolMain() : m_manipulator()
 	m_selectedObject = NO_SELECTION_ID;	//initial selection ID
 	m_graph.clear();	//clear the scenegraph
 	m_doRebuildDisplay = false;
-
-	ZeroMemory(&m_inputCommands, sizeof(InputCommands));
 }
 
 ToolMain::~ToolMain()
@@ -74,11 +72,11 @@ void ToolMain::onActionSaveTerrain()
 void ToolMain::Tick(MSG *msg, History* history)
 {
 	// Process input, retrieves the current input commands
-	m_inputCommands = m_input.tick();
+	const InputCommands& commands = m_input.tick();
 
 	// If we click, then we need to perform a raycast to see
 	// if we have selected an entity from the cameras perspective
-	if (m_inputCommands.leftMouse == ClickState::DOWN) {
+	if (commands.leftMouse == ClickState::DOWN) {
 		std::vector<int> picked = m_d3dRenderer.FindMouseRayTargets();
 		
 		int new_pick = -1;
@@ -109,13 +107,13 @@ void ToolMain::Tick(MSG *msg, History* history)
 		// and if the tool is used - change the flag to rebuild our display
 		if (selected != nullptr) {
 			if (m_mode == EditorMode::MOVE) {
-				m_doRebuildDisplay |= m_manipulator.translate(&m_inputCommands, selected, history);
+				m_doRebuildDisplay |= m_manipulator.translate(&commands, selected, history);
 			}
 			else if (m_mode == EditorMode::ROTATE) {
-				m_doRebuildDisplay |= m_manipulator.rotate(&m_inputCommands, selected, history);
+				m_doRebuildDisplay |= m_manipulator.rotate(&commands, selected, history);
 			}
 			else if (m_mode == EditorMode::SCALE) {
-				m_doRebuildDisplay |= m_manipulator.scale(&m_inputCommands, selected, history);
+				m_doRebuildDisplay |= m_manipulator.scale(&commands, selected, history);
 			}
 		}
 	}
@@ -129,7 +127,7 @@ void ToolMain::Tick(MSG *msg, History* history)
 	}
 
 	//Renderer Update Call
-	m_d3dRenderer.Tick(&m_inputCommands);
+	m_d3dRenderer.Tick(&commands);
 }
 
 void ToolMain::UpdateInput(MSG * msg)
@@ -145,7 +143,7 @@ Command* ToolMain::createAddNewSceneObjectCommand()
 
 InputCommands& ToolMain::getInputCommands()
 {
-	return m_inputCommands;
+	return m_input.getCommands();
 }
 
 void ToolMain::setSelectionID(int id)

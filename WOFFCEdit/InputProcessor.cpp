@@ -1,5 +1,15 @@
 #include "InputProcessor.h"
 
+InputProcessor::InputProcessor()
+{
+	ZeroMemory(&m_inputCommands, sizeof(InputCommands));
+}
+
+InputCommands & InputProcessor::getCommands()
+{
+	return m_inputCommands;
+}
+
 const InputCommands& InputProcessor::tick()
 {
 	// Copy the keys from the this input frame
@@ -12,6 +22,14 @@ const InputCommands& InputProcessor::tick()
 	m_inputCommands.mouseVelocityY = (float)m_inputCommands.mouseY - m_lastMouseY;
 	m_lastMouseX = m_inputCommands.mouseX;
 	m_lastMouseY = m_inputCommands.mouseY;
+
+	if (m_lastInputCommands.leftMouse == ClickState::DOWN && m_inputCommands.leftMouse == ClickState::DOWN) {
+		m_inputCommands.leftMouse = ClickState::HELD;
+	}
+	if (m_lastInputCommands.rightMouse == ClickState::DOWN && m_inputCommands.rightMouse == ClickState::DOWN) {
+		m_inputCommands.rightMouse = ClickState::HELD;
+	}
+	m_lastInputCommands = m_inputCommands;
 
 	return m_inputCommands;
 }
@@ -66,5 +84,6 @@ void InputProcessor::process_msg(const MSG * msg)
 		m_inputCommands.undo = m_keyArray['Z'] && !m_lastKeyArray['Z'];
 		m_inputCommands.redo = m_keyArray['Y'] && !m_lastKeyArray['Y'];
 		m_inputCommands.save = m_keyArray['S'] && !m_lastKeyArray['S'];
+		m_inputCommands.wireframe = m_keyArray['W'] && !m_lastKeyArray['W'];
 	}
 }

@@ -65,7 +65,6 @@ private:
 	bool m_doRebuildDisplay;
 	HWND	m_toolHandle;		//Handle to the  window
 	Game	m_d3dRenderer;		//Instance of D3D rendering system for our tool
-	InputCommands m_inputCommands;		//input commands that we want to use and possibly pass over to the renderer
 	CRect	WindowRECT;		//Window area rectangle. 
 
 	int m_width;		//dimensions passed to directX

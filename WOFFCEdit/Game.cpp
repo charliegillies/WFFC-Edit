@@ -83,7 +83,7 @@ void Game::SetGridState(bool state)
 
 #pragma region Frame Update
 // Executes the basic game loop.
-void Game::Tick(InputCommands *Input)
+void Game::Tick(const InputCommands *Input)
 {
 	//copy over the input commands so we have a local version to use elsewhere.
 	m_InputCommands = *Input;
