@@ -7,6 +7,7 @@
 #include "SceneObject.h"
 #include "InputCommands.h"
 #include "Command.h"
+#include "InputProcessor.h"
 
 #include <vector>
 
@@ -17,8 +18,6 @@ enum class EditorMode {
 class ToolMain
 {
 public:
-	static const int NUM_KEYS = 256;
-
 	ToolMain();
 	~ToolMain();
 
@@ -57,18 +56,17 @@ private:	//methods
 
 private:
 	EditorMode m_mode;
+	InputProcessor m_input;
 
 	bool m_doRebuildDisplay;
 	HWND	m_toolHandle;		//Handle to the  window
 	Game	m_d3dRenderer;		//Instance of D3D rendering system for our tool
 	InputCommands m_inputCommands;		//input commands that we want to use and possibly pass over to the renderer
 	CRect	WindowRECT;		//Window area rectangle. 
-	char	m_keyArray[NUM_KEYS], m_lastKeyArray[NUM_KEYS];
 	sqlite3 *m_databaseConnection;	//sqldatabase handle
 
 	int m_width;		//dimensions passed to directX
 	int m_height;
 	int m_currentChunk;			//the current chunk of thedatabase that we are operating on.  Dictates loading and saving. 
 	
-	float m_lastMouseX, m_lastMouseY;
 };

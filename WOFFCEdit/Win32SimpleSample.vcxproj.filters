@@ -65,9 +65,16 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="History.cpp" />
-    <ClCompile Include="EditorCommands.cpp" />
-    <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="EditorCommands.cpp">
+      <Filter>Tool\History</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils.cpp">
+      <Filter>Tool</Filter>
+    </ClCompile>
+    <ClCompile Include="History.cpp">
+      <Filter>Tool\History</Filter>
+    </ClCompile>
+    <ClCompile Include="InputProcessor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DeviceResources.h">
@@ -129,7 +136,12 @@
     <ClInclude Include="Command.h">
       <Filter>Tool\History</Filter>
     </ClInclude>
-    <ClInclude Include="Utils.h" />
+    <ClInclude Include="Utils.h">
+      <Filter>Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="InputProcessor.h">
+      <Filter>Tool</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
