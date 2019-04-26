@@ -16,9 +16,12 @@ public:
 	int chunk_ID;
 	std::string model_path;
 	std::string tex_diffuse_path;
+
+	// Transform data!
 	float posX, posY, posZ;
 	float rotX, rotY, rotZ;
 	float scaX, scaY, scaZ;
+	
 	bool render, collision;
 	std::string collision_mesh;
 	bool collectable, destructable;
@@ -53,7 +56,8 @@ public:
 	float light_quadratic;
 
 	void setPosition(const float x, const float y, const float z);
-
+	void setScale(const float x, const float y, const float z);
+	void setRotation(const float x, const float y, const float z);
 
 	static SceneObject CreatePrimitive();
 };

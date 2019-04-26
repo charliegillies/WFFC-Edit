@@ -8,9 +8,11 @@ SceneObject::SceneObject()
 	chunk_ID =0 ;
 	model_path ="";
 	tex_diffuse_path = "";
+	
 	posX = 0.0f;	posY = 0.0f;	posZ = 0.0f;
 	rotX = 0.0f;	rotY = 0.0f;	rotZ = 0.0f;
 	scaX = 1.0f;	scaY = 1.0f;	scaZ = 1.0f;
+
 	render = true;
 	collision = false;
 	collision_mesh ="";
@@ -58,6 +60,16 @@ SceneObject::~SceneObject()
 void SceneObject::setPosition(const float x, const float y, const float z)
 {
 	posX = x; posY = y; posZ = z;
+}
+
+void SceneObject::setScale(const float x, const float y, const float z)
+{
+	scaX = x; scaY = y; scaZ = z;
+}
+
+void SceneObject::setRotation(const float x, const float y, const float z)
+{
+	rotX = x; rotY = y; rotZ = z;
 }
 
 SceneObject SceneObject::CreatePrimitive()

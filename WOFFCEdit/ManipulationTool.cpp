@@ -19,6 +19,33 @@ bool ManipulationTool::rotate(const InputCommands * input, SceneObject * selecte
 
 bool ManipulationTool::scale(const InputCommands * input, SceneObject * selected)
 {
+	Vector3 scale = { selected->scaX, selected->scaY, selected->scaZ };
+	Vector3 change = Vector3::Zero;
+
+	if (input->left) {
+		change += Vector3::Left;
+	}
+	if (input->right) {
+		change += Vector3::Right;
+	}
+	if (input->forward) {
+		change += Vector3::Forward;
+	}
+	if (input->back) {
+		change += Vector3::Backward;
+	}
+	if (input->moveDown) {
+		change += Vector3::Down;
+	}
+	if (input->moveUp) {
+		change += Vector3::Up;
+	}
+
+	if (change.Length() > 0.0f) {
+		scale += change;
+		selected->setScale(scale.x, scale.y, scale.z);
+		return true;
+	}
 	return false;
 }
 
