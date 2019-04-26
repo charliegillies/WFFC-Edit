@@ -8,6 +8,7 @@
 #include "Command.h"
 #include "InputProcessor.h"
 #include "DatabaseIO.h"
+#include "ManipulationTool.h"
 
 #include <vector>
 
@@ -40,7 +41,7 @@ public:
 	bool removeSceneObject(SceneObject& target);
 	InputCommands& getInputCommands();
 
-	void forceSetSelectionID(int id);
+	void setSelectionID(int id);
 
 	bool onToggleWireframe();
 
@@ -51,13 +52,15 @@ public:
 	ChunkObject					m_chunk;		//our landscape chunk
 	int m_selectedObject;						//ID of current Selection
 
-private:	//methods
-	void	onContentAdded();
+private:
+	SceneObject* getSelectedObject();
 
 private:
 	EditorMode m_mode;
+
 	DatabaseIO m_database;
 	InputProcessor m_input;
+	ManipulationTool m_manipulator;
 
 	bool m_doRebuildDisplay;
 	HWND	m_toolHandle;		//Handle to the  window
@@ -68,5 +71,4 @@ private:
 	int m_width;		//dimensions passed to directX
 	int m_height;
 	int m_currentChunk;			//the current chunk of thedatabase that we are operating on.  Dictates loading and saving. 
-	
 };

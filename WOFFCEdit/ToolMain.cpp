@@ -5,18 +5,19 @@
 #include "EditorCommands.h"
 #include "History.h"
 
+const int NO_SELECTION = -1;
+
 //
 //ToolMain Class
 ToolMain::ToolMain()
 {
 	m_currentChunk = 0;		//default value
-	m_selectedObject = 0;	//initial selection ID
+	m_selectedObject = NO_SELECTION;	//initial selection ID
 	m_sceneGraph.clear();	//clear the vector for the scenegraph
 	m_doRebuildDisplay = false;
 
 	ZeroMemory(&m_inputCommands, sizeof(InputCommands));
 }
-
 
 ToolMain::~ToolMain()
 {
@@ -50,8 +51,8 @@ void ToolMain::onActionLoad()
 		m_sceneGraph.clear();
 	}
 
+	// read our scene graph & chunk data from the database IO
 	m_database.read(&m_sceneGraph, &m_chunk);
-
 	//Process results into renderable
 	m_d3dRenderer.BuildDisplayList(&m_sceneGraph);
 	//build the renderable chunk 
@@ -60,6 +61,7 @@ void ToolMain::onActionLoad()
 
 void ToolMain::onActionSave()
 {
+	// Write the scene graph to the database
 	m_database.writeGraph(&m_sceneGraph);
 	MessageBox(NULL, L"Objects Saved", L"Notification", MB_OK);
 }
@@ -95,16 +97,29 @@ void ToolMain::Tick(MSG *msg, History* history)
 		}
 	}
 
-	//do we have a selection
-	//do we have a mode
-	//are we clicking / dragging /releasing
-	//has something changed
-		//update Scenegraph
-		//add to scenegraph
-		//resend scenegraph to Direct X renderer
+	SceneObject* selected = getSelectedObject();
+	if (m_mode == EditorMode::CAMERA) {
+		m_d3dRenderer.setCameraLock(false);
+	}
+	else {
+		// lock camera if we are not in camera mode 
+		m_d3dRenderer.setCameraLock(true);
 
-
-
+		// if we have the selection, use the manipulator tool
+		// and if the tool is used - change the flag to rebuild our display
+		if (selected != nullptr) {
+			if (m_mode == EditorMode::MOVE) {
+				m_doRebuildDisplay != m_manipulator.translate(&m_inputCommands, selected);
+			}
+			else if (m_mode == EditorMode::ROTATE) {
+				m_doRebuildDisplay != m_manipulator.rotate(&m_inputCommands, selected);
+			}
+			else if (m_mode == EditorMode::SCALE) {
+				m_doRebuildDisplay != m_manipulator.scale(&m_inputCommands, selected);
+			}
+		}
+	}
+	
 	// Dirty flag that indicates if the display list requires
 	// to be rebuilt or not.
 	if (m_doRebuildDisplay) {
@@ -118,8 +133,8 @@ void ToolMain::Tick(MSG *msg, History* history)
 
 void ToolMain::UpdateInput(MSG * msg)
 {
+	// forward onto our input processor to process it
 	m_input.process_msg(msg);
-
 }
 
 Command* ToolMain::createAddNewSceneObjectCommand()
@@ -178,17 +193,9 @@ InputCommands& ToolMain::getInputCommands()
 	return m_inputCommands;
 }
 
-void ToolMain::forceSetSelectionID(int id)
+void ToolMain::setSelectionID(int id)
 {
 	m_selectedObject = id;
-
-	for (auto& obj : m_sceneGraph) {
-		if (obj.ID == id) {
-			obj.tex_diffuse_path = "database/data/rock.dds";
-			m_doRebuildDisplay = true;
-			break;
-		}
-	}
 }
 
 bool ToolMain::onToggleWireframe()
@@ -199,4 +206,19 @@ bool ToolMain::onToggleWireframe()
 void ToolMain::editorModeChanged(const EditorMode mode)
 {
 	m_mode = mode;
+}
+
+SceneObject * ToolMain::getSelectedObject()
+{
+	// No selection? nullptr!
+	if (m_selectedObject == NO_SELECTION) return nullptr;
+
+	// otherwise, search through the graph for our selection!
+	// TODO: Move this to a map for no linear lookup time.
+	for (SceneObject& obj : m_sceneGraph) {
+		if (obj.ID == m_selectedObject) {
+			return &obj;
+		}
+	}
+	return nullptr;
 }

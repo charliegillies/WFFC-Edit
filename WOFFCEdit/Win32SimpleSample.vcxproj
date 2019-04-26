@@ -198,6 +198,7 @@
     <ClInclude Include="EditorCommands.h" />
     <ClInclude Include="InputCommands.h" />
     <ClInclude Include="InputProcessor.h" />
+    <ClInclude Include="ManipulationTool.h" />
     <ClInclude Include="MFCFrame.h" />
     <ClInclude Include="MFCRenderFrame.h" />
     <ClInclude Include="pch.h" />

@@ -54,6 +54,8 @@ public:
 	// Wireframe
 	bool toggleWireframe();
 
+	void setCameraLock(const bool locked);
+
 #ifdef DXTK_AUDIO
 	void NewAudioDevice();
 #endif
@@ -72,6 +74,8 @@ private:
 
 	void XM_CALLCONV DrawGrid(DirectX::FXMVECTOR xAxis, DirectX::FXMVECTOR yAxis, DirectX::FXMVECTOR origin, size_t xdivs, size_t ydivs, DirectX::GXMVECTOR color);
 
+
+	bool m_camLocked;
 
 	RECT m_screenDimensions;
 

@@ -34,12 +34,12 @@ ChangeSelectionCommand::ChangeSelectionCommand(int newId, int lastId, ToolMain* 
 
 void ChangeSelectionCommand::execute(bool asRedo)
 {
-	m_tool->forceSetSelectionID(m_newSelectionId);
+	m_tool->setSelectionID(m_newSelectionId);
 }
 
 void ChangeSelectionCommand::undo()
 {
-	m_tool->forceSetSelectionID(m_lastSelectionId);
+	m_tool->setSelectionID(m_lastSelectionId);
 }
 
 std::wstring ChangeSelectionCommand::get_label()

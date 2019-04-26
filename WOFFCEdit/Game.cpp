@@ -21,6 +21,7 @@ Game::Game()
 
 	m_grid = false;
 	m_wireframe = false;
+	m_camLocked = false;
 }
 
 Game::~Game()
@@ -107,8 +108,9 @@ void Game::Tick(InputCommands *Input)
 // Updates the world.
 void Game::Update(DX::StepTimer const& timer)
 {
-	//apply camera vectors
-	m_camera.handleInput(m_InputCommands);
+	if(!m_camLocked)
+		m_camera.handleInput(m_InputCommands);
+
 	m_view = m_camera.createViewMatrix();
 
 	m_batchEffect->SetView(m_view);
@@ -463,6 +465,11 @@ bool Game::toggleWireframe()
 {
 	m_wireframe = !m_wireframe;
 	return m_wireframe;
+}
+
+void Game::setCameraLock(const bool locked)
+{
+	m_camLocked = locked;
 }
 
 #ifdef DXTK_AUDIO
