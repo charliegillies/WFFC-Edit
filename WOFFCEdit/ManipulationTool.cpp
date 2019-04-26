@@ -42,8 +42,6 @@ bool ManipulationTool::rotate(const InputCommands * input, SceneObject * selecte
 		selected->setRotation(rotation.x, rotation.y, rotation.z);
 		return true;
 	}
-
-
 	return false;
 }
 
