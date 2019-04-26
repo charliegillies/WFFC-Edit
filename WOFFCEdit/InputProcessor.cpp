@@ -12,6 +12,26 @@ InputCommands & InputProcessor::getCommands()
 
 const InputCommands& InputProcessor::tick()
 {
+	if (!m_inputCommands.ctrl) {
+		// Map actions if their appropriate keybinds are down
+		// and the control modifier is NOT down
+		m_inputCommands.forward = m_keyArray['W'];
+		m_inputCommands.back = m_keyArray['S'];
+		m_inputCommands.left = m_keyArray['A'];
+		m_inputCommands.right = m_keyArray['D'];
+		m_inputCommands.rotateLeft = m_keyArray['Q'];
+		m_inputCommands.rotateRight = m_keyArray['E'];
+		m_inputCommands.down = m_keyArray['Z'];
+		m_inputCommands.up = m_keyArray['X'];
+	}
+	else {
+		// Ctrl modifier is down, so check shortcuts!
+		m_inputCommands.undo = m_keyArray['Z'] && !m_lastKeyArray['Z'];
+		m_inputCommands.redo = m_keyArray['Y'] && !m_lastKeyArray['Y'];
+		m_inputCommands.save = m_keyArray['S'] && !m_lastKeyArray['S'];
+		m_inputCommands.wireframe = m_keyArray['W'] && !m_lastKeyArray['W'];
+	}
+
 	// Copy the keys from the this input frame
 	// to the last input frame, so we can compare
 	for (int i = 0; i < NUM_KEYS; i++)
@@ -67,23 +87,5 @@ void InputProcessor::process_msg(const MSG * msg)
 
 	m_inputCommands.ctrl = m_keyArray[VK_CONTROL];
 	m_inputCommands.shift = m_keyArray[VK_SHIFT];
-	if (!m_inputCommands.ctrl) {
-		// Map actions if their appropriate keybinds are down
-		// and the control modifier is NOT down
-		m_inputCommands.forward = m_keyArray['W'];
-		m_inputCommands.back = m_keyArray['S'];
-		m_inputCommands.left = m_keyArray['A'];
-		m_inputCommands.right = m_keyArray['D'];
-		m_inputCommands.rotateLeft = m_keyArray['Q'];
-		m_inputCommands.rotateRight = m_keyArray['E'];
-		m_inputCommands.down = m_keyArray['Z'];
-		m_inputCommands.up = m_keyArray['X'];
-	}
-	else {
-		// Ctrl modifier is down, so check shortcuts!
-		m_inputCommands.undo = m_keyArray['Z'] && !m_lastKeyArray['Z'];
-		m_inputCommands.redo = m_keyArray['Y'] && !m_lastKeyArray['Y'];
-		m_inputCommands.save = m_keyArray['S'] && !m_lastKeyArray['S'];
-		m_inputCommands.wireframe = m_keyArray['W'] && !m_lastKeyArray['W'];
-	}
+
 }

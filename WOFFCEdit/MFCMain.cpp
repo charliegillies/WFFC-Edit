@@ -113,6 +113,7 @@ int MFCMain::Run()
 				Button_SaveScene();
 			}
 			if (input.wireframe) {
+				// Emulate the toggle button using the keybind
 				Button_ToggleWireframe();
 			}
 		}
