@@ -78,6 +78,7 @@
       <Filter>Tool</Filter>
     </ClCompile>
     <ClCompile Include="DatabaseIO.cpp" />
+    <ClCompile Include="ManipulationTool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DeviceResources.h">

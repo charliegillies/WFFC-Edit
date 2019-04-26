@@ -176,6 +176,7 @@
     <ClCompile Include="History.cpp" />
     <ClCompile Include="InputProcessor.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="ManipulationTool.cpp" />
     <ClCompile Include="MFCFrame.cpp" />
     <ClCompile Include="MFCRenderFrame.cpp" />
     <ClCompile Include="pch.cpp" />

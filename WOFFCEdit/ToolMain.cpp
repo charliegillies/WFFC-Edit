@@ -9,7 +9,7 @@ const int NO_SELECTION = -1;
 
 //
 //ToolMain Class
-ToolMain::ToolMain()
+ToolMain::ToolMain() : m_manipulator()
 {
 	m_currentChunk = 0;		//default value
 	m_selectedObject = NO_SELECTION;	//initial selection ID
@@ -109,13 +109,13 @@ void ToolMain::Tick(MSG *msg, History* history)
 		// and if the tool is used - change the flag to rebuild our display
 		if (selected != nullptr) {
 			if (m_mode == EditorMode::MOVE) {
-				m_doRebuildDisplay != m_manipulator.translate(&m_inputCommands, selected);
+				m_doRebuildDisplay |= m_manipulator.translate(&m_inputCommands, selected);
 			}
 			else if (m_mode == EditorMode::ROTATE) {
-				m_doRebuildDisplay != m_manipulator.rotate(&m_inputCommands, selected);
+				m_doRebuildDisplay |= m_manipulator.rotate(&m_inputCommands, selected);
 			}
 			else if (m_mode == EditorMode::SCALE) {
-				m_doRebuildDisplay != m_manipulator.scale(&m_inputCommands, selected);
+				m_doRebuildDisplay |= m_manipulator.scale(&m_inputCommands, selected);
 			}
 		}
 	}
