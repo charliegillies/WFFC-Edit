@@ -86,6 +86,7 @@
     <ClCompile Include="SceneGraph.cpp">
       <Filter>Tool</Filter>
     </ClCompile>
+    <ClCompile Include="ObjectEditorDialogue.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DeviceResources.h">
@@ -162,6 +163,7 @@
     <ClInclude Include="SceneGraph.h">
       <Filter>Tool</Filter>
     </ClInclude>
+    <ClInclude Include="ObjectEditorDialogue.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

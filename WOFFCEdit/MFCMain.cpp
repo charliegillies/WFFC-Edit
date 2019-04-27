@@ -14,6 +14,7 @@ BEGIN_MESSAGE_MAP(MFCMain, CWinApp)
 	ON_COMMAND(ID_BUTTON_ROTATE, &MFCMain::Button_RotateToggle)
 	ON_COMMAND(ID_BUTTON_SCALE, &MFCMain::Button_ScaleToggle)
 	ON_COMMAND(ID_BUTTON_MOVE, &MFCMain::Button_TranslateToggle)
+	ON_COMMAND(ID_BUTTON_EDIT_OBJECT, &MFCMain::Button_EditObject)
 	
 	ON_UPDATE_COMMAND_UI(ID_INDICATOR_TOOL, &CMyFrame::OnUpdatePage)
 END_MESSAGE_MAP()
@@ -135,9 +136,9 @@ void MFCMain::MenuFileSaveTerrain()
 
 void MFCMain::MenuEditSelect()
 {
-	m_ToolSelectDialogue.Create(IDD_DIALOG1);
-	m_ToolSelectDialogue.ShowWindow(SW_SHOW);
-	m_ToolSelectDialogue.SetObjectData(m_toolSystem.getGraph()->getObjects(), &m_toolSystem.m_selectedObject);
+	m_selectDialogue.Create(IDD_DIALOG1);
+	m_selectDialogue.ShowWindow(SW_SHOW);
+	m_selectDialogue.SetObjectData(m_toolSystem.getGraph()->getObjects(), &m_toolSystem.m_selectedObject);
 }
 
 void MFCMain::Button_SaveScene()
@@ -178,6 +179,12 @@ void MFCMain::Button_RotateToggle()
 void MFCMain::Button_ScaleToggle()
 {
 	ChangeEditorMode(EditorMode::SCALE);
+}
+
+void MFCMain::Button_EditObject()
+{
+	m_objectEditDialogue.Create(ID_OBJECT_EDITOR);
+	m_objectEditDialogue.ShowWindow(SW_SHOW);
 }
 
 void MFCMain::ChangeEditorMode(const EditorMode mode)
