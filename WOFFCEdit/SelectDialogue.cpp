@@ -4,16 +4,18 @@
 #include "stdafx.h"
 #include "SelectDialogue.h"
 #include "ToolMain.h"
+#include "Utils.h"
+#include "resource.h"
 
 // SelectDialogue dialog
-
 IMPLEMENT_DYNAMIC(SelectDialogue, CDialogEx)
 
 //Message map.  Just like MFCMAIN.cpp.  This is where we catch button presses etc and point them to a handy dandy method.
 BEGIN_MESSAGE_MAP(SelectDialogue, CDialogEx)
-	ON_COMMAND(IDOK, &SelectDialogue::End)					//ok button
+	ON_COMMAND(IDOK, &SelectDialogue::End)
 	ON_BN_CLICKED(IDOK, &SelectDialogue::OnBnClickedOk)		
-	ON_LBN_SELCHANGE(IDC_HIERARCHY_LIST, &SelectDialogue::Select)	//listbox
+	ON_LBN_SELCHANGE(IDC_HIERARCHY_LIST, &SelectDialogue::Select)
+	//ON_NOTIFY(LVN_ITEMCHANGED, IDC_HIERARCHY_LIST, &SelectDialogue::Select)
 END_MESSAGE_MAP()
 
 
@@ -39,20 +41,31 @@ void SelectDialogue::SetObjectData(ToolMain* tool)
 	m_tool = tool;
 	m_sceneGraph = tool->getGraph()->getObjects();
 
-	//auto ctrl = m_listBox
+	// Allows full row selection instead of single-element
+	m_list.SetExtendedStyle(LVS_EX_FULLROWSELECT);
 
-	//roll through all the objects in the scene graph and put an entry for each in the listbox
+	// Insert columns into the structure
+	m_list.InsertColumn(0, L"ID", LVCFMT_LEFT, 100, 0);
+	m_list.InsertColumn(1, L"Name", LVCFMT_LEFT, 100, 1);
+	m_list.InsertColumn(2, L"Mesh", LVCFMT_LEFT, 200, 2);
+	m_list.InsertColumn(3, L"Texture", LVCFMT_LEFT, 200, 3);
+
+	// Show every scene object
 	for (int i = 0, count = m_sceneGraph->size(); i < count; i++) {
-		//easily possible to make the data string presented more complex. showing other columns.
-		std::wstring listBoxEntry = std::to_wstring(m_sceneGraph->at(i).ID);
-		m_listBox.AddString(listBoxEntry.c_str());
+		SceneObject& obj = m_sceneGraph->at(i);
+
+		// Display the row. Format: ID/Name/Mesh/Texture.
+		int row = m_list.InsertItem(obj.ID, std::to_wstring(obj.ID).c_str());
+		m_list.SetItem(row, 1, LVIF_TEXT, Utils::StringToWCHART(obj.name).c_str(), 0, 0, 0, 0);
+		m_list.SetItem(row, 2, LVIF_TEXT, Utils::StringToWCHART(obj.model_path).c_str(), 0, 0, 0, 0);
+		m_list.SetItem(row, 3, LVIF_TEXT, Utils::StringToWCHART(obj.tex_diffuse_path).c_str(), 0, 0, 0, 0);
 	}
 }
 
 void SelectDialogue::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_HIERARCHY_LIST, m_listBox);
+	DDX_Control(pDX, IDC_HIERARCHY_LIST, m_list);
 }
 
 void SelectDialogue::End()
@@ -62,10 +75,11 @@ void SelectDialogue::End()
 
 void SelectDialogue::Select()
 {
-	int index = m_listBox.GetCurSel();
-	CString currentSelectionValue;
-	m_listBox.GetText(index, currentSelectionValue);
-	m_tool->setSelectionID(_ttoi(currentSelectionValue));
+	int column = m_list.GetSelectedColumn();
+	if (column != -1) {
+		CString id = m_list.GetItemText(column, 0);
+		m_tool->setSelectionID(_ttoi(id));
+	}
 }
 
 BOOL SelectDialogue::OnInitDialog()
@@ -78,32 +92,6 @@ BOOL SelectDialogue::OnInitDialog()
 void SelectDialogue::PostNcDestroy()
 {
 }
-
-// SelectDialogue message handlers callback   - We only need this if the dailogue is being setup-with createDialogue().  We are doing
-//it manually so its better to use the messagemap
-/*INT_PTR CALLBACK SelectProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{	
-	switch (uMsg)
-	{
-	case WM_COMMAND:
-		switch (LOWORD(wParam))
-		{
-		case IDOK:
-		//	EndDialog(hwndDlg, wParam);
-			DestroyWindow(hwndDlg);
-			return TRUE;
-			
-
-		case IDCANCEL:
-			EndDialog(hwndDlg, wParam);
-			return TRUE;
-			break;
-		}
-	}
-	
-	return INT_PTR();
-}*/
-
 
 void SelectDialogue::OnBnClickedOk()
 {
