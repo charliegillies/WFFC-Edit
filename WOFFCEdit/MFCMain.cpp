@@ -187,9 +187,10 @@ void MFCMain::Button_EditObject()
 	SceneObject* target = m_toolSystem.getGraph()->getObjectById(id);
 
 	if (target != nullptr) {
+
 		m_objectEditDialogue.Create(ID_OBJECT_EDITOR);
 		m_objectEditDialogue.ShowWindow(SW_SHOW);
-		m_objectEditDialogue.setData(target, m_toolSystem.getGraph(), &m_history);
+		m_objectEditDialogue.setData(target, m_toolSystem.getGraph(), &m_history, m_toolSystem.getResourceHandler());
 	}
 	else {
 		// if not, let the user know..

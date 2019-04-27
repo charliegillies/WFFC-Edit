@@ -51,6 +51,8 @@ void ToolMain::onActionLoad()
 
 	// read our scene graph & chunk data from the database IO
 	m_database.read(&m_graph, &m_chunk);
+	// then read our available resources
+	m_database.readResources(&m_resources);
 	//Process results into renderable
 	m_d3dRenderer.BuildDisplayList(m_graph.getObjects());
 	//build the renderable chunk 
@@ -177,4 +179,9 @@ SceneObject * ToolMain::getSelectedObject()
 	if (m_selectedObject == NO_SELECTION_ID) return nullptr;
 	// otherwise, search through the graph for our selection!
 	return m_graph.getObjectById(m_selectedObject);
+}
+
+ResourceHandler * ToolMain::getResourceHandler()
+{
+	return &m_resources;
 }

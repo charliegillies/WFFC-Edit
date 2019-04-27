@@ -86,7 +86,10 @@
     <ClCompile Include="SceneGraph.cpp">
       <Filter>Tool</Filter>
     </ClCompile>
-    <ClCompile Include="ObjectEditorDialogue.cpp" />
+    <ClCompile Include="ObjectEditorDialogue.cpp">
+      <Filter>MFC</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DeviceResources.h">
@@ -163,7 +166,12 @@
     <ClInclude Include="SceneGraph.h">
       <Filter>Tool</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectEditorDialogue.h" />
+    <ClInclude Include="ObjectEditorDialogue.h">
+      <Filter>MFC</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceHandler.h">
+      <Filter>Tool</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

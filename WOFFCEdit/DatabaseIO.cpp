@@ -3,6 +3,7 @@
 #include <sstream>
 
 #include "SceneGraph.h"
+#include "ResourceHandler.h"
 
 DatabaseIO::DatabaseIO()
 {
@@ -23,6 +24,31 @@ bool DatabaseIO::tryOpenConnection()
 	// Attempt to open the database with read/write permissions.
 	int rc = sqlite3_open_v2("database/test.db", &m_databaseConnection, SQLITE_OPEN_READWRITE, NULL);
 	return rc == SQLITE_OK;
+}
+
+void DatabaseIO::readResources(ResourceHandler * handler)
+{
+	sqlite3_stmt* pResults;
+
+	char* sqlCmd = "SELECT * from Meshes";
+	int rc = sqlite3_prepare_v2(m_databaseConnection, sqlCmd, -1, &pResults, 0);
+	while (sqlite3_step(pResults) == SQLITE_ROW) {
+		// Layout: ID(0), Name(1), Filepath(2)
+		int id = sqlite3_column_int(pResults, 0);
+		std::string name = reinterpret_cast<const char*>(sqlite3_column_text(pResults, 1));
+		std::string filepath = reinterpret_cast<const char*>(sqlite3_column_text(pResults, 2));
+		handler->addMeshResource(id, name, filepath);
+	}
+
+	sqlCmd = "SELECT * from Textures";
+	rc = sqlite3_prepare_v2(m_databaseConnection, sqlCmd, -1, &pResults, 0);
+	while (sqlite3_step(pResults) == SQLITE_ROW) {
+		// Layout: ID(0), Name(1), Filepath(2)
+		int id = sqlite3_column_int(pResults, 0);
+		std::string name = reinterpret_cast<const char*>(sqlite3_column_text(pResults, 1));
+		std::string filepath = reinterpret_cast<const char*>(sqlite3_column_text(pResults, 2));
+		handler->addTexResource(id, name, filepath);
+	}
 }
 
 void DatabaseIO::read(SceneGraph* graph, ChunkObject* chunk)

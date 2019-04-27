@@ -5,6 +5,7 @@
 #include <vector>
 
 class SceneGraph;
+class ResourceHandler;
 
 // Handles the connection, reading and writing of the scene graph
 // and chunk, to and from the local database. This helps keep 
@@ -20,6 +21,8 @@ public:
 
 	void closeConnection();
 	bool tryOpenConnection();
+
+	void readResources(ResourceHandler* handler);
 
 	void read(SceneGraph* graph, ChunkObject* chunk);
 	void writeGraph(SceneGraph* graph);

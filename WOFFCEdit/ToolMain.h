@@ -10,6 +10,7 @@
 #include "DatabaseIO.h"
 #include "ManipulationTool.h"
 #include "SceneGraph.h"
+#include "ResourceHandler.h"
 
 #include <vector>
 
@@ -43,6 +44,7 @@ public:
 	bool onToggleWireframe();
 
 	void editorModeChanged(const EditorMode mode);
+	ResourceHandler* getResourceHandler();
 
 public:
 	ChunkObject					m_chunk;		//our landscape chunk
@@ -57,6 +59,7 @@ private:
 private:
 	EditorMode m_mode;
 
+	ResourceHandler m_resources;
 	SceneGraph m_graph;
 	DatabaseIO m_database;
 	InputProcessor m_input;
