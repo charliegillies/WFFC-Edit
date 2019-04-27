@@ -46,7 +46,6 @@ BOOL MFCMain::InitInstance()
 	m_frame->ShowWindow(SW_SHOW);
 	m_frame->UpdateWindow();
 
-
 	//get the rect from the MFC window so we can get its dimensions
 	m_toolHandle = m_frame->m_DirXView.GetSafeHwnd();				//handle of directX child window
 	m_frame->m_DirXView.GetClientRect(&WindowRECT);
@@ -183,8 +182,19 @@ void MFCMain::Button_ScaleToggle()
 
 void MFCMain::Button_EditObject()
 {
-	m_objectEditDialogue.Create(ID_OBJECT_EDITOR);
-	m_objectEditDialogue.ShowWindow(SW_SHOW);
+	// First of all, check there is a valid object selected
+	int id = m_toolSystem.getCurrentSelectionID();
+	SceneObject* target = m_toolSystem.getGraph()->getObjectById(id);
+
+	if (target != nullptr) {
+		m_objectEditDialogue.Create(ID_OBJECT_EDITOR);
+		m_objectEditDialogue.ShowWindow(SW_SHOW);
+		m_objectEditDialogue.setData(target, m_toolSystem.getGraph(), &m_history);
+	}
+	else {
+		// if not, let the user know..
+		MessageBox(NULL, L"No selected object. Please select an object before editing.", L"Object Editor", MB_OK);
+	}
 }
 
 void MFCMain::ChangeEditorMode(const EditorMode mode)
