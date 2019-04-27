@@ -14,8 +14,8 @@ IMPLEMENT_DYNAMIC(SelectDialogue, CDialogEx)
 BEGIN_MESSAGE_MAP(SelectDialogue, CDialogEx)
 	ON_COMMAND(IDOK, &SelectDialogue::End)
 	ON_BN_CLICKED(IDOK, &SelectDialogue::OnBnClickedOk)		
-	ON_LBN_SELCHANGE(IDC_HIERARCHY_LIST, &SelectDialogue::Select)
-	//ON_NOTIFY(LVN_ITEMCHANGED, IDC_HIERARCHY_LIST, &SelectDialogue::Select)
+	//ON_LBN_SELCHANGE(IDC_HIERARCHY_LIST, &SelectDialogue::Select)
+	ON_NOTIFY(LVN_ITEMCHANGED, IDC_HIERARCHY_LIST, &SelectDialogue::Select)
 END_MESSAGE_MAP()
 
 
@@ -73,7 +73,7 @@ void SelectDialogue::End()
 	DestroyWindow();	//destory the window properly.  INcluding the links and pointers created.  THis is so the dialogue can start again. 
 }
 
-void SelectDialogue::Select()
+void SelectDialogue::Select(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	int column = m_list.GetSelectedColumn();
 	if (column != -1) {

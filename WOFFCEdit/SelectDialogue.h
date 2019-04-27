@@ -25,7 +25,7 @@ public:
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);
 	afx_msg void End();
-	afx_msg void Select();
+	afx_msg void Select(NMHDR* pNMHDR, LRESULT* pResult);
 
 	std::vector<SceneObject>* m_sceneGraph;
 	ToolMain* m_tool;
