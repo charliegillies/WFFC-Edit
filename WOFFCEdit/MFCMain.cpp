@@ -116,6 +116,13 @@ int MFCMain::Run()
 				// Emulate the toggle button using the keybind
 				Button_ToggleWireframe();
 			}
+			if (input.duplicate) {
+				SceneObject* selected = m_toolSystem.getSelectedObject();
+				if (selected != nullptr) {
+					SceneObject copy = *selected;
+					m_toolSystem.getGraph()->insertSceneObject(std::move(copy));
+				}
+			}
 		}
 	}
 
@@ -183,8 +190,7 @@ void MFCMain::Button_ScaleToggle()
 void MFCMain::Button_EditObject()
 {
 	// First of all, check there is a valid object selected
-	int id = m_toolSystem.getCurrentSelectionID();
-	SceneObject* target = m_toolSystem.getGraph()->getObjectById(id);
+	SceneObject* target = m_toolSystem.getSelectedObject();
 
 	if (target != nullptr) {
 		if (!m_editorCreated) {
@@ -215,7 +221,6 @@ MFCMain::MFCMain() : m_history(&m_toolSystem)
 	m_editorCreated = false;
 	ChangeEditorMode(EditorMode::CAMERA);
 }
-
 
 MFCMain::~MFCMain()
 {

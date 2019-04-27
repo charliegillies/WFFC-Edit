@@ -380,6 +380,9 @@ void Game::BuildDisplayList(std::vector<SceneObject> * SceneGraph)
 	int numObjects = SceneGraph->size();
 	for (int i = 0; i < numObjects; i++)
 	{
+		// skip the object, if we're not supposed to render it
+		if (!SceneGraph->at(i).render) continue;
+
 		//create a temp display object that we will populate then append to the display list.
 		DisplayObject newDisplayObject;
 

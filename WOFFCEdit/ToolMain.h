@@ -44,7 +44,9 @@ public:
 	bool onToggleWireframe();
 
 	void editorModeChanged(const EditorMode mode);
+
 	ResourceHandler* getResourceHandler();
+	SceneObject* getSelectedObject();
 
 public:
 	ChunkObject					m_chunk;		//our landscape chunk
@@ -52,9 +54,6 @@ public:
 
 	SceneGraph* getGraph();
 	void setDirty(bool dirty);
-
-private:
-	SceneObject* getSelectedObject();
 
 private:
 	EditorMode m_mode;

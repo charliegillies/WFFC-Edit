@@ -30,6 +30,7 @@ const InputCommands& InputProcessor::tick()
 		m_inputCommands.redo = m_keyArray['Y'] && !m_lastKeyArray['Y'];
 		m_inputCommands.save = m_keyArray['S'] && !m_lastKeyArray['S'];
 		m_inputCommands.wireframe = m_keyArray['W'] && !m_lastKeyArray['W'];
+		m_inputCommands.duplicate = m_keyArray['D'] && !m_lastKeyArray['D'];
 	}
 
 	// Copy the keys from the this input frame
