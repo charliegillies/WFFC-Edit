@@ -8,9 +8,6 @@
 // and then used within the project.
 class ResourceHandler {
 public:
-	// Allow the object editor access to our internals
-	friend class ObjectEditorDialogue;
-
 	// Mimics the table data layout of the meshes and texture tables
 	struct Resource {
 		int id;
@@ -32,4 +29,7 @@ public:
 	const std::string getTextureNameByFilepath(const std::string& path) const;
 	const std::string getMeshNameByFilepath(const std::string& path) const;
 	
+	const std::string getModelPathFromName(const std::string& name) const;
+	const std::string getTexturePathFromName(const std::string& tex) const;
+
 };

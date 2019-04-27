@@ -29,6 +29,8 @@ private:
 	SelectDialogue m_selectDialogue;			//for modeless dialogue, declare it here
 	ObjectEditorDialogue m_objectEditDialogue;
 
+	bool m_editorCreated;
+
 	EditorMode m_mode;
 	History m_history;
 

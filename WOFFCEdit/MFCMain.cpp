@@ -187,8 +187,10 @@ void MFCMain::Button_EditObject()
 	SceneObject* target = m_toolSystem.getGraph()->getObjectById(id);
 
 	if (target != nullptr) {
-
-		m_objectEditDialogue.Create(ID_OBJECT_EDITOR);
+		if (!m_editorCreated) {
+			m_objectEditDialogue.Create(ID_OBJECT_EDITOR);
+			m_editorCreated = true;
+		}
 		m_objectEditDialogue.ShowWindow(SW_SHOW);
 		m_objectEditDialogue.setData(target, m_toolSystem.getGraph(), &m_history, m_toolSystem.getResourceHandler());
 	}
@@ -210,6 +212,7 @@ void MFCMain::ChangeEditorMode(const EditorMode mode)
 
 MFCMain::MFCMain() : m_history(&m_toolSystem)
 {
+	m_editorCreated = false;
 	ChangeEditorMode(EditorMode::CAMERA);
 }
 

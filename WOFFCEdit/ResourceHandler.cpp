@@ -53,3 +53,19 @@ const std::string ResourceHandler::getMeshNameByFilepath(const std::string & pat
 	}
 	return "";
 }
+
+const std::string ResourceHandler::getModelPathFromName(const std::string & name) const
+{
+	if (m_meshes.find(name) != m_meshes.end()) {
+		return m_meshes.at(name).filepath;
+	}
+	return "";
+}
+
+const std::string ResourceHandler::getTexturePathFromName(const std::string & tex) const
+{
+	if (m_textures.find(tex) != m_textures.end()) {
+		return m_textures.at(tex).filepath;
+	}
+	return "";
+}
