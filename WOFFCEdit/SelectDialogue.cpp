@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include "SelectDialogue.h"
+#include "ToolMain.h"
 
 // SelectDialogue dialog
 
@@ -12,19 +13,20 @@ IMPLEMENT_DYNAMIC(SelectDialogue, CDialogEx)
 BEGIN_MESSAGE_MAP(SelectDialogue, CDialogEx)
 	ON_COMMAND(IDOK, &SelectDialogue::End)					//ok button
 	ON_BN_CLICKED(IDOK, &SelectDialogue::OnBnClickedOk)		
-	ON_LBN_SELCHANGE(IDC_LIST1, &SelectDialogue::Select)	//listbox
+	ON_LBN_SELCHANGE(IDC_HIERARCHY_LIST, &SelectDialogue::Select)	//listbox
 END_MESSAGE_MAP()
 
 
 SelectDialogue::SelectDialogue(CWnd* pParent, std::vector<SceneObject>* SceneGraph)		//constructor used in modal
-	: CDialogEx(IDD_DIALOG1, pParent)
+	: CDialogEx(IDD_HIERARCHY_DIALOG, pParent)
 {
 	m_sceneGraph = SceneGraph;
 }
 
 SelectDialogue::SelectDialogue(CWnd * pParent)			//constructor used in modeless
-	: CDialogEx(IDD_DIALOG1, pParent)
+	: CDialogEx(IDD_HIERARCHY_DIALOG, pParent)
 {
+
 }
 
 SelectDialogue::~SelectDialogue()
@@ -32,26 +34,25 @@ SelectDialogue::~SelectDialogue()
 }
 
 ///pass through pointers to the data in the tool we want to manipulate
-void SelectDialogue::SetObjectData(std::vector<SceneObject>* SceneGraph, int * selection)
+void SelectDialogue::SetObjectData(ToolMain* tool)
 {
-	m_sceneGraph = SceneGraph;
-	m_currentSelection = selection;
+	m_tool = tool;
+	m_sceneGraph = tool->getGraph()->getObjects();
+
+	//auto ctrl = m_listBox
 
 	//roll through all the objects in the scene graph and put an entry for each in the listbox
-	int numSceneObjects = m_sceneGraph->size();
-	for (int i = 0; i < numSceneObjects; i++)
-	{
+	for (int i = 0, count = m_sceneGraph->size(); i < count; i++) {
 		//easily possible to make the data string presented more complex. showing other columns.
 		std::wstring listBoxEntry = std::to_wstring(m_sceneGraph->at(i).ID);
 		m_listBox.AddString(listBoxEntry.c_str());
 	}
 }
 
-
 void SelectDialogue::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_LIST1, m_listBox);
+	DDX_Control(pDX, IDC_HIERARCHY_LIST, m_listBox);
 }
 
 void SelectDialogue::End()
@@ -63,27 +64,13 @@ void SelectDialogue::Select()
 {
 	int index = m_listBox.GetCurSel();
 	CString currentSelectionValue;
-	
 	m_listBox.GetText(index, currentSelectionValue);
-
-	*m_currentSelection = _ttoi(currentSelectionValue);
-
+	m_tool->setSelectionID(_ttoi(currentSelectionValue));
 }
 
 BOOL SelectDialogue::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
-
-	//uncomment for modal only
-/*	//roll through all the objects in the scene graph and put an entry for each in the listbox
-	int numSceneObjects = m_sceneGraph->size();
-	for (size_t i = 0; i < numSceneObjects; i++)
-	{
-		//easily possible to make the data string presented more complex. showing other columns.
-		std::wstring listBoxEntry = std::to_wstring(m_sceneGraph->at(i).ID);
-		m_listBox.AddString(listBoxEntry.c_str());
-	}*/
-	
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // EXCEPTION: OCX Property Pages should return FALSE
 }
@@ -91,9 +78,6 @@ BOOL SelectDialogue::OnInitDialog()
 void SelectDialogue::PostNcDestroy()
 {
 }
-
-
-
 
 // SelectDialogue message handlers callback   - We only need this if the dailogue is being setup-with createDialogue().  We are doing
 //it manually so its better to use the messagemap

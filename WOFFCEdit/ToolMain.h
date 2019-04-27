@@ -40,9 +40,7 @@ public:
 	InputCommands& getInputCommands();
 
 	void setSelectionID(int id);
-
 	bool onToggleWireframe();
-
 	void editorModeChanged(const EditorMode mode);
 
 	ResourceHandler* getResourceHandler();

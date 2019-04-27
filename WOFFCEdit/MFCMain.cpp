@@ -6,7 +6,7 @@ BEGIN_MESSAGE_MAP(MFCMain, CWinApp)
 	ON_COMMAND(ID_FILE_QUIT, &MFCMain::MenuFileQuit)
 	ON_COMMAND(ID_FILE_SAVETERRAIN, &MFCMain::MenuFileSaveTerrain)
 	ON_COMMAND(ID_EDIT_SELECT, &MFCMain::MenuEditSelect)
-	ON_COMMAND(ID_BUTTON40001, &MFCMain::Button_SaveScene)
+	ON_COMMAND(ID_BUTTON_SAVE, &MFCMain::Button_SaveScene)
 	ON_COMMAND(ID_BUTTON_ADD_OBJECT, &MFCMain::Button_NewSceneObject)
 	ON_COMMAND(ID_BUTTON_WIREFRAME, &MFCMain::Button_ToggleWireframe)
 
@@ -15,7 +15,8 @@ BEGIN_MESSAGE_MAP(MFCMain, CWinApp)
 	ON_COMMAND(ID_BUTTON_SCALE, &MFCMain::Button_ScaleToggle)
 	ON_COMMAND(ID_BUTTON_MOVE, &MFCMain::Button_TranslateToggle)
 	ON_COMMAND(ID_BUTTON_EDIT_OBJECT, &MFCMain::Button_EditObject)
-	
+	ON_COMMAND(ID_BUTTON_BROWSE_HIERARCHY, &MFCMain::Button_BrowseHiearchy)
+
 	ON_UPDATE_COMMAND_UI(ID_INDICATOR_TOOL, &CMyFrame::OnUpdatePage)
 END_MESSAGE_MAP()
 
@@ -142,9 +143,9 @@ void MFCMain::MenuFileSaveTerrain()
 
 void MFCMain::MenuEditSelect()
 {
-	m_selectDialogue.Create(IDD_DIALOG1);
+	m_selectDialogue.Create(IDD_HIERARCHY_DIALOG);
 	m_selectDialogue.ShowWindow(SW_SHOW);
-	m_selectDialogue.SetObjectData(m_toolSystem.getGraph()->getObjects(), &m_toolSystem.m_selectedObject);
+	m_selectDialogue.SetObjectData(&m_toolSystem);
 }
 
 void MFCMain::Button_SaveScene()
@@ -185,6 +186,11 @@ void MFCMain::Button_RotateToggle()
 void MFCMain::Button_ScaleToggle()
 {
 	ChangeEditorMode(EditorMode::SCALE);
+}
+
+void MFCMain::Button_BrowseHiearchy()
+{
+	MenuEditSelect();
 }
 
 void MFCMain::Button_EditObject()

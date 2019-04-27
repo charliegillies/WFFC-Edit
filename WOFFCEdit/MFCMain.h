@@ -50,6 +50,8 @@ private:
 	afx_msg void Button_TranslateToggle();
 	afx_msg void Button_RotateToggle();
 	afx_msg void Button_ScaleToggle();
+
+	afx_msg void Button_BrowseHiearchy();
 	afx_msg void Button_EditObject();
 
 	void ChangeEditorMode(const EditorMode mode);

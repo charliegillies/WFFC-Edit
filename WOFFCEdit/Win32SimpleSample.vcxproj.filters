@@ -89,7 +89,9 @@
     <ClCompile Include="ObjectEditorDialogue.cpp">
       <Filter>MFC</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceHandler.cpp" />
+    <ClCompile Include="ResourceHandler.cpp">
+      <Filter>Tool</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DeviceResources.h">
