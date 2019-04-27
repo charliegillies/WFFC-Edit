@@ -21,7 +21,7 @@ public:
 
 	void EditorModeChanged(const EditorMode mode);
 	void ChangeWireframeButtonState(const bool enabled);
-
+	void ChangeGridButtonState(const bool enabled);
 public:
 	CMyFrame();
 	void SetCurrentSelectionID(int ID);

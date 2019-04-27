@@ -41,6 +41,7 @@ public:
 
 	void setSelectionID(int id);
 	bool onToggleWireframe();
+	bool onToggleGrid();
 	void editorModeChanged(const EditorMode mode);
 
 	ResourceHandler* getResourceHandler();

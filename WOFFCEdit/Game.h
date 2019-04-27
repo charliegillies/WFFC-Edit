@@ -53,6 +53,7 @@ public:
 
 	// Wireframe
 	bool toggleWireframe();
+	bool toggleGrid();
 
 	void setCameraLock(const bool locked);
 

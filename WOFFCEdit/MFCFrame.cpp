@@ -32,6 +32,11 @@ void CMyFrame::ChangeWireframeButtonState(const bool enabled)
 	m_toolBar.GetToolBarCtrl().PressButton(ID_BUTTON_WIREFRAME, enabled ? 1 : 0);
 }
 
+void CMyFrame::ChangeGridButtonState(const bool enabled)
+{
+	m_toolBar.GetToolBarCtrl().PressButton(ID_BUTTON_GRID, enabled ? 1 : 0);
+}
+
 //frame initialiser
 CMyFrame::CMyFrame()
 {

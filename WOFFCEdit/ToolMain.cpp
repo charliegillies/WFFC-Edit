@@ -158,6 +158,11 @@ bool ToolMain::onToggleWireframe()
 	return m_d3dRenderer.toggleWireframe();
 }
 
+bool ToolMain::onToggleGrid()
+{
+	return m_d3dRenderer.toggleGrid();
+}
+
 void ToolMain::editorModeChanged(const EditorMode mode)
 {
 	m_mode = mode;

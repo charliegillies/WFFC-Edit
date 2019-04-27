@@ -44,6 +44,7 @@ private:
 	afx_msg	void Button_SaveScene();
 	afx_msg void Button_NewSceneObject();
 	afx_msg void Button_ToggleWireframe();
+	afx_msg void Button_ToggleGrid();
 
 	// Editor controls
 	afx_msg void Button_CameraToggle();

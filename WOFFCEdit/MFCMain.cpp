@@ -8,7 +8,9 @@ BEGIN_MESSAGE_MAP(MFCMain, CWinApp)
 	ON_COMMAND(ID_EDIT_SELECT, &MFCMain::MenuEditSelect)
 	ON_COMMAND(ID_BUTTON_SAVE, &MFCMain::Button_SaveScene)
 	ON_COMMAND(ID_BUTTON_ADD_OBJECT, &MFCMain::Button_NewSceneObject)
+
 	ON_COMMAND(ID_BUTTON_WIREFRAME, &MFCMain::Button_ToggleWireframe)
+	ON_COMMAND(ID_BUTTON_GRID, &MFCMain::Button_ToggleGrid)
 
 	ON_COMMAND(ID_BUTTON_CAMERA, &MFCMain::Button_CameraToggle)
 	ON_COMMAND(ID_BUTTON_ROTATE, &MFCMain::Button_RotateToggle)
@@ -16,7 +18,6 @@ BEGIN_MESSAGE_MAP(MFCMain, CWinApp)
 	ON_COMMAND(ID_BUTTON_MOVE, &MFCMain::Button_TranslateToggle)
 	ON_COMMAND(ID_BUTTON_EDIT_OBJECT, &MFCMain::Button_EditObject)
 	ON_COMMAND(ID_BUTTON_BROWSE_HIERARCHY, &MFCMain::Button_BrowseHiearchy)
-
 	ON_UPDATE_COMMAND_UI(ID_INDICATOR_TOOL, &CMyFrame::OnUpdatePage)
 END_MESSAGE_MAP()
 
@@ -166,6 +167,12 @@ void MFCMain::Button_ToggleWireframe()
 	// Toggle wireframe on/off, and change the interface button mode appropriately
 	bool toggled = m_toolSystem.onToggleWireframe();
 	m_frame->ChangeWireframeButtonState(toggled);
+}
+
+void MFCMain::Button_ToggleGrid()
+{
+	bool toggled = m_toolSystem.onToggleGrid();
+	m_frame->ChangeGridButtonState(toggled);
 }
 
 void MFCMain::Button_CameraToggle()

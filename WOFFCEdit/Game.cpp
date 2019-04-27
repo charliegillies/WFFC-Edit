@@ -470,6 +470,12 @@ bool Game::toggleWireframe()
 	return m_wireframe;
 }
 
+bool Game::toggleGrid()
+{
+	m_grid = !m_grid;
+	return m_grid;
+}
+
 void Game::setCameraLock(const bool locked)
 {
 	m_camLocked = locked;
