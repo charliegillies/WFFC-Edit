@@ -14,7 +14,6 @@ IMPLEMENT_DYNAMIC(SelectDialogue, CDialogEx)
 BEGIN_MESSAGE_MAP(SelectDialogue, CDialogEx)
 	ON_COMMAND(IDOK, &SelectDialogue::End)
 	ON_BN_CLICKED(IDOK, &SelectDialogue::OnBnClickedOk)		
-	//ON_LBN_SELCHANGE(IDC_HIERARCHY_LIST, &SelectDialogue::Select)
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_HIERARCHY_LIST, &SelectDialogue::Select)
 END_MESSAGE_MAP()
 

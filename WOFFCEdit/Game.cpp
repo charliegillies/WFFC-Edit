@@ -212,8 +212,7 @@ void Game::Render()
 	m_deviceResources->PIXBeginEvent(L"Render");
 	auto context = m_deviceResources->GetD3DDeviceContext();
 
-	if (m_grid)
-	{
+	if (m_grid) {
 		// Draw procedurally generated dynamic grid
 		const XMVECTORF32 xaxis = { 512.f, 0.f, 0.f };
 		const XMVECTORF32 yaxis = { 0.f, 0.f, 512.f };
@@ -243,6 +242,7 @@ void Game::Render()
 
 		XMMATRIX local = m_world * XMMatrixTransformation(g_XMZero, Quaternion::Identity, scale, g_XMZero, rotate, translate);
 
+		// We want to swap out a texture if we match IDs
 		m_displayList[i].m_model->Draw(context, *m_states, local, m_view, m_projection, m_wireframe);	//last variable in draw,  make TRUE for wireframe
 
 		m_deviceResources->PIXEndEvent();
@@ -366,32 +366,32 @@ void Game::OnWindowSizeChanged(int width, int height)
 	CreateWindowSizeDependentResources();
 }
 
-void Game::BuildDisplayList(std::vector<SceneObject> * SceneGraph)
+void Game::BuildDisplayList(std::vector<SceneObject>* sceneObjects, const int selected)
 {
 	auto device = m_deviceResources->GetD3DDevice();
 	auto devicecontext = m_deviceResources->GetD3DDeviceContext();
 
-	if (!m_displayList.empty())		//is the vector empty
-	{
-		m_displayList.clear();		//if not, empty it
+	// Clear the display list, for the rebuild
+	if (!m_displayList.empty()) {
+		m_displayList.clear();
 	}
 
 	//for every item in the scenegraph
-	int numObjects = SceneGraph->size();
+	int numObjects = sceneObjects->size();
 	for (int i = 0; i < numObjects; i++)
 	{
 		// skip the object, if we're not supposed to render it
-		if (!SceneGraph->at(i).render) continue;
+		if (!sceneObjects->at(i).render) continue;
 
 		//create a temp display object that we will populate then append to the display list.
 		DisplayObject newDisplayObject;
 
 		//load model
-		std::wstring modelwstr = Utils::StringToWCHART(SceneGraph->at(i).model_path);							//convect string to Wchar
+		std::wstring modelwstr = Utils::StringToWCHART(sceneObjects->at(i).model_path);							//convect string to Wchar
 		newDisplayObject.m_model = Model::CreateFromCMO(device, modelwstr.c_str(), *m_fxFactory, true);	//get DXSDK to load model "False" for LH coordinate system (maya)
 
 		//Load Texture
-		std::wstring texturewstr = Utils::StringToWCHART(SceneGraph->at(i).tex_diffuse_path);								//convect string to Wchar
+		std::wstring texturewstr = Utils::StringToWCHART(sceneObjects->at(i).tex_diffuse_path);								//convect string to Wchar
 		HRESULT rs;
 		rs = CreateDDSTextureFromFile(device, texturewstr.c_str(), nullptr, &newDisplayObject.m_texture_diffuse);	//load tex into Shader resource
 
@@ -400,53 +400,55 @@ void Game::BuildDisplayList(std::vector<SceneObject> * SceneGraph)
 			CreateDDSTextureFromFile(device, L"database/data/Error.dds", nullptr, &newDisplayObject.m_texture_diffuse);	//load tex into Shader resource
 		}
 
+		if (sceneObjects->at(i).ID == selected) {
+			newDisplayObject.m_texture_diffuse = m_selectedTex.Get();
+		}
+
 		//apply new texture to models effect
 		newDisplayObject.m_model->UpdateEffects([&](IEffect* effect) //This uses a Lambda function,  if you dont understand it: Look it up.
 		{
-			auto lights = dynamic_cast<BasicEffect*>(effect);
-			if (lights)
-			{
+			BasicEffect* lights = dynamic_cast<BasicEffect*>(effect);
+			if (lights != nullptr) {
 				lights->SetTexture(newDisplayObject.m_texture_diffuse);
 			}
 		});
 
+		//set id
+		newDisplayObject.m_ID = sceneObjects->at(i).ID;
+
 		//set position
-		newDisplayObject.m_position.x = SceneGraph->at(i).posX;
-		newDisplayObject.m_position.y = SceneGraph->at(i).posY;
-		newDisplayObject.m_position.z = SceneGraph->at(i).posZ;
+		newDisplayObject.m_position.x = sceneObjects->at(i).posX;
+		newDisplayObject.m_position.y = sceneObjects->at(i).posY;
+		newDisplayObject.m_position.z = sceneObjects->at(i).posZ;
 
 		//setorientation
-		newDisplayObject.m_orientation.x = SceneGraph->at(i).rotX;
-		newDisplayObject.m_orientation.y = SceneGraph->at(i).rotY;
-		newDisplayObject.m_orientation.z = SceneGraph->at(i).rotZ;
+		newDisplayObject.m_orientation.x = sceneObjects->at(i).rotX;
+		newDisplayObject.m_orientation.y = sceneObjects->at(i).rotY;
+		newDisplayObject.m_orientation.z = sceneObjects->at(i).rotZ;
 
 		//set scale
-		newDisplayObject.m_scale.x = SceneGraph->at(i).scaX;
-		newDisplayObject.m_scale.y = SceneGraph->at(i).scaY;
-		newDisplayObject.m_scale.z = SceneGraph->at(i).scaZ;
+		newDisplayObject.m_scale.x = sceneObjects->at(i).scaX;
+		newDisplayObject.m_scale.y = sceneObjects->at(i).scaY;
+		newDisplayObject.m_scale.z = sceneObjects->at(i).scaZ;
 
 		//set wireframe / render flags
-		newDisplayObject.m_render = SceneGraph->at(i).editor_render;
-		newDisplayObject.m_wireframe = SceneGraph->at(i).editor_wireframe;
+		newDisplayObject.m_render = sceneObjects->at(i).editor_render;
+		newDisplayObject.m_wireframe = sceneObjects->at(i).editor_wireframe;
 
-		newDisplayObject.m_light_type = SceneGraph->at(i).light_type;
-		newDisplayObject.m_light_diffuse_r = SceneGraph->at(i).light_diffuse_r;
-		newDisplayObject.m_light_diffuse_g = SceneGraph->at(i).light_diffuse_g;
-		newDisplayObject.m_light_diffuse_b = SceneGraph->at(i).light_diffuse_b;
-		newDisplayObject.m_light_specular_r = SceneGraph->at(i).light_specular_r;
-		newDisplayObject.m_light_specular_g = SceneGraph->at(i).light_specular_g;
-		newDisplayObject.m_light_specular_b = SceneGraph->at(i).light_specular_b;
-		newDisplayObject.m_light_spot_cutoff = SceneGraph->at(i).light_spot_cutoff;
-		newDisplayObject.m_light_constant = SceneGraph->at(i).light_constant;
-		newDisplayObject.m_light_linear = SceneGraph->at(i).light_linear;
-		newDisplayObject.m_light_quadratic = SceneGraph->at(i).light_quadratic;
+		newDisplayObject.m_light_type = sceneObjects->at(i).light_type;
+		newDisplayObject.m_light_diffuse_r = sceneObjects->at(i).light_diffuse_r;
+		newDisplayObject.m_light_diffuse_g = sceneObjects->at(i).light_diffuse_g;
+		newDisplayObject.m_light_diffuse_b = sceneObjects->at(i).light_diffuse_b;
+		newDisplayObject.m_light_specular_r = sceneObjects->at(i).light_specular_r;
+		newDisplayObject.m_light_specular_g = sceneObjects->at(i).light_specular_g;
+		newDisplayObject.m_light_specular_b = sceneObjects->at(i).light_specular_b;
+		newDisplayObject.m_light_spot_cutoff = sceneObjects->at(i).light_spot_cutoff;
+		newDisplayObject.m_light_constant = sceneObjects->at(i).light_constant;
+		newDisplayObject.m_light_linear = sceneObjects->at(i).light_linear;
+		newDisplayObject.m_light_quadratic = sceneObjects->at(i).light_quadratic;
 
 		m_displayList.push_back(newDisplayObject);
-
 	}
-
-
-
 }
 
 void Game::BuildDisplayChunk(ChunkObject * SceneChunk)
@@ -474,6 +476,11 @@ bool Game::toggleGrid()
 {
 	m_grid = !m_grid;
 	return m_grid;
+}
+
+void Game::setSelectedID(int id)
+{
+	m_selectedId = id;
 }
 
 void Game::setCameraLock(const bool locked)
@@ -547,6 +554,9 @@ void Game::CreateDeviceDependentResources()
 		CreateDDSTextureFromFile(device, L"windowslogo.dds", nullptr, m_texture2.ReleaseAndGetAddressOf())
 	);
 
+	DX::ThrowIfFailed(
+		CreateDDSTextureFromFile(device, L"database/data/selected.dds", nullptr, m_selectedTex.ReleaseAndGetAddressOf())
+	);
 }
 
 // Allocate all memory resources that change on a window SizeChanged event.
@@ -572,7 +582,6 @@ void Game::CreateWindowSizeDependentResources()
 	);
 
 	m_batchEffect->SetProjection(m_projection);
-
 }
 
 void Game::OnDeviceLost()

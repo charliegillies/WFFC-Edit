@@ -46,15 +46,16 @@ public:
 	void OnWindowSizeChanged(int width, int height);
 
 	//tool specific
-	void BuildDisplayList(std::vector<SceneObject> * SceneGraph); //note vector passed by reference 
+	void BuildDisplayList(std::vector<SceneObject>* sceneObjects, const int id); //note vector passed by reference 
 	void BuildDisplayChunk(ChunkObject *SceneChunk);
 	void SaveDisplayChunk(ChunkObject *SceneChunk);	//saves geometry et al
 	void ClearDisplayList();
 
-	// Wireframe
+	// Toggles for render modes
 	bool toggleWireframe();
 	bool toggleGrid();
 
+	void setSelectedID(int id);
 	void setCameraLock(const bool locked);
 
 #ifdef DXTK_AUDIO
@@ -87,9 +88,10 @@ private:
 	
 	Camera m_camera;
 
-	//control variables
+	int m_selectedId;
 	bool m_grid;							//grid rendering on / off
 	bool m_wireframe;
+
 	// Device resources.
     std::shared_ptr<DX::DeviceResources>    m_deviceResources;
 
@@ -121,6 +123,7 @@ private:
 
     Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>                        m_texture1;
     Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>                        m_texture2;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>						m_selectedTex;
     Microsoft::WRL::ComPtr<ID3D11InputLayout>                               m_batchInputLayout;
 
 #ifdef DXTK_AUDIO

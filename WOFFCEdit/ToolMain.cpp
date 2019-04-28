@@ -12,7 +12,7 @@ const int NO_SELECTION_ID = -1;
 ToolMain::ToolMain() : m_manipulator()
 {
 	m_currentChunk = 0;		//default value
-	m_selectedObject = NO_SELECTION_ID;	//initial selection ID
+	m_selectedId = NO_SELECTION_ID;	//initial selection ID
 	m_graph.clear();	//clear the scenegraph
 	m_doRebuildDisplay = false;
 }
@@ -25,7 +25,7 @@ ToolMain::~ToolMain()
 
 int ToolMain::getCurrentSelectionID()
 {
-	return m_selectedObject;
+	return m_selectedId;
 }
 
 void ToolMain::onActionInitialise(HWND handle, int width, int height)
@@ -54,7 +54,7 @@ void ToolMain::onActionLoad()
 	// then read our available resources
 	m_database.readResources(&m_resources);
 	//Process results into renderable
-	m_d3dRenderer.BuildDisplayList(m_graph.getObjects());
+	m_d3dRenderer.BuildDisplayList(m_graph.getObjects(), m_selectedId);
 	//build the renderable chunk 
 	m_d3dRenderer.BuildDisplayChunk(&m_chunk);
 }
@@ -91,9 +91,9 @@ void ToolMain::Tick(MSG *msg, History* history)
 			}
 		}
 
-		if (new_pick != -1 && new_pick != m_selectedObject) {
+		if (new_pick != -1 && new_pick != m_selectedId) {
 			// log the selection change - so the user can undo it
-			history->log(new ChangeSelectionCommand(new_pick, m_selectedObject));
+			history->log(new ChangeSelectionCommand(new_pick, m_selectedId));
 		}
 	}
 
@@ -123,7 +123,7 @@ void ToolMain::Tick(MSG *msg, History* history)
 	// Dirty flag that indicates if the display list requires
 	// to be rebuilt or not.
 	if (m_doRebuildDisplay || m_graph.isDirty()) {
-		m_d3dRenderer.BuildDisplayList(m_graph.getObjects());
+		m_d3dRenderer.BuildDisplayList(m_graph.getObjects(), m_selectedId);
 		m_doRebuildDisplay = false;
 		m_graph.setDirty(false);
 	}
@@ -150,7 +150,8 @@ InputCommands& ToolMain::getInputCommands()
 
 void ToolMain::setSelectionID(int id)
 {
-	m_selectedObject = id;
+	m_selectedId = id;
+	m_doRebuildDisplay = true;
 }
 
 bool ToolMain::onToggleWireframe()
@@ -181,9 +182,9 @@ void ToolMain::setDirty(bool dirty)
 SceneObject * ToolMain::getSelectedObject()
 {
 	// No selection? nullptr!
-	if (m_selectedObject == NO_SELECTION_ID) return nullptr;
+	if (m_selectedId == NO_SELECTION_ID) return nullptr;
 	// otherwise, search through the graph for our selection!
-	return m_graph.getObjectById(m_selectedObject);
+	return m_graph.getObjectById(m_selectedId);
 }
 
 ResourceHandler * ToolMain::getResourceHandler()

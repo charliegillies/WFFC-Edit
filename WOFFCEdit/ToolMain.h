@@ -49,7 +49,7 @@ public:
 
 public:
 	ChunkObject					m_chunk;		//our landscape chunk
-	int m_selectedObject;						//ID of current Selection
+	int m_selectedId;						//ID of current Selection
 
 	SceneGraph* getGraph();
 	void setDirty(bool dirty);
