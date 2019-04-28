@@ -9,47 +9,31 @@ typedef DirectX::SimpleMath::Vector2 Vector2;
 
 Camera::Camera()
 {
-	//functional
+	// movement and camera rotation speed
 	m_moveSpeed = 4.0;
 	m_camRotRate = 10.0f;
 
-	//camera
-	m_camPosition.x = 0.0f;
-	m_camPosition.y = 3.7f;
-	m_camPosition.z = -3.5f;
+	// initial camera position
+	m_camPosition = Vector3(0.0f, 3.7f, -3.5f);
 
-	m_camOrientation.x = 0;
-	m_camOrientation.y = 0;
-	m_camOrientation.z = 0;
-
-	m_camLookAt.x = 0.0f;
-	m_camLookAt.y = 0.0f;
-	m_camLookAt.z = 0.0f;
-
-	m_camLookDirection.x = 0.0f;
-	m_camLookDirection.y = 0.0f;
-	m_camLookDirection.z = 0.0f;
-
-	m_camRight.x = 0.0f;
-	m_camRight.y = 0.0f;
-	m_camRight.z = 0.0f;
-
-	m_camOrientation.x = 0.0f;
-	m_camOrientation.y = 0.0f;
-	m_camOrientation.z = 0.0f;
+	m_camLookDirection = Vector3::Zero;
+	m_camOrientation = Vector3::Zero;
+	m_camLookAt = Vector3::Zero;
+	m_camRight = Vector3::Zero;
 }
 
 void Camera::handleInput(InputCommands const & input, const float deltaTime)
 {
+	static const float speedIncrease = 1.5f;
 	Vector3 planarMotionVector = m_camLookDirection;
 	planarMotionVector.y = 0.0;
 
 	float moveSpeed = m_moveSpeed;
-	if (input.shift) moveSpeed *= 1.5f;
+	if (input.shift) moveSpeed *= speedIncrease;
 	moveSpeed *= deltaTime;
 
 	float rotateSpeed = m_camRotRate;
-	if (input.shift) rotateSpeed *= 1.5f;
+	if (input.shift) rotateSpeed *= speedIncrease;
 	rotateSpeed *= deltaTime;
 
 	if (input.rotateRight) {
