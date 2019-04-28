@@ -147,17 +147,10 @@ void Game::Update(DX::StepTimer const& timer)
 }
 #pragma endregion
 
-std::vector<int> Game::FindMouseRayTargets()
+int Game::FindMouseRayTargets()
 {
-	std::vector<int> hits;
-	float dst;
-
-	auto at = m_camera.screenToWorld(m_handle, 
-		m_inputCommands.mouseX, m_inputCommands.mouseY, 
-		m_screenDimensions.left - m_screenDimensions.right, 
-		m_screenDimensions.bottom - m_screenDimensions.top, 
-		m_world);
-	
+	float dst = 100000000;
+	int selection = -1;
 
 	//setup near and far planes of frustum with mouse X and mouse y passed down from Toolmain. 
 	//they may look the same but note, the difference in Z
@@ -194,14 +187,17 @@ std::vector<int> Game::FindMouseRayTargets()
 		for (int y = 0; y < m_displayList[i].m_model.get()->meshes.size(); y++)
 		{
 			//checking for ray intersection
-			if (m_displayList[i].m_model.get()->meshes[y]->boundingBox.Intersects(nearPoint, pickingVector, dst))
-			{
-				hits.push_back(i);
+			float hitDist;
+			if (m_displayList[i].m_model.get()->meshes[y]->boundingBox.Intersects(nearPoint, pickingVector, hitDist)) {
+				if (hitDist < dst) {
+					dst = hitDist;
+					selection = m_displayList[i].m_ID;
+				}
 			}
 		}
+		return selection;
 	}
 
-	return hits;
 }
 
 #pragma region Frame Render
@@ -229,7 +225,6 @@ void Game::Render()
 	//CAMERA POSITION ON HUD
 	m_sprites->Begin();
 	auto point = m_camera.screenToWorld(m_handle,
-		m_inputCommands.mouseX, m_inputCommands.mouseY,
 		m_screenDimensions.right - m_screenDimensions.left,
 		m_screenDimensions.bottom - m_screenDimensions.top,
 		m_world);

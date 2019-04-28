@@ -5,9 +5,9 @@ InputProcessor::InputProcessor()
 	ZeroMemory(&m_inputCommands, sizeof(InputCommands));
 }
 
-InputCommands & InputProcessor::getCommands()
+InputCommands* InputProcessor::getCommands()
 {
-	return m_inputCommands;
+	return &m_inputCommands;
 }
 
 const InputCommands& InputProcessor::tick()

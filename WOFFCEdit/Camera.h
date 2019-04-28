@@ -22,7 +22,7 @@ public:
 	void handleInput(InputCommands const& commands, const float deltaTime);
 	bool moveTowards(const SceneObject* obj);
 
-	DirectX::SimpleMath::Vector3 screenToWorld(HWND hwnd, int x, int y, int width, int height, DirectX::SimpleMath::Matrix worldMatrix);
+	DirectX::SimpleMath::Vector3 screenToWorld(HWND hwnd, int width, int height, DirectX::SimpleMath::Matrix worldMatrix);
 
 	DirectX::SimpleMath::Matrix createViewMatrix();
 

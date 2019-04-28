@@ -66,7 +66,7 @@ public:
 
 	// Raycasts from the cameras near plane in range of given distance
 	// returns a vector of IDs for each scene object that collided
-	std::vector<int> FindMouseRayTargets();
+	int FindMouseRayTargets();
 
 private:
 

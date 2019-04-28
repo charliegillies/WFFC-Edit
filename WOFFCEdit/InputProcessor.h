@@ -16,7 +16,7 @@ private:
 public:
 	InputProcessor();
 
-	InputCommands& getCommands();
+	InputCommands* getCommands();
 	const InputCommands& tick();
 	void process_msg(const MSG* msg);
 };

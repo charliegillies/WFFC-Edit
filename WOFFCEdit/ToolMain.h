@@ -37,7 +37,7 @@ public:
 
 	Command* createAddNewSceneObjectCommand();
 
-	InputCommands& getInputCommands();
+	InputCommands* getInputCommands();
 
 	void setSelectionID(int id);
 	bool onToggleWireframe();

@@ -81,18 +81,7 @@ void ToolMain::Tick(MSG *msg, History* history)
 	// If we click, then we need to perform a raycast to see
 	// if we have selected an entity from the cameras perspective
 	if (commands.leftMouse == ClickState::DOWN) {
-		std::vector<int> picked = m_d3dRenderer.FindMouseRayTargets();
-		
-		int new_pick = -1;
-		if (picked.size() > 0) {
-			if (picked.size() == 1) {
-				new_pick = picked[0];
-			}
-			else {
-				// TODO: sort by distance to find the guys we want!
-			}
-		}
-
+		int new_pick = m_d3dRenderer.FindMouseRayTargets();
 		if (new_pick != -1 && new_pick != m_selectedId) {
 			// log the selection change - so the user can undo it
 			history->log(new ChangeSelectionCommand(new_pick, m_selectedId));
@@ -145,7 +134,7 @@ Command* ToolMain::createAddNewSceneObjectCommand()
 	return new AddNewSceneObjectCommand();
 }
 
-InputCommands& ToolMain::getInputCommands()
+InputCommands* ToolMain::getInputCommands()
 {
 	return m_input.getCommands();
 }

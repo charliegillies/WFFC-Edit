@@ -6,6 +6,7 @@
 
 typedef DirectX::SimpleMath::Vector3 Vector3;
 typedef DirectX::SimpleMath::Vector2 Vector2;
+typedef DirectX::SimpleMath::Matrix Matrix;
 
 Camera::Camera()
 {
@@ -46,10 +47,10 @@ void Camera::handleInput(InputCommands const & input, const float deltaTime)
 	// Allow right click & drag to change our camera rotation
 	// this needs to be improved when we allow rotation around 
 	// the other axis as well as the y axis.
-	if (input.rightMouse == ClickState::DOWN) {
+	if (input.rightMouse == ClickState::DOWN || input.rightMouse == ClickState::HELD) {
 		Vector2 mVelocity = Vector2(input.mouseVelocityX, input.mouseVelocityY);
 		mVelocity.Normalize();
-		mVelocity = mVelocity * rotateSpeed;
+		mVelocity = mVelocity * rotateSpeed * 12.5f;
 		m_camOrientation += Vector3(0.0f, mVelocity.x, 0.0f);
 	}
 
@@ -106,16 +107,12 @@ bool Camera::moveTowards(const SceneObject * obj)
 	return false;
 }
 
-DirectX::SimpleMath::Vector3 Camera::screenToWorld(HWND hwnd, int x, int y, int width, int height, DirectX::SimpleMath::Matrix worldMatrix)
+DirectX::SimpleMath::Vector3 Camera::screenToWorld(HWND hwnd, int width, int height, DirectX::SimpleMath::Matrix worldMatrix)
 {
-	DirectX::SimpleMath::Vector3 cursorPosition;
 	POINT p;
-	p.x = x; p.y = y;
-	if (ScreenToClient(hwnd, &p)) {
-		cursorPosition.x = static_cast<float>(p.x);
-		cursorPosition.y = static_cast<float>(p.y);
-	}
-	cursorPosition.z = 1.0f;
+	GetCursorPos(&p);
+	ScreenToClient(hwnd, &p);
+	Vector3 cursorPosition = Vector3(p.x, p.y, 1.0f);
 
 	// Convert the coordinates to normalised device coordinates (-1:1)
 	float hw = width * 0.5f;
@@ -123,13 +120,12 @@ DirectX::SimpleMath::Vector3 Camera::screenToWorld(HWND hwnd, int x, int y, int 
 	cursorPosition.x = (cursorPosition.x / hw) - 1.0f;
 	cursorPosition.y = (cursorPosition.y / hh) - 1.0f;
 
-	// Calculate the position of the cursor in the 3D world and return it.
-	DirectX::SimpleMath::Matrix position3D;
-	position3D = position3D.CreateTranslation(
+	// Calculate the position of the cursor in our 3D world
+	auto cursorWorld = Matrix::CreateTranslation(
 		m_camPosition.x - (cursorPosition.x * (1.0f / hw)), 
 		m_camPosition.y - (cursorPosition.y * (1.0f / hh)), 
 		m_camPosition.z - (cursorPosition.x * (1.0f / hw)));
-	DirectX::SimpleMath::Matrix dir = worldMatrix * position3D;
+	Matrix dir = worldMatrix * cursorWorld;
 	return dir.Translation();
 }
 
