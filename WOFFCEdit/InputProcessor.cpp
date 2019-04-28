@@ -26,6 +26,7 @@ const InputCommands& InputProcessor::tick()
 		m_inputCommands.rotate = m_keyArray['R'] && !m_lastKeyArray['R'];
 		m_inputCommands.scale = m_keyArray['S'] && !m_lastKeyArray['S'];
 		m_inputCommands.camera = m_keyArray['C'] && !m_lastKeyArray['C'];
+		m_inputCommands.edit = m_keyArray['E'] && !m_lastKeyArray['E'];
 	}
 	else {
 		// Map actions if their appropriate keybinds are down

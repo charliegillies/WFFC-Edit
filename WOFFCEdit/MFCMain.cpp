@@ -88,58 +88,70 @@ int MFCMain::Run()
 				m_frame->m_wndStatusBar.SetPaneText(1, m_history.get_current_cmd_label().c_str(), 1);
 			}
 
+			// Finally, process input commands at the top level
+			// as we need to check for state changes, caused by triggering
+			// of shortcuts.
 			InputCommands* input = m_toolSystem.getInputCommands();
-			if (input->undo) {
-				// attempt to undo the history, change the label if we succeed
-				if (m_history.undo()) {
-					std::wstring label = L"Undo: " + m_history.get_current_cmd_label();
-					m_frame->m_wndStatusBar.SetPaneText(1, label.c_str(), 1);
-				}
-			}
-			if (input->redo) {
-				// attempt to redo the history, change the label if we succeed
-				if (m_history.redo()) {
-					std::wstring label = L"Redo: " + m_history.get_current_cmd_label();
-					m_frame->m_wndStatusBar.SetPaneText(1, label.c_str(), 1);
-				}
-			}
-			if (input->save) {
-				// Emulate the button save using the keybind
-				Button_SaveScene();
-			}
-			if (input->wireframe) {
-				// Emulate the toggle button using the keybind
-				Button_ToggleWireframe();
-			}
-			if (input->duplicate) {
-				SceneObject* selected = m_toolSystem.getSelectedObject();
-				if (selected != nullptr) {
-					SceneObject copy = *selected;
-					m_toolSystem.getGraph()->insertSceneObject(std::move(copy));
-				}
-			}
-			if (input->space) {
-				SceneObject* selected = m_toolSystem.getSelectedObject();
-				if (selected != nullptr) {
-					m_toolSystem.moveCameraToTarget();
-				}
-			}
-			if (input->translate) {
-				ChangeEditorMode(EditorMode::MOVE);
-			}
-			if (input->rotate) {
-				ChangeEditorMode(EditorMode::ROTATE);
-			}
-			if (input->scale) {
-				ChangeEditorMode(EditorMode::SCALE);
-			}
-			if (input->camera) {
-				ChangeEditorMode(EditorMode::CAMERA);
-			}
+			ProcessInput(input);
 		}
 	}
 
 	return (int)msg.wParam;
+}
+
+void MFCMain::ProcessInput(InputCommands * input)
+{
+	if (input->undo) {
+		// attempt to undo the history, change the label if we succeed
+		if (m_history.undo()) {
+			std::wstring label = L"Undo: " + m_history.get_current_cmd_label();
+			m_frame->m_wndStatusBar.SetPaneText(1, label.c_str(), 1);
+		}
+	}
+	if (input->redo) {
+		// attempt to redo the history, change the label if we succeed
+		if (m_history.redo()) {
+			std::wstring label = L"Redo: " + m_history.get_current_cmd_label();
+			m_frame->m_wndStatusBar.SetPaneText(1, label.c_str(), 1);
+		}
+	}
+	if (input->save) {
+		// Emulate the button save using the keybind
+		Button_SaveScene();
+	}
+	if (input->wireframe) {
+		// Emulate the toggle button using the keybind
+		Button_ToggleWireframe();
+	}
+	if (input->duplicate) {
+		SceneObject* selected = m_toolSystem.getSelectedObject();
+		if (selected != nullptr) {
+			SceneObject copy = *selected;
+			m_toolSystem.getGraph()->insertSceneObject(std::move(copy));
+		}
+	}
+	if (input->space) {
+		SceneObject* selected = m_toolSystem.getSelectedObject();
+		if (selected != nullptr) {
+			m_toolSystem.moveCameraToTarget();
+		}
+	}
+	if (input->translate) {
+		ChangeEditorMode(EditorMode::MOVE);
+	}
+	if (input->rotate) {
+		ChangeEditorMode(EditorMode::ROTATE);
+	}
+	if (input->scale) {
+		ChangeEditorMode(EditorMode::SCALE);
+	}
+	if (input->camera) {
+		ChangeEditorMode(EditorMode::CAMERA);
+	}
+	if (input->edit) {
+		// Simulate edit button press
+		Button_EditObject();
+	}
 }
 
 void MFCMain::MenuFileQuit()
