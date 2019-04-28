@@ -50,6 +50,7 @@ void SelectDialogue::SetObjectData(ToolMain* tool)
 	m_list.InsertColumn(3, L"Texture", LVCFMT_LEFT, 200, 3);
 
 	// Show every scene object
+	int selected_row = -1;
 	for (int i = 0, count = m_sceneGraph->size(); i < count; i++) {
 		SceneObject& obj = m_sceneGraph->at(i);
 
@@ -58,6 +59,17 @@ void SelectDialogue::SetObjectData(ToolMain* tool)
 		m_list.SetItem(row, 1, LVIF_TEXT, Utils::StringToWCHART(obj.name).c_str(), 0, 0, 0, 0);
 		m_list.SetItem(row, 2, LVIF_TEXT, Utils::StringToWCHART(obj.model_path).c_str(), 0, 0, 0, 0);
 		m_list.SetItem(row, 3, LVIF_TEXT, Utils::StringToWCHART(obj.tex_diffuse_path).c_str(), 0, 0, 0, 0);
+
+		if (obj.ID == tool->getCurrentSelectionID()) {
+			selected_row = row;
+		}
+	}
+
+	// if a selection row was found, now set the default selection .. 
+	if (selected_row != -1) {
+		m_list.SetFocus();
+		m_list.SetItemState(selected_row, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
+		m_list.SetSelectionMark(selected_row);
 	}
 }
 
