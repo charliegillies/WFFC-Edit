@@ -124,6 +124,18 @@ int MFCMain::Run()
 					m_toolSystem.moveCameraToTarget();
 				}
 			}
+			if (input->translate) {
+				ChangeEditorMode(EditorMode::MOVE);
+			}
+			if (input->rotate) {
+				ChangeEditorMode(EditorMode::ROTATE);
+			}
+			if (input->scale) {
+				ChangeEditorMode(EditorMode::SCALE);
+			}
+			if (input->camera) {
+				ChangeEditorMode(EditorMode::CAMERA);
+			}
 		}
 	}
 

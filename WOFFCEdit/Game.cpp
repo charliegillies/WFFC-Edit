@@ -195,9 +195,8 @@ int Game::FindMouseRayTargets()
 				}
 			}
 		}
-		return selection;
 	}
-
+	return selection;
 }
 
 #pragma region Frame Render
