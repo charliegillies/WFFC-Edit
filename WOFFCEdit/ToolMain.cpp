@@ -31,8 +31,10 @@ int ToolMain::getCurrentSelectionID()
 void ToolMain::onActionInitialise(HWND handle, int width, int height)
 {
 	//window size, handle etc for directX
+	m_toolHandle = handle;
 	m_width		= width;
 	m_height	= height;
+
 	// Initialize our directX 3d renderer
 	m_d3dRenderer.Initialize(handle, m_width, m_height);
 

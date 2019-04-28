@@ -10,8 +10,8 @@ typedef DirectX::SimpleMath::Vector2 Vector2;
 Camera::Camera()
 {
 	//functional
-	m_moveSpeed = 0.30;
-	m_camRotRate = 3.0;
+	m_moveSpeed = 4.0;
+	m_camRotRate = 10.0f;
 
 	//camera
 	m_camPosition.x = 0.0f;
@@ -39,16 +39,24 @@ Camera::Camera()
 	m_camOrientation.z = 0.0f;
 }
 
-void Camera::handleInput(InputCommands const & input)
+void Camera::handleInput(InputCommands const & input, const float deltaTime)
 {
 	Vector3 planarMotionVector = m_camLookDirection;
 	planarMotionVector.y = 0.0;
 
+	float moveSpeed = m_moveSpeed;
+	if (input.shift) moveSpeed *= 1.5f;
+	moveSpeed *= deltaTime;
+
+	float rotateSpeed = m_camRotRate;
+	if (input.shift) rotateSpeed *= 1.5f;
+	rotateSpeed *= deltaTime;
+
 	if (input.rotateRight) {
-		m_camOrientation.y -= m_camRotRate;
+		m_camOrientation.y -= m_camRotRate * rotateSpeed;
 	}
 	if (input.rotateLeft) {
-		m_camOrientation.y += m_camRotRate;
+		m_camOrientation.y += m_camRotRate * rotateSpeed;
 	}
 
 	// Allow right click & drag to change our camera rotation
@@ -57,7 +65,7 @@ void Camera::handleInput(InputCommands const & input)
 	if (input.rightMouse == ClickState::DOWN) {
 		Vector2 mVelocity = Vector2(input.mouseVelocityX, input.mouseVelocityY);
 		mVelocity.Normalize();
-		mVelocity *= m_moveSpeed * 5.0f;
+		mVelocity = mVelocity * rotateSpeed;
 		m_camOrientation += Vector3(0.0f, mVelocity.x, 0.0f);
 	}
 
@@ -71,22 +79,22 @@ void Camera::handleInput(InputCommands const & input)
 
 	//process input and update stuff
 	if (input.forward) {
-		m_camPosition += m_camLookDirection * m_moveSpeed;
+		m_camPosition += m_camLookDirection * moveSpeed;
 	}
 	if (input.back) {
-		m_camPosition -= m_camLookDirection * m_moveSpeed;
+		m_camPosition -= m_camLookDirection * moveSpeed;
 	}
 	if (input.right) {
-		m_camPosition += m_camRight * m_moveSpeed;
+		m_camPosition += m_camRight * moveSpeed;
 	}
 	if (input.left) {
-		m_camPosition -= m_camRight * m_moveSpeed;
+		m_camPosition -= m_camRight * moveSpeed;
 	}
 	if (input.down) {
-		m_camPosition -= Vector3::UnitY * m_moveSpeed;
+		m_camPosition -= Vector3::UnitY * moveSpeed;
 	}
 	if (input.up) {
-		m_camPosition += Vector3::UnitY * m_moveSpeed;
+		m_camPosition += Vector3::UnitY * moveSpeed;
 	}
 
 	//update lookat point
@@ -112,6 +120,35 @@ bool Camera::moveTowards(const SceneObject * obj)
 
 
 	return false;
+}
+
+DirectX::SimpleMath::Vector3 Camera::screenToWorld(HWND hwnd, float x, float y, int width, int height, DirectX::SimpleMath::Matrix worldMatrix)
+{
+	DirectX::SimpleMath::Vector3 cursorPosition;
+	POINT p;
+	if (GetCursorPos(&p)) {
+		cursorPosition.x = static_cast<float>(p.x);
+		cursorPosition.y = static_cast<float>(p.y);
+	}
+	if (ScreenToClient(hwnd, &p)) {
+		cursorPosition.x = static_cast<float>(p.x);
+		cursorPosition.y = static_cast<float>(p.y);
+	}
+	cursorPosition.z = 1.0f;
+
+	DirectX::SimpleMath::Matrix dir;
+	float halfWidth = width * 0.5f;
+	float halfHeight = height * 0.5f;
+
+	// Calculate the current cursor position based on the screen width and height.
+	cursorPosition.x = (cursorPosition.x / halfWidth) - 1.0f;
+	cursorPosition.y = (cursorPosition.y / halfHeight) - 1.0f;
+
+	// Calculate the position of the cursor in the 3D world and return it.
+	DirectX::SimpleMath::Matrix position3D;
+	position3D = position3D.CreateTranslation(m_camPosition.x - (cursorPosition.x * (1.0f / halfWidth)), m_camPosition.y - (cursorPosition.y * (1.0f / halfHeight)), m_camPosition.z - (cursorPosition.x * (1.0f / halfWidth)));
+	dir = worldMatrix * position3D;
+	return dir.Translation();
 }
 
 DirectX::SimpleMath::Matrix Camera::createViewMatrix()

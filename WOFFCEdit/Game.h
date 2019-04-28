@@ -80,13 +80,14 @@ private:
 
 
 	bool m_camLocked;
+	HWND m_handle;
 
 	RECT m_screenDimensions;
 
 	//tool specific
 	std::vector<DisplayObject>			m_displayList;
 	DisplayChunk						m_displayChunk;
-	InputCommands						m_InputCommands;
+	InputCommands						m_inputCommands;
 	
 	Camera m_camera;
 

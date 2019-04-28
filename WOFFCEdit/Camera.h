@@ -19,8 +19,10 @@ private:
 public:
 	Camera();
 
-	void handleInput(InputCommands const& commands);
+	void handleInput(InputCommands const& commands, const float deltaTime);
 	bool moveTowards(const SceneObject* obj);
+
+	DirectX::SimpleMath::Vector3 screenToWorld(HWND hwnd, float x, float y, int width, int height, DirectX::SimpleMath::Matrix worldMatrix);
 
 	DirectX::SimpleMath::Matrix createViewMatrix();
 

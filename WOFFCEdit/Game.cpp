@@ -37,6 +37,7 @@ Game::~Game()
 // Initialize the Direct3D resources required to run.
 void Game::Initialize(HWND window, int width, int height)
 {
+	m_handle = window;
 	m_gamePad = std::make_unique<GamePad>();
 	m_keyboard = std::make_unique<Keyboard>();
 	m_mouse = std::make_unique<Mouse>();
@@ -86,10 +87,12 @@ void Game::SetGridState(bool state)
 void Game::Tick(const InputCommands *Input)
 {
 	//copy over the input commands so we have a local version to use elsewhere.
-	m_InputCommands = *Input;
+	m_inputCommands = *Input;
 	m_timer.Tick([&]()
 	{
 		Update(m_timer);
+		if (!m_camLocked)
+			m_camera.handleInput(m_inputCommands, m_timer.GetElapsedSeconds());
 	});
 
 #ifdef DXTK_AUDIO
@@ -108,9 +111,6 @@ void Game::Tick(const InputCommands *Input)
 // Updates the world.
 void Game::Update(DX::StepTimer const& timer)
 {
-	if(!m_camLocked)
-		m_camera.handleInput(m_InputCommands);
-
 	m_view = m_camera.createViewMatrix();
 
 	m_batchEffect->SetView(m_view);
@@ -152,10 +152,16 @@ std::vector<int> Game::FindMouseRayTargets()
 	std::vector<int> hits;
 	float dst;
 
+	auto at = m_camera.screenToWorld(m_handle, 
+		m_inputCommands.mouseX, m_inputCommands.mouseY, 
+		m_screenDimensions.left - m_screenDimensions.right, 
+		m_screenDimensions.bottom - m_screenDimensions.top, 
+		m_world);
+
 	//setup near and far planes of frustum with mouse X and mouse y passed down from Toolmain. 
 	//they may look the same but note, the difference in Z
-	const XMVECTOR nearSource = XMVectorSet(m_InputCommands.mouseX, m_InputCommands.mouseY, 0.0f, 1.0f);
-	const XMVECTOR farSource = XMVectorSet(m_InputCommands.mouseX, m_InputCommands.mouseY, 1.0f, 1.0f);
+	const XMVECTOR nearSource = XMVectorSet(m_inputCommands.mouseX, m_inputCommands.mouseY, 0.0f, 1.0f);
+	const XMVECTOR farSource = XMVectorSet(m_inputCommands.mouseX, m_inputCommands.mouseY, 1.0f, 1.0f);
 
 	//Loop through entire display list of objects and pick with each in turn. 
 	for (int i = 0; i < m_displayList.size(); i++)

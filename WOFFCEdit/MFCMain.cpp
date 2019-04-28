@@ -68,14 +68,7 @@ int MFCMain::Run()
 
 	while (WM_QUIT != msg.message)
 	{
-		if (true)
-		{
-			bGotMsg = (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE) != 0);
-		}
-		else
-		{
-			bGotMsg = (GetMessage(&msg, NULL, 0U, 0U) != 0);
-		}
+		bGotMsg = (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE) != 0);
 
 		if (bGotMsg)
 		{
