@@ -157,5 +157,7 @@ DirectX::SimpleMath::Vector3 Camera::getUp() const
 
 std::wstring Camera::getDebugPosition() const
 {
-	return L"Cam X: " + std::to_wstring(m_camPosition.x) + L" Cam Z: " + std::to_wstring(m_camPosition.z);
+	return L"X: " + std::to_wstring(m_camPosition.x) 
+		+ L" Y: " + std::to_wstring(m_camPosition.y) 
+		+ L" Z: " + std::to_wstring(m_camPosition.z);
 }

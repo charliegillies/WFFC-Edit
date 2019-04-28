@@ -226,10 +226,20 @@ void Game::Render()
 	}
 
 	//CAMERA POSITION ON HUD
-	//m_sprites->Begin();
-	//std::wstring var = m_camera.getDebugPosition();
-	//m_font->DrawString(m_sprites.get(), var.c_str(), XMFLOAT2(100, 10), Colors::Yellow);	
-	//m_sprites->End();
+	m_sprites->Begin();
+	auto point = m_camera.screenToWorld(m_handle,
+		m_inputCommands.mouseX, m_inputCommands.mouseY,
+		m_screenDimensions.right - m_screenDimensions.left,
+		m_screenDimensions.bottom - m_screenDimensions.top,
+		m_world);
+	
+	std::wstring var = L"X: " + std::to_wstring(point.x)
+		+ L" Y: " + std::to_wstring(point.y)
+		+ L" Z: " + std::to_wstring(point.z);
+	m_font->DrawString(m_sprites.get(), var.c_str(), XMFLOAT2(0, 0), Colors::Yellow);
+	var = m_camera.getDebugPosition();
+	m_font->DrawString(m_sprites.get(), var.c_str(), XMFLOAT2(0, 100), Colors::Yellow);	
+	m_sprites->End();
 
 	//RENDER OBJECTS FROM SCENEGRAPH
 	int numRenderObjects = m_displayList.size();
