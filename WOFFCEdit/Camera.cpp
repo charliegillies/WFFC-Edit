@@ -47,7 +47,7 @@ void Camera::handleInput(InputCommands const & input, const float deltaTime)
 	// Allow right click & drag to change our camera rotation
 	// this needs to be improved when we allow rotation around 
 	// the other axis as well as the y axis.
-	if (input.rightMouse == ClickState::DOWN || input.rightMouse == ClickState::HELD) {
+	if (input.rightMouse != ClickState::UP) {
 		Vector2 mVelocity = Vector2(input.mouseVelocityX, input.mouseVelocityY);
 		mVelocity.Normalize();
 		mVelocity = mVelocity * rotateSpeed * 12.5f;

@@ -130,6 +130,12 @@ void MFCMain::ProcessInput(InputCommands * input)
 			m_toolSystem.getGraph()->insertSceneObject(std::move(copy));
 		}
 	}
+	if (input->del) {
+		SceneObject* selected = m_toolSystem.getSelectedObject();
+		if (selected != nullptr) {
+			m_toolSystem.getGraph()->removeSceneObject(*selected);
+		}
+	}
 	if (input->space) {
 		SceneObject* selected = m_toolSystem.getSelectedObject();
 		if (selected != nullptr) {

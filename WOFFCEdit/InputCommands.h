@@ -9,11 +9,12 @@ struct InputCommands {
 	bool forward, back, right, left;
 	bool rotateRight, rotateLeft;
 	bool down, up;
+	bool space;
 
 	// Input shortcuts for actions
 	bool undo, redo, save, wireframe, duplicate;
-	bool space;
 	bool translate, rotate, scale, camera, edit;
+	bool del;
 
 	// Modifiers
 	bool ctrl, shift;

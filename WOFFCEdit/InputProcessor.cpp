@@ -40,6 +40,7 @@ const InputCommands& InputProcessor::tick()
 		m_inputCommands.down = m_keyArray['Z'];
 		m_inputCommands.up = m_keyArray['X'];
 		m_inputCommands.space = m_keyArray[VK_SPACE];
+		m_inputCommands.del = m_keyArray[VK_DELETE];
 	}
 
 	// Copy the keys from the this input frame
