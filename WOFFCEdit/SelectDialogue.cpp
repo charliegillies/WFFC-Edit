@@ -74,7 +74,7 @@ void SelectDialogue::End()
 
 void SelectDialogue::Select(NMHDR* pNMHDR, LRESULT* pResult)
 {
-	int column = m_list.GetSelectedColumn();
+	int column = m_list.GetSelectionMark();
 	if (column != -1) {
 		CString id = m_list.GetItemText(column, 0);
 		m_tool->setSelectionID(_ttoi(id));
