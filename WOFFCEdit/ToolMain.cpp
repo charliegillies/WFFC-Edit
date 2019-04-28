@@ -169,6 +169,15 @@ void ToolMain::editorModeChanged(const EditorMode mode)
 	m_mode = mode;
 }
 
+void ToolMain::moveCameraToTarget()
+{
+	SceneObject* target = getSelectedObject();
+	if (target != nullptr) {
+		Camera* camera = m_d3dRenderer.getCamera();
+		camera->moveTowards(target);
+	}
+}
+
 SceneGraph * ToolMain::getGraph()
 {
 	return &m_graph;

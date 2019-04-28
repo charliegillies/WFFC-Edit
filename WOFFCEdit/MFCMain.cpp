@@ -125,6 +125,12 @@ int MFCMain::Run()
 					m_toolSystem.getGraph()->insertSceneObject(std::move(copy));
 				}
 			}
+			if (input.space) {
+				SceneObject* selected = m_toolSystem.getSelectedObject();
+				if (selected != nullptr) {
+					m_toolSystem.moveCameraToTarget();
+				}
+			}
 		}
 	}
 

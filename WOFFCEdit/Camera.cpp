@@ -1,6 +1,7 @@
 #include "Camera.h"
 
 #include "InputCommands.h"
+#include "SceneObject.h"
 #include <string>
 
 typedef DirectX::SimpleMath::Vector3 Vector3;
@@ -92,10 +93,29 @@ void Camera::handleInput(InputCommands const & input)
 	m_camLookAt = m_camPosition + m_camLookDirection;
 }
 
+bool Camera::moveTowards(const SceneObject * obj)
+{
+	Vector3 target = Vector3(obj->posX, obj->posY, obj->posZ);
+	Vector3 position = m_camPosition;
+
+	// do not move closer than 1 unit
+	if (Vector3::Distance(target, position) <= 1.0f) {
+		return true;
+	}
+
+	// move towards .. 
+	Vector3 delta = target - position;
+	delta.Normalize();
+	m_camPosition += delta * m_moveSpeed;
+
+	// now rotate to look at it .. 
+
+
+	return false;
+}
+
 DirectX::SimpleMath::Matrix Camera::createViewMatrix()
 {
-	// TODO:
-	// Cache, rather than generate per frame.
 	return DirectX::SimpleMath::Matrix::CreateLookAt(getPosition(), getLookAt(), getUp());
 }
 

@@ -488,6 +488,11 @@ void Game::setCameraLock(const bool locked)
 	m_camLocked = locked;
 }
 
+Camera * Game::getCamera()
+{
+	return &m_camera;
+}
+
 #ifdef DXTK_AUDIO
 void Game::NewAudioDevice()
 {

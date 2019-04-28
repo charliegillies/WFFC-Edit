@@ -2,7 +2,9 @@
 
 #include <d3d11.h>
 #include "SimpleMath.h"
+
 struct InputCommands;
+class SceneObject;
 
 class Camera {
 private:
@@ -18,6 +20,7 @@ public:
 	Camera();
 
 	void handleInput(InputCommands const& commands);
+	bool moveTowards(const SceneObject* obj);
 
 	DirectX::SimpleMath::Matrix createViewMatrix();
 

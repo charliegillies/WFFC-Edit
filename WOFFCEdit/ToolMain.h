@@ -44,6 +44,8 @@ public:
 	bool onToggleGrid();
 	void editorModeChanged(const EditorMode mode);
 
+	void moveCameraToTarget();
+
 	ResourceHandler* getResourceHandler();
 	SceneObject* getSelectedObject();
 

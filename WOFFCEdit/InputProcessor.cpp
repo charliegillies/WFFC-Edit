@@ -23,6 +23,8 @@ const InputCommands& InputProcessor::tick()
 		m_inputCommands.rotateRight = m_keyArray['E'];
 		m_inputCommands.down = m_keyArray['Z'];
 		m_inputCommands.up = m_keyArray['X'];
+
+		m_inputCommands.space = m_keyArray[VK_SPACE];
 	}
 	else {
 		// Ctrl modifier is down, so check shortcuts!
@@ -88,5 +90,4 @@ void InputProcessor::process_msg(const MSG * msg)
 
 	m_inputCommands.ctrl = m_keyArray[VK_CONTROL];
 	m_inputCommands.shift = m_keyArray[VK_SHIFT];
-
 }

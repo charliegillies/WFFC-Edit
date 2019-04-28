@@ -12,6 +12,7 @@ struct InputCommands {
 
 	// Input shortcuts for actions
 	bool undo, redo, save, wireframe, duplicate;
+	bool space;
 
 	// Modifiers
 	bool ctrl, shift;

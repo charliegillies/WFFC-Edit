@@ -58,6 +58,8 @@ public:
 	void setSelectedID(int id);
 	void setCameraLock(const bool locked);
 
+	Camera* getCamera();
+
 #ifdef DXTK_AUDIO
 	void NewAudioDevice();
 #endif
