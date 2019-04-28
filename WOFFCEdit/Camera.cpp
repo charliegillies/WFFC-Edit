@@ -106,32 +106,30 @@ bool Camera::moveTowards(const SceneObject * obj)
 	return false;
 }
 
-DirectX::SimpleMath::Vector3 Camera::screenToWorld(HWND hwnd, float x, float y, int width, int height, DirectX::SimpleMath::Matrix worldMatrix)
+DirectX::SimpleMath::Vector3 Camera::screenToWorld(HWND hwnd, int x, int y, int width, int height, DirectX::SimpleMath::Matrix worldMatrix)
 {
 	DirectX::SimpleMath::Vector3 cursorPosition;
 	POINT p;
-	if (GetCursorPos(&p)) {
-		cursorPosition.x = static_cast<float>(p.x);
-		cursorPosition.y = static_cast<float>(p.y);
-	}
+	p.x = x; p.y = y;
 	if (ScreenToClient(hwnd, &p)) {
 		cursorPosition.x = static_cast<float>(p.x);
 		cursorPosition.y = static_cast<float>(p.y);
 	}
 	cursorPosition.z = 1.0f;
 
-	DirectX::SimpleMath::Matrix dir;
-	float halfWidth = width * 0.5f;
-	float halfHeight = height * 0.5f;
-
-	// Calculate the current cursor position based on the screen width and height.
-	cursorPosition.x = (cursorPosition.x / halfWidth) - 1.0f;
-	cursorPosition.y = (cursorPosition.y / halfHeight) - 1.0f;
+	// Convert the coordinates to normalised device coordinates (-1:1)
+	float hw = width * 0.5f;
+	float hh = height * 0.5f;
+	cursorPosition.x = (cursorPosition.x / hw) - 1.0f;
+	cursorPosition.y = (cursorPosition.y / hh) - 1.0f;
 
 	// Calculate the position of the cursor in the 3D world and return it.
 	DirectX::SimpleMath::Matrix position3D;
-	position3D = position3D.CreateTranslation(m_camPosition.x - (cursorPosition.x * (1.0f / halfWidth)), m_camPosition.y - (cursorPosition.y * (1.0f / halfHeight)), m_camPosition.z - (cursorPosition.x * (1.0f / halfWidth)));
-	dir = worldMatrix * position3D;
+	position3D = position3D.CreateTranslation(
+		m_camPosition.x - (cursorPosition.x * (1.0f / hw)), 
+		m_camPosition.y - (cursorPosition.y * (1.0f / hh)), 
+		m_camPosition.z - (cursorPosition.x * (1.0f / hw)));
+	DirectX::SimpleMath::Matrix dir = worldMatrix * position3D;
 	return dir.Translation();
 }
 

@@ -157,17 +157,19 @@ std::vector<int> Game::FindMouseRayTargets()
 		m_screenDimensions.left - m_screenDimensions.right, 
 		m_screenDimensions.bottom - m_screenDimensions.top, 
 		m_world);
+	
 
 	//setup near and far planes of frustum with mouse X and mouse y passed down from Toolmain. 
 	//they may look the same but note, the difference in Z
 	const XMVECTOR nearSource = XMVectorSet(m_inputCommands.mouseX, m_inputCommands.mouseY, 0.0f, 1.0f);
 	const XMVECTOR farSource = XMVectorSet(m_inputCommands.mouseX, m_inputCommands.mouseY, 1.0f, 1.0f);
 
+	D3D11_VIEWPORT viewport = m_deviceResources->GetScreenViewport();
 	//Loop through entire display list of objects and pick with each in turn. 
 	for (int i = 0; i < m_displayList.size(); i++)
 	{
 		//Get the scale factor and translation of the object
-		const XMVECTORF32 scale = { m_displayList[i].m_scale.x,		m_displayList[i].m_scale.y,		m_displayList[i].m_scale.z };
+		const XMVECTORF32 scale = { m_displayList[i].m_scale.x,	m_displayList[i].m_scale.y,	m_displayList[i].m_scale.z };
 		const XMVECTORF32 translate = { m_displayList[i].m_position.x,	m_displayList[i].m_position.y,	m_displayList[i].m_position.z };
 
 		//convert euler angles into a quaternion for the rotation of the object
@@ -181,7 +183,6 @@ std::vector<int> Game::FindMouseRayTargets()
 		XMMATRIX local = m_world * XMMatrixTransformation(g_XMZero, Quaternion::Identity, scale, g_XMZero, rotate, translate);
 
 		//Unproject the points on the near and far plane, with respect to the matrix we just created.
-		D3D11_VIEWPORT viewport = m_deviceResources->GetScreenViewport();
 		XMVECTOR nearPoint = XMVector3Unproject(nearSource, 0.0f, 0.0f, m_screenDimensions.right, m_screenDimensions.bottom, viewport.MinDepth, viewport.MaxDepth, m_projection, m_view, local);
 		XMVECTOR farPoint = XMVector3Unproject(farSource, 0.0f, 0.0f, m_screenDimensions.right, m_screenDimensions.bottom, viewport.MinDepth, viewport.MaxDepth, m_projection, m_view, local);
 
@@ -238,7 +239,7 @@ void Game::Render()
 		+ L" Z: " + std::to_wstring(point.z);
 	m_font->DrawString(m_sprites.get(), var.c_str(), XMFLOAT2(0, 0), Colors::Yellow);
 	var = m_camera.getDebugPosition();
-	m_font->DrawString(m_sprites.get(), var.c_str(), XMFLOAT2(0, 100), Colors::Yellow);	
+	m_font->DrawString(m_sprites.get(), var.c_str(), XMFLOAT2(0, 50), Colors::Yellow);	
 	m_sprites->End();
 
 	//RENDER OBJECTS FROM SCENEGRAPH
