@@ -21,7 +21,7 @@ void TerrainManipulator::flatten(DisplayChunk* chunk)
 void TerrainManipulator::sculpt(DisplayChunk* chunk, const Camera* camera, const InputCommands* input)
 {
 	bool raise = input->leftMouse != ClickState::UP;
-	bool lower = input->rightMouse != ClickState::UP;
+	bool lower = raise && input->shift;
 	//if (!raise && !lower) return;
 
 	// hard coding the numbers as a test!
@@ -39,16 +39,16 @@ void TerrainManipulator::sculpt(DisplayChunk* chunk, const Camera* camera, const
 		// calculate the intersection point on the plane
 		Vector3 point = ray.position + (ray.direction * distance);
 		// terrain is positioned from -TERRAINRES/2:TERRAINRES/2. Set back!
-		int x = std::round(point.x / scalar) + (TERRAINRESOLUTION)/2;
-		int y = std::round(point.z / scalar) + (TERRAINRESOLUTION)/2;
+		int x = std::round(point.z / scalar) + (TERRAINRESOLUTION)/2;
+		int y = std::round(point.x / scalar) + (TERRAINRESOLUTION)/2;
 
 		if (x >= 0 && x < TERRAINRESOLUTION && y >= 0 && y < TERRAINRESOLUTION) {
 			// in bounds! convert coordinates to 1d.. 
 			int index = (TERRAINRESOLUTION * x) + y;
-			if (raise)
-				chunk->RaiseCoordinateHeight(index);
-			else if (lower)
+			if (lower)
 				chunk->LowerCoordinateHeight(index);
+			else if (raise)
+				chunk->RaiseCoordinateHeight(index);
 		}
 	}
 

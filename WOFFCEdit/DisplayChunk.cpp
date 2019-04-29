@@ -14,7 +14,6 @@ DisplayChunk::DisplayChunk()
 	m_terrainPositionScalingFactor = m_terrainSize / (TERRAINRESOLUTION-1);
 }
 
-
 DisplayChunk::~DisplayChunk()
 {
 }
