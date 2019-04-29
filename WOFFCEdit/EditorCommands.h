@@ -16,6 +16,7 @@ private:
 
 public:
 	AddNewSceneObjectCommand();
+	AddNewSceneObjectCommand(SceneObject* so);
 
 	// Inherited via Command
 	virtual void execute(ToolMain* tool, bool asRedo) override;

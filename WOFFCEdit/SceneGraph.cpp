@@ -46,13 +46,6 @@ const size_t SceneGraph::size() const
 	return m_objects.size();
 }
 
-SceneObject & SceneGraph::createNewSceneObject()
-{
-	// Push an empty scene object into the graph, then get a reference to it
-	SceneObject& new_obj = insertSceneObject(SceneObject::CreatePrimitive());
-	return new_obj;
-}
-
 SceneObject & SceneGraph::insertSceneObject(SceneObject && obj)
 {
 	setDirty(true);

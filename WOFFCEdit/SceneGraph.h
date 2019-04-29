@@ -23,9 +23,7 @@ public:
 	const bool empty() const;
 	const size_t size() const;
 
-	SceneObject& createNewSceneObject();
 	SceneObject& insertSceneObject(SceneObject&& obj);
 	int createNewSceneObjectID() const;
 	bool removeSceneObject(SceneObject& target);
-
 };

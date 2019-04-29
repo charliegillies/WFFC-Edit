@@ -3,16 +3,17 @@
 #include "ToolMain.h"
 
 // Add new scene object command implementation .. 
-AddNewSceneObjectCommand::AddNewSceneObjectCommand() {}
+AddNewSceneObjectCommand::AddNewSceneObjectCommand() {
+	m_sceneObject = SceneObject::CreatePrimitive();
+}
+
+AddNewSceneObjectCommand::AddNewSceneObjectCommand(SceneObject * so) {
+	m_sceneObject = *so;
+}
 
 void AddNewSceneObjectCommand::execute(ToolMain* tool, bool asRedo)
 {
-	if (asRedo) {
-		m_sceneObject = tool->getGraph()->insertSceneObject(std::move(m_sceneObject));
-	}
-	else {
-		m_sceneObject = tool->getGraph()->createNewSceneObject();
-	}
+	m_sceneObject = tool->getGraph()->insertSceneObject(std::move(m_sceneObject));
 }
 
 void AddNewSceneObjectCommand::undo(ToolMain* tool)
