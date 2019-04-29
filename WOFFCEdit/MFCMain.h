@@ -58,6 +58,8 @@ private:
 	afx_msg void MenuFileQuit();
 	afx_msg void MenuFileSaveTerrain();
 	afx_msg void MenuEditSelect();
+
+	// Primary toolbar
 	afx_msg	void Button_SaveScene();
 	afx_msg void Button_NewSceneObject();
 	afx_msg void Button_ToggleWireframe();

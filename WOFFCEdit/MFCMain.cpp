@@ -165,6 +165,7 @@ void MFCMain::MenuFileQuit()
 void MFCMain::MenuFileSaveTerrain()
 {
 	m_toolSystem.onActionSaveTerrain();
+	MessageBox(NULL, L"Terrain has been saved.", L"Terrain Editor", MB_OK);
 }
 
 void MFCMain::MenuEditSelect()
