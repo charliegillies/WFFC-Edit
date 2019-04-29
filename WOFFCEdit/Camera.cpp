@@ -23,10 +23,15 @@ Camera::Camera()
 	m_camRight = Vector3::Zero;
 }
 
-void Camera::handleInput(InputCommands const & input, const float deltaTime)
+void Camera::handleInput(InputCommands const & input, const float deltaTime, const SceneObject* obj)
 {
 	// no input focus? don't process the commands.
 	if (input.lostFocus) return;
+
+	// if we have a valid target, and we want to move towards it
+	if (obj != nullptr && input.space) {
+		moveTowards(obj, deltaTime);
+	}
 
 	static const float shift_speed_mult = 1.5f;
 	Vector3 planarMotionVector = m_camLookDirection;
@@ -89,20 +94,22 @@ void Camera::handleInput(InputCommands const & input, const float deltaTime)
 	m_camLookAt = m_camPosition + m_camLookDirection;
 }
 
-bool Camera::moveTowards(const SceneObject * obj)
+bool Camera::moveTowards(const SceneObject * obj, float time)
 {
 	Vector3 target = Vector3(obj->posX, obj->posY, obj->posZ);
 	Vector3 position = m_camPosition;
 
-	// do not move closer than 1 unit
-	if (Vector3::Distance(target, position) <= 1.0f) {
+	// do not move closer than 2 units
+	if (Vector3::Distance(target, position) <= 2.0f) {
 		return true;
 	}
 
 	// move towards .. 
 	Vector3 delta = target - position;
 	delta.Normalize();
-	m_camPosition += delta * m_moveSpeed;
+	delta *= time;
+	delta *= m_moveSpeed * 2.0f;
+	m_camPosition += delta;
 
 	// now rotate to look at it .. 
 

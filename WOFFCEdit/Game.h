@@ -28,7 +28,7 @@ public:
 	void SetGridState(bool state);
 
 	// Basic game loop
-	void Tick(const InputCommands * Input);
+	void Tick(const InputCommands * Input, SceneObject* target);
 	void Render();
 
 	// Rendering helpers
@@ -69,19 +69,16 @@ public:
 	int FindMouseRayTargets();
 
 private:
-
 	void Update(DX::StepTimer const& timer);
-
-
 	void CreateDeviceDependentResources();
 	void CreateWindowSizeDependentResources();
 
 	void XM_CALLCONV DrawGrid(DirectX::FXMVECTOR xAxis, DirectX::FXMVECTOR yAxis, DirectX::FXMVECTOR origin, size_t xdivs, size_t ydivs, DirectX::GXMVECTOR color);
 
-
 	bool m_camLocked;
 	HWND m_handle;
 
+	SceneObject* m_target;
 	RECT m_screenDimensions;
 
 	//tool specific

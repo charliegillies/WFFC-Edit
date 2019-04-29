@@ -84,15 +84,15 @@ void Game::SetGridState(bool state)
 
 #pragma region Frame Update
 // Executes the basic game loop.
-void Game::Tick(const InputCommands *Input)
+void Game::Tick(const InputCommands *Input, SceneObject* obj)
 {
 	//copy over the input commands so we have a local version to use elsewhere.
 	m_inputCommands = *Input;
+	m_target = obj;
 	m_timer.Tick([&]()
 	{
 		Update(m_timer);
-		if (!m_camLocked)
-			m_camera.handleInput(m_inputCommands, m_timer.GetElapsedSeconds());
+
 	});
 
 #ifdef DXTK_AUDIO
@@ -111,6 +111,9 @@ void Game::Tick(const InputCommands *Input)
 // Updates the world.
 void Game::Update(DX::StepTimer const& timer)
 {
+	if (!m_camLocked)
+		m_camera.handleInput(m_inputCommands, timer.GetElapsedSeconds(), m_target);
+
 	m_view = m_camera.createViewMatrix();
 
 	m_batchEffect->SetView(m_view);

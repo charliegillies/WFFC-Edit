@@ -127,18 +127,13 @@ void MFCMain::ProcessInput(InputCommands * input)
 	}
 	if (input->duplicate) {
 		SceneObject* selected = m_toolSystem.getSelectedObject();
-		if (selected != nullptr) {
-			SceneObject copy = *selected;
-			m_toolSystem.getGraph()->insertSceneObject(std::move(copy));
-		}
+		if (selected != nullptr)
+			m_history.log(new AddNewSceneObjectCommand(selected));
 	}
 	if (input->del) {
 		SceneObject* selected = m_toolSystem.getSelectedObject();
 		if (selected != nullptr)
 			m_history.log(new DeleteSceneObjectCommand(selected));
-	}
-	if (input->space) {
-		m_toolSystem.moveCameraToTarget();
 	}
 	if (input->translate) {
 		Button_TranslateToggle();
@@ -153,7 +148,6 @@ void MFCMain::ProcessInput(InputCommands * input)
 		Button_CameraToggle();
 	}
 	if (input->edit) {
-		// Simulate edit button press
 		Button_EditObject();
 	}
 }
