@@ -92,6 +92,9 @@
     <ClCompile Include="ResourceHandler.cpp">
       <Filter>Tool</Filter>
     </ClCompile>
+    <ClCompile Include="TerrainManipulator.cpp">
+      <Filter>Tool</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DeviceResources.h">
@@ -172,6 +175,9 @@
       <Filter>MFC</Filter>
     </ClInclude>
     <ClInclude Include="ResourceHandler.h">
+      <Filter>Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainManipulator.h">
       <Filter>Tool</Filter>
     </ClInclude>
   </ItemGroup>

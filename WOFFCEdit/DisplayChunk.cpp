@@ -183,6 +183,19 @@ void DisplayChunk::GenerateHeightmap()
 	//insert how YOU want to update the heigtmap here! :D
 }
 
+void DisplayChunk::Flatten()
+{
+	for (size_t i = 0; i < TERRAINRESOLUTION; i++)
+	{
+		for (size_t j = 0; j < TERRAINRESOLUTION; j++)
+		{
+			size_t index = (TERRAINRESOLUTION * i) + j;
+			m_heightMap[index] = 0;
+		}
+	}
+	UpdateTerrain();
+}
+
 void DisplayChunk::CalculateTerrainNormals()
 {
 	int index1, index2, index3, index4;

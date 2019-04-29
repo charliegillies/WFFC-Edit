@@ -224,20 +224,6 @@ void Game::Render()
 		DrawGrid(xaxis, yaxis, g_XMZero, 512, 512, Colors::Gray);
 	}
 
-	//CAMERA POSITION ON HUD
-	if (m_inputCommands.lostFocus) {
-
-		m_sprites->Begin();
-		auto point = m_camera.screenToWorld(m_handle,
-			m_screenDimensions.right - m_screenDimensions.left,
-			m_screenDimensions.bottom - m_screenDimensions.top,
-			m_world);
-
-		std::wstring var = m_camera.getDebugPosition();
-		m_font->DrawString(m_sprites.get(), var.c_str(), XMFLOAT2(0, 0), Colors::Yellow);
-		m_sprites->End();
-	}
-
 	//RENDER OBJECTS FROM SCENEGRAPH
 	int numRenderObjects = m_displayList.size();
 	for (int i = 0; i < numRenderObjects; i++)
@@ -477,6 +463,11 @@ void Game::BuildDisplayChunk(ChunkObject * SceneChunk)
 void Game::SaveDisplayChunk(ChunkObject * SceneChunk)
 {
 	m_displayChunk.SaveHeightMap();			//save heightmap to file.
+}
+
+DisplayChunk * Game::getDisplayChunk()
+{
+	return &m_displayChunk;
 }
 
 bool Game::toggleWireframe()

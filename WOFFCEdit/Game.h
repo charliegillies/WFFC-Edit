@@ -50,6 +50,7 @@ public:
 	void BuildDisplayChunk(ChunkObject *SceneChunk);
 	void SaveDisplayChunk(ChunkObject *SceneChunk);	//saves geometry et al
 	void ClearDisplayList();
+	DisplayChunk* getDisplayChunk();
 
 	// Toggles for render modes
 	bool toggleWireframe();

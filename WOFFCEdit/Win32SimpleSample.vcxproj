@@ -187,6 +187,7 @@
     <ClCompile Include="SceneObject.cpp" />
     <ClCompile Include="SelectDialogue.cpp" />
     <ClCompile Include="sqlite3.c" />
+    <ClCompile Include="TerrainManipulator.cpp" />
     <ClCompile Include="ToolMain.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
@@ -217,6 +218,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="StepTimer.h" />
     <ClInclude Include="MFCMain.h" />
+    <ClInclude Include="TerrainManipulator.h" />
     <ClInclude Include="ToolMain.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>

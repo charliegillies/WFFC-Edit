@@ -33,7 +33,6 @@ void Camera::handleInput(InputCommands const & input, const float deltaTime, con
 		moveTowards(obj, deltaTime);
 	}
 
-	static const float alt_speed_mult = 1.5f;
 	Vector3 planarMotionVector = m_camLookDirection;
 	planarMotionVector.y = 0.0;
 

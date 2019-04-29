@@ -18,6 +18,9 @@ BEGIN_MESSAGE_MAP(MFCMain, CWinApp)
 	ON_COMMAND(ID_BUTTON_MOVE, &MFCMain::Button_TranslateToggle)
 	ON_COMMAND(ID_BUTTON_EDIT_OBJECT, &MFCMain::Button_EditObject)
 	ON_COMMAND(ID_BUTTON_BROWSE_HIERARCHY, &MFCMain::Button_BrowseHierarchy)
+
+	ON_COMMAND(ID_BUTTON_FLATTEN_TERRAIN, &MFCMain::Button_FlattenTerrain)
+
 	ON_UPDATE_COMMAND_UI(ID_INDICATOR_TOOL, &CMyFrame::OnUpdatePage)
 END_MESSAGE_MAP()
 
@@ -238,6 +241,11 @@ void MFCMain::Button_EditObject()
 		// if not, let the user know..
 		MessageBox(NULL, L"No selected object. Please select an object before editing.", L"Object Editor", MB_OK);
 	}
+}
+
+void MFCMain::Button_FlattenTerrain()
+{
+	m_toolSystem.onFlattenTerrain();
 }
 
 void MFCMain::ChangeEditorMode(const EditorMode mode)

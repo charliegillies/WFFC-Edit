@@ -178,6 +178,11 @@ SceneObject * ToolMain::getSelectedObject()
 	return m_graph.getObjectById(m_selectedId);
 }
 
+void ToolMain::onFlattenTerrain()
+{
+	m_terrain.flatten(m_d3dRenderer.getDisplayChunk());
+}
+
 ResourceHandler * ToolMain::getResourceHandler()
 {
 	return &m_resources;

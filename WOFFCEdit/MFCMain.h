@@ -72,5 +72,8 @@ private:
 	afx_msg void Button_BrowseHierarchy();
 	afx_msg void Button_EditObject();
 
+	// Terrain edit controls
+	afx_msg void Button_FlattenTerrain();
+
 	DECLARE_MESSAGE_MAP()	// required macro for message map functionality  One per class
 };
