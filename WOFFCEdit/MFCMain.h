@@ -13,6 +13,20 @@
 #include "SelectDialogue.h"
 #include "ObjectEditorDialogue.h"
 
+class MFCMain;
+
+class ChangeEditorModeCommand : public Command {
+private:
+	EditorMode m_next, m_last;
+	MFCMain* m_main;
+public:
+	ChangeEditorModeCommand(EditorMode next, EditorMode last, MFCMain* main);
+	// Inherited via Command
+	virtual void execute(ToolMain * tool, bool asRedo) override;
+	virtual void undo(ToolMain * tool) override;
+	virtual std::wstring get_label() override;
+};
+
 class MFCMain : public CWinApp 
 {
 public:
@@ -22,6 +36,7 @@ public:
 	int  Run();
 
 	void ProcessInput(InputCommands * input);
+	void ChangeEditorMode(const EditorMode mode);
 
 private:
 	CMyFrame * m_frame;	//handle to the frame where all our UI is
@@ -56,8 +71,6 @@ private:
 
 	afx_msg void Button_BrowseHiearchy();
 	afx_msg void Button_EditObject();
-
-	void ChangeEditorMode(const EditorMode mode);
 
 	DECLARE_MESSAGE_MAP()	// required macro for message map functionality  One per class
 };

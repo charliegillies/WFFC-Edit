@@ -3,10 +3,12 @@
 
 History::History(ToolMain* tool) : m_index(0), m_tool(tool)
 {
+	m_isDirty = false;
 }
 
 void History::log(Command* cmd)
 {
+	m_isDirty = true;
 	if (m_commandHistory.size() > 0) {
 		// Delete all recorded history between index+1:size
 		for (int i = m_index + 1, right = m_commandHistory.size(); i < right; i++) {
@@ -54,6 +56,16 @@ bool History::redo()
 	Command* next = m_commandHistory[m_index];
 	next->execute(m_tool, true);
 	return true;
+}
+
+bool History::isDirty() const
+{
+	return m_isDirty;
+}
+
+void History::setDirty(bool dirty)
+{
+	m_isDirty = dirty;
 }
 
 int History::num_commands()

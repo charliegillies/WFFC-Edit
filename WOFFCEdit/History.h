@@ -14,6 +14,7 @@ private:
 	std::vector<Command*> m_commandHistory;
 	int m_index;
 	ToolMain* m_tool;
+	bool m_isDirty;
 
 public:
 	History(ToolMain* tool);
@@ -21,6 +22,9 @@ public:
 	void log(Command* cmd);
 	bool undo();
 	bool redo();
+
+	bool isDirty() const;
+	void setDirty(bool);
 
 	int num_commands();
 

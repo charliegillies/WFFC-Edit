@@ -79,15 +79,14 @@ int MFCMain::Run()
 		}
 		else
 		{
-			int numCommands = m_history.num_commands();
-			m_toolSystem.Tick(&msg, &m_history);
-
 			// Check if there has been a change in the command history
 			// if there has, update the label.
-			if (numCommands != m_history.num_commands()) {
+			if (m_history.isDirty()) {
 				m_frame->m_wndStatusBar.SetPaneText(1, m_history.get_current_cmd_label().c_str(), 1);
+				m_history.setDirty(false);
 			}
 
+			m_toolSystem.Tick(&msg, &m_history);
 
 			// Finally, process input commands at the top level
 			InputCommands* input = m_toolSystem.getInputCommands();
@@ -146,16 +145,16 @@ void MFCMain::ProcessInput(InputCommands * input)
 		}
 	}
 	if (input->translate) {
-		ChangeEditorMode(EditorMode::MOVE);
+		Button_TranslateToggle();
 	}
 	if (input->rotate) {
-		ChangeEditorMode(EditorMode::ROTATE);
+		Button_RotateToggle();
 	}
 	if (input->scale) {
-		ChangeEditorMode(EditorMode::SCALE);
+		Button_ScaleToggle();
 	}
 	if (input->camera) {
-		ChangeEditorMode(EditorMode::CAMERA);
+		Button_CameraToggle();
 	}
 	if (input->edit) {
 		// Simulate edit button press
@@ -209,22 +208,22 @@ void MFCMain::Button_ToggleGrid()
 
 void MFCMain::Button_CameraToggle()
 {
-	ChangeEditorMode(EditorMode::CAMERA);
+	m_history.log(new ChangeEditorModeCommand(EditorMode::CAMERA, m_mode, this));
 }
 
 void MFCMain::Button_TranslateToggle()
 {
-	ChangeEditorMode(EditorMode::MOVE);
+	m_history.log(new ChangeEditorModeCommand(EditorMode::MOVE, m_mode, this));
 }
 
 void MFCMain::Button_RotateToggle()
 {
-	ChangeEditorMode(EditorMode::ROTATE);
+	m_history.log(new ChangeEditorModeCommand(EditorMode::ROTATE, m_mode, this));
 }
 
 void MFCMain::Button_ScaleToggle()
 {
-	ChangeEditorMode(EditorMode::SCALE);
+	m_history.log(new ChangeEditorModeCommand(EditorMode::SCALE, m_mode, this));
 }
 
 void MFCMain::Button_BrowseHiearchy()
@@ -269,4 +268,22 @@ MFCMain::MFCMain() : m_history(&m_toolSystem)
 
 MFCMain::~MFCMain()
 {
+}
+
+ChangeEditorModeCommand::ChangeEditorModeCommand(EditorMode next, EditorMode last, MFCMain* main)
+	: m_next(next), m_last(last), m_main(main) {}
+
+void ChangeEditorModeCommand::execute(ToolMain * tool, bool asRedo)
+{
+	m_main->ChangeEditorMode(m_next);
+}
+
+void ChangeEditorModeCommand::undo(ToolMain * tool)
+{
+	m_main->ChangeEditorMode(m_last);
+}
+
+std::wstring ChangeEditorModeCommand::get_label()
+{
+	return L"Changed editor mode";
 }
