@@ -23,6 +23,11 @@ Camera::Camera()
 	m_camRight = Vector3::Zero;
 }
 
+void Camera::setHWND(HWND hwnd)
+{
+	m_hwnd = hwnd;
+}
+
 void Camera::handleInput(InputCommands const & input, const float deltaTime, const SceneObject* obj)
 {
 	// no input focus? don't process the commands.
@@ -112,11 +117,11 @@ bool Camera::moveTowards(const SceneObject * obj, const float time)
 	return false;
 }
 
-DirectX::SimpleMath::Vector3 Camera::screenToWorld(HWND hwnd, int width, int height, DirectX::SimpleMath::Matrix worldMatrix)
+DirectX::SimpleMath::Vector3 Camera::screenToWorld(int width, int height, DirectX::SimpleMath::Matrix worldMatrix) const
 {
 	POINT p;
 	GetCursorPos(&p);
-	ScreenToClient(hwnd, &p);
+	ScreenToClient(m_hwnd, &p);
 	Vector3 cursorPosition = Vector3(p.x, p.y, 1.0f);
 
 	// Convert the coordinates to normalised device coordinates (-1:1)

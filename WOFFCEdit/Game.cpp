@@ -38,6 +38,7 @@ Game::~Game()
 void Game::Initialize(HWND window, int width, int height)
 {
 	m_handle = window;
+	m_camera.setHWND(window);
 	m_gamePad = std::make_unique<GamePad>();
 	m_keyboard = std::make_unique<Keyboard>();
 	m_mouse = std::make_unique<Mouse>();

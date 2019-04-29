@@ -16,13 +16,16 @@ private:
 	float m_camRotRate;
 	float m_moveSpeed;
 
+	HWND m_hwnd;
+
 public:
 	Camera();
 
+	void setHWND(HWND hwnd);
 	void handleInput(InputCommands const& commands, const float deltaTime, const SceneObject* so);
 	bool moveTowards(const SceneObject* obj, const float time);
 
-	DirectX::SimpleMath::Vector3 screenToWorld(HWND hwnd, int width, int height, DirectX::SimpleMath::Matrix worldMatrix);
+	DirectX::SimpleMath::Vector3 screenToWorld(int width, int height, DirectX::SimpleMath::Matrix worldMatrix) const;
 
 	DirectX::SimpleMath::Matrix createViewMatrix();
 
