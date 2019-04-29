@@ -16,6 +16,9 @@ struct InputCommands {
 	bool translate, rotate, scale, camera, edit;
 	bool del;
 
+	// Information about the window .. 
+	bool lostFocus;
+
 	// Modifiers
 	bool ctrl, shift;
 

@@ -25,16 +25,19 @@ Camera::Camera()
 
 void Camera::handleInput(InputCommands const & input, const float deltaTime)
 {
-	static const float speedIncrease = 1.5f;
+	// no input focus? don't process the commands.
+	if (input.lostFocus) return;
+
+	static const float shift_speed_mult = 1.5f;
 	Vector3 planarMotionVector = m_camLookDirection;
 	planarMotionVector.y = 0.0;
 
 	float moveSpeed = m_moveSpeed;
-	if (input.shift) moveSpeed *= speedIncrease;
+	if (input.shift) moveSpeed *= shift_speed_mult;
 	moveSpeed *= deltaTime;
 
 	float rotateSpeed = m_camRotRate;
-	if (input.shift) rotateSpeed *= speedIncrease;
+	if (input.shift) rotateSpeed *= shift_speed_mult;
 	rotateSpeed *= deltaTime;
 
 	if (input.rotateRight) {

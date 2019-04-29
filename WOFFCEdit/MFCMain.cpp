@@ -92,6 +92,7 @@ int MFCMain::Run()
 			// as we need to check for state changes, caused by triggering
 			// of shortcuts.
 			InputCommands* input = m_toolSystem.getInputCommands();
+			input->lostFocus = IsWindowVisible(m_selectDialogue.GetSafeHwnd()) || IsWindowVisible(m_objectEditDialogue.GetSafeHwnd());
 			ProcessInput(input);
 		}
 	}
@@ -101,6 +102,7 @@ int MFCMain::Run()
 
 void MFCMain::ProcessInput(InputCommands * input)
 {
+	if (input->lostFocus) return;
 	if (input->undo) {
 		// attempt to undo the history, change the label if we succeed
 		if (m_history.undo()) {
