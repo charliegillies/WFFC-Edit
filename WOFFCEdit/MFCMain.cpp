@@ -1,6 +1,6 @@
 #include "MFCMain.h"
 #include "resource.h"
-
+#include "EditorCommands.h"
 
 BEGIN_MESSAGE_MAP(MFCMain, CWinApp)
 	ON_COMMAND(ID_FILE_QUIT, &MFCMain::MenuFileQuit)
@@ -17,7 +17,7 @@ BEGIN_MESSAGE_MAP(MFCMain, CWinApp)
 	ON_COMMAND(ID_BUTTON_SCALE, &MFCMain::Button_ScaleToggle)
 	ON_COMMAND(ID_BUTTON_MOVE, &MFCMain::Button_TranslateToggle)
 	ON_COMMAND(ID_BUTTON_EDIT_OBJECT, &MFCMain::Button_EditObject)
-	ON_COMMAND(ID_BUTTON_BROWSE_HIERARCHY, &MFCMain::Button_BrowseHiearchy)
+	ON_COMMAND(ID_BUTTON_BROWSE_HIERARCHY, &MFCMain::Button_BrowseHierarchy)
 	ON_UPDATE_COMMAND_UI(ID_INDICATOR_TOOL, &CMyFrame::OnUpdatePage)
 END_MESSAGE_MAP()
 
@@ -134,15 +134,11 @@ void MFCMain::ProcessInput(InputCommands * input)
 	}
 	if (input->del) {
 		SceneObject* selected = m_toolSystem.getSelectedObject();
-		if (selected != nullptr) {
-			m_toolSystem.getGraph()->removeSceneObject(*selected);
-		}
+		if (selected != nullptr)
+			m_history.log(new DeleteSceneObjectCommand(selected));
 	}
 	if (input->space) {
-		SceneObject* selected = m_toolSystem.getSelectedObject();
-		if (selected != nullptr) {
-			m_toolSystem.moveCameraToTarget();
-		}
+		m_toolSystem.moveCameraToTarget();
 	}
 	if (input->translate) {
 		Button_TranslateToggle();
@@ -226,7 +222,7 @@ void MFCMain::Button_ScaleToggle()
 	m_history.log(new ChangeEditorModeCommand(EditorMode::SCALE, m_mode, this));
 }
 
-void MFCMain::Button_BrowseHiearchy()
+void MFCMain::Button_BrowseHierarchy()
 {
 	MenuEditSelect();
 }

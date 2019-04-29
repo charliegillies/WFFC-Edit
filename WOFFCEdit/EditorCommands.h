@@ -36,3 +36,16 @@ public:
 	virtual void undo(ToolMain* tool) override;
 	virtual std::wstring get_label() override;
 };
+
+class DeleteSceneObjectCommand : public Command {
+private:
+	SceneObject m_object;
+
+public:
+	DeleteSceneObjectCommand(const SceneObject* obj);
+
+	// Inherited via Command
+	virtual void execute(ToolMain * tool, bool asRedo) override;
+	virtual void undo(ToolMain * tool) override;
+	virtual std::wstring get_label() override;
+};

@@ -48,3 +48,24 @@ std::wstring ChangeSelectionCommand::get_label()
 {
 	return L"Selected object: " + std::to_wstring(m_newSelectionId);
 }
+
+// Delete scene object command implementation 
+DeleteSceneObjectCommand::DeleteSceneObjectCommand(const SceneObject * obj)
+{
+	m_object = *obj;
+}
+
+void DeleteSceneObjectCommand::execute(ToolMain * tool, bool asRedo)
+{
+	tool->getGraph()->removeSceneObject(m_object);
+}
+
+void DeleteSceneObjectCommand::undo(ToolMain * tool)
+{
+	m_object = tool->getGraph()->insertSceneObject(std::move(m_object));
+}
+
+std::wstring DeleteSceneObjectCommand::get_label()
+{
+	return L"Deleted scene object";
+}
