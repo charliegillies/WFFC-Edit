@@ -66,11 +66,11 @@ void SelectDialogue::SetObjectData(ToolMain* tool)
 	}
 
 	// if a selection row was found, now set the default selection .. 
-	if (selected_row != -1) {
-		m_list.SetFocus();
-		m_list.SetItemState(selected_row, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
-		m_list.SetSelectionMark(selected_row);
-	}
+	//if (selected_row != -1) {
+	//	m_list.SetFocus();
+	//	m_list.SetItemState(selected_row, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED );
+	//	m_list.SetSelectionMark(selected_row);
+	//}
 }
 
 void SelectDialogue::DoDataExchange(CDataExchange* pDX)

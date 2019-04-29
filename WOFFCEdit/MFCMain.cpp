@@ -88,12 +88,14 @@ int MFCMain::Run()
 				m_frame->m_wndStatusBar.SetPaneText(1, m_history.get_current_cmd_label().c_str(), 1);
 			}
 
+
 			// Finally, process input commands at the top level
-			// as we need to check for state changes, caused by triggering
-			// of shortcuts.
 			InputCommands* input = m_toolSystem.getInputCommands();
+			// if the dialogue windows are open, game does not have focus!
 			input->lostFocus = IsWindowVisible(m_selectDialogue.GetSafeHwnd()) || IsWindowVisible(m_objectEditDialogue.GetSafeHwnd());
-			ProcessInput(input);
+			// check for state changes, caused by triggering of shortcuts.
+			if(!input->lostFocus) 
+				ProcessInput(input);
 		}
 	}
 
@@ -102,7 +104,6 @@ int MFCMain::Run()
 
 void MFCMain::ProcessInput(InputCommands * input)
 {
-	if (input->lostFocus) return;
 	if (input->undo) {
 		// attempt to undo the history, change the label if we succeed
 		if (m_history.undo()) {
