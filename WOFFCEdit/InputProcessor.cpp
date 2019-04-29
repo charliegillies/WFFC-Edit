@@ -12,7 +12,6 @@ InputCommands* InputProcessor::getCommands()
 
 const InputCommands& InputProcessor::tick()
 {
-	
 	if (m_inputCommands.ctrl) {
 		// Ctrl modifier is down, so check shortcuts!
 		m_inputCommands.undo = m_keyArray['Z'] && !m_lastKeyArray['Z']; // CTRL+Z

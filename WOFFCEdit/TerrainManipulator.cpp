@@ -34,14 +34,15 @@ void TerrainManipulator::sculpt(DisplayChunk* chunk, const Camera* camera, const
 	// then check if the ray intersects the plane!
 	float distance;
 	if (ray.Intersects(p, distance)) {
-		const float scalar = chunk->getResolutionScale();
+		const float scalar = chunk->GetPlaneUnitSize();
 
-		// calculate the intersection point on the plane
+		// Calculate the intersection point on the plane
 		Vector3 point = ray.position + (ray.direction * distance);
-		// terrain is positioned from -TERRAINRES/2:TERRAINRES/2. Set back!
+		// terrain is positioned from -TERRAINRES/2:TERRAINRES/2. Convert back.
 		int x = std::round(point.z / scalar) + (TERRAINRESOLUTION)/2;
 		int y = std::round(point.x / scalar) + (TERRAINRESOLUTION)/2;
 
+		// From our calculated coordinates, 
 		if (x >= 0 && x < TERRAINRESOLUTION && y >= 0 && y < TERRAINRESOLUTION) {
 			// in bounds! convert coordinates to 1d.. 
 			int index = (TERRAINRESOLUTION * x) + y;

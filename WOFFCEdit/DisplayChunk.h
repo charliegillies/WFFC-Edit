@@ -20,7 +20,6 @@ public:
 	void LoadHeightMap(std::shared_ptr<DX::DeviceResources>  DevResources);
 	void SaveHeightMap();			//saves the heigtmap back to file.
 	void UpdateTerrain();			//updates the geometry based on the heigtmap
-	void GenerateHeightmap();		//creates or alters the heightmap
 	std::unique_ptr<DirectX::PrimitiveBatch<DirectX::VertexPositionNormalTexture>>  m_batch;
 	std::unique_ptr<DirectX::BasicEffect>       m_terrainEffect;
 
@@ -32,7 +31,7 @@ public:
 
 	void RaiseCoordinateHeight(int index);
 	void LowerCoordinateHeight(int index);
-	const float getResolutionScale() const;
+	const float GetPlaneUnitSize() const;
 
 private:
 	

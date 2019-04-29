@@ -137,11 +137,6 @@ void DisplayChunk::LoadHeightMap(std::shared_ptr<DX::DeviceResources>  DevResour
 
 void DisplayChunk::SaveHeightMap()
 {
-/*	for (size_t i = 0; i < TERRAINRESOLUTION*TERRAINRESOLUTION; i++)
-	{
-		m_heightMap[i] = 0;
-	}*/
-
 	FILE *pFile = NULL;
 
 	// Open The File In Read / Binary Mode.
@@ -173,11 +168,6 @@ void DisplayChunk::UpdateTerrain()
 	}
 	CalculateTerrainNormals();
 
-}
-
-void DisplayChunk::GenerateHeightmap()
-{
-	//insert how YOU want to update the heigtmap here! :D
 }
 
 void DisplayChunk::Flatten()
@@ -222,7 +212,7 @@ void DisplayChunk::LowerCoordinateHeight(int index)
 	UpdateTerrain();
 }
 
-const float DisplayChunk::getResolutionScale() const
+const float DisplayChunk::GetPlaneUnitSize() const
 {
 	return m_terrainPositionScalingFactor;
 }
