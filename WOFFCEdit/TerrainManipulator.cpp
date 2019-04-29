@@ -18,25 +18,32 @@ void TerrainManipulator::flatten(DisplayChunk* chunk)
 	chunk->Flatten();
 }
 
-void TerrainManipulator::manipulate(DisplayChunk * chunk, Camera * camera, const InputCommands * input)
+void TerrainManipulator::sculpt(DisplayChunk* chunk, const Camera* camera, const InputCommands* input)
 {
+	bool raise = input->leftMouse != ClickState::UP;
+	bool lower = input->rightMouse != ClickState::UP;
+	//if (!raise && !lower) return;
+
 	// Form a ray from the cameras position & direction
 	Ray ray(camera->getPosition(), camera->getDirection());
 
 	// then check if the ray intersects the plane!
 	float distance;
 	if (ray.Intersects(p, distance)) {
+		const float scalar = chunk->getResolutionScale();
 		// calculate the intersection point on the plane
 		Vector3 point = ray.position + (ray.direction * distance);
-		// the terrain is positioned from -64 to 64 (TERRAINRESOLUTION/2)
-		// so check if our point is in range?
-		int x = static_cast<int>(point.x / 4.0f) + (TERRAINRESOLUTION)/2;
-		int y = static_cast<int>(point.z / 4.0f) + (TERRAINRESOLUTION)/2;
+		// terrain is positioned from -TERRAINRES/2:TERRAINRES/2. Set back!
+		int x = static_cast<int>(point.x / scalar) + (TERRAINRESOLUTION)/2;
+		int y = static_cast<int>(point.z / scalar) + (TERRAINRESOLUTION)/2;
 
 		if (x >= 0 && x < TERRAINRESOLUTION && y >= 0 && y < TERRAINRESOLUTION) {
 			// in bounds! convert coordinates to 1d.. 
 			int index = (TERRAINRESOLUTION * x) + y;
-			chunk->SetCoordinateHeight(index, 50);
+			if (raise)
+				chunk->RaiseCoordinateHeight(index);
+			else if (lower)
+				chunk->LowerCoordinateHeight(index);
 		}
 	}
 

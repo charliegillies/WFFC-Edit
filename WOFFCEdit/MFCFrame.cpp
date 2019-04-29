@@ -25,6 +25,7 @@ void CMyFrame::EditorModeChanged(const EditorMode mode)
 	m_worldEditToolbar.GetToolBarCtrl().PressButton(ID_BUTTON_MOVE, mode == EditorMode::MOVE ? 1 : 0);
 	m_worldEditToolbar.GetToolBarCtrl().PressButton(ID_BUTTON_SCALE, mode == EditorMode::SCALE ? 1 : 0);
 	m_worldEditToolbar.GetToolBarCtrl().PressButton(ID_BUTTON_ROTATE, mode == EditorMode::ROTATE ? 1 : 0);
+	m_worldEditToolbar.GetToolBarCtrl().PressButton(ID_BUTTON_SCULPT, mode == EditorMode::TERRAIN_SCULPT ? 1 : 0);
 }
 
 void CMyFrame::ChangeWireframeButtonState(const bool enabled)

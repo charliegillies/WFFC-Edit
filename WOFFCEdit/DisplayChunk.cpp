@@ -9,7 +9,7 @@ DisplayChunk::DisplayChunk()
 {
 	//terrain size in meters. note that this is hard coded here, we COULD get it from the terrain chunk along with the other info from the tool if we want to be more flexible.
 	m_terrainSize = 512;
-	m_terrainHeightScale = 0.25;  //convert our 0-256 terrain to 64
+	m_terrainHeightScale = (float)TERRAINRESOLUTION/(float)m_terrainSize;  //convert our 0-256 terrain to 64
 	m_textureCoordStep = 1.0 / (TERRAINRESOLUTION-1);	//-1 becuase its split into chunks. not vertices.  we want tthe last one in each row to have tex coord 1
 	m_terrainPositionScalingFactor = m_terrainSize / (TERRAINRESOLUTION-1);
 }
@@ -134,8 +134,6 @@ void DisplayChunk::LoadHeightMap(std::shared_ptr<DX::DeviceResources>  DevResour
 		);
 
 	m_batch = std::make_unique<PrimitiveBatch<VertexPositionNormalTexture>>(devicecontext);
-
-	
 }
 
 void DisplayChunk::SaveHeightMap()
@@ -203,16 +201,41 @@ void DisplayChunk::SetCoordinateHeight(int index, BYTE height)
 	UpdateTerrain();
 }
 
+void DisplayChunk::RaiseCoordinateHeight(int index)
+{
+	if (index >= TERRAINRESOLUTION * TERRAINRESOLUTION) return;
+	if (m_heightMap[index] + SCULPT_HEIGHT > 255)
+		m_heightMap[index] = 255;
+	else
+		m_heightMap[index] += SCULPT_HEIGHT;
+
+	UpdateTerrain();
+}
+
+void DisplayChunk::LowerCoordinateHeight(int index)
+{
+	if (index >= TERRAINRESOLUTION * TERRAINRESOLUTION) return;
+	if (m_heightMap[index] - SCULPT_HEIGHT < 0)
+		m_heightMap[index] = 0;
+	else
+		m_heightMap[index] -= SCULPT_HEIGHT;
+
+	UpdateTerrain();
+}
+
+const float DisplayChunk::getResolutionScale() const
+{
+	return m_terrainPositionScalingFactor;
+}
+
 void DisplayChunk::CalculateTerrainNormals()
 {
 	int index1, index2, index3, index4;
 	DirectX::SimpleMath::Vector3 upDownVector, leftRightVector, normalVector;
 
-
-
-	for (int i = 0; i<(TERRAINRESOLUTION - 1); i++)
+	for (int i = 0; i < (TERRAINRESOLUTION - 1); i++)
 	{
-		for (int j = 0; j<(TERRAINRESOLUTION - 1); j++)
+		for (int j = 0; j < (TERRAINRESOLUTION - 1); j++)
 		{
 			upDownVector.x = (m_terrainGeometry[i + 1][j].position.x - m_terrainGeometry[i - 1][j].position.x);
 			upDownVector.y = (m_terrainGeometry[i + 1][j].position.y - m_terrainGeometry[i - 1][j].position.y);

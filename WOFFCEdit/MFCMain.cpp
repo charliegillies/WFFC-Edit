@@ -20,6 +20,7 @@ BEGIN_MESSAGE_MAP(MFCMain, CWinApp)
 	ON_COMMAND(ID_BUTTON_BROWSE_HIERARCHY, &MFCMain::Button_BrowseHierarchy)
 
 	ON_COMMAND(ID_BUTTON_FLATTEN_TERRAIN, &MFCMain::Button_FlattenTerrain)
+	ON_COMMAND(ID_BUTTON_SCULPT, &MFCMain::Button_SculptTerrain)
 
 	ON_UPDATE_COMMAND_UI(ID_INDICATOR_TOOL, &CMyFrame::OnUpdatePage)
 END_MESSAGE_MAP()
@@ -246,6 +247,11 @@ void MFCMain::Button_EditObject()
 void MFCMain::Button_FlattenTerrain()
 {
 	m_toolSystem.onFlattenTerrain();
+}
+
+void MFCMain::Button_SculptTerrain()
+{
+	m_history.log(new ChangeEditorModeCommand(EditorMode::TERRAIN_SCULPT, m_mode, this));
 }
 
 void MFCMain::ChangeEditorMode(const EditorMode mode)

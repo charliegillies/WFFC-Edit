@@ -74,6 +74,7 @@ private:
 
 	// Terrain edit controls
 	afx_msg void Button_FlattenTerrain();
+	afx_msg void Button_SculptTerrain();
 
 	DECLARE_MESSAGE_MAP()	// required macro for message map functionality  One per class
 };

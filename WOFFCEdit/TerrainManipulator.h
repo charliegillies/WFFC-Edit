@@ -7,6 +7,6 @@ struct InputCommands;
 class TerrainManipulator {
 public:
 	void flatten(DisplayChunk* chunk);
-	void manipulate(DisplayChunk* chunk, Camera* camera, const InputCommands* input);
+	void sculpt(DisplayChunk* chunk, const Camera* camera, const InputCommands* input);
 
 };

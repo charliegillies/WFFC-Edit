@@ -16,7 +16,7 @@
 #include <vector>
 
 enum class EditorMode {
-	CAMERA, MOVE, ROTATE, SCALE
+	CAMERA, MOVE, ROTATE, SCALE, TERRAIN_SCULPT
 };
 
 class ToolMain

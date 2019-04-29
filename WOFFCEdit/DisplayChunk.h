@@ -7,6 +7,7 @@
 
 //geometric resoltuion - note,  hard coded.
 #define TERRAINRESOLUTION 128
+const int SCULPT_HEIGHT = 1.0f;
 
 class DisplayChunk
 {
@@ -28,6 +29,10 @@ public:
 
 	void Flatten();
 	void SetCoordinateHeight(int index, BYTE height);
+
+	void RaiseCoordinateHeight(int index);
+	void LowerCoordinateHeight(int index);
+	const float getResolutionScale() const;
 
 private:
 	

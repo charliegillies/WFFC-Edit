@@ -88,11 +88,13 @@ void ToolMain::Tick(MSG *msg, History* history)
 		}
 	}
 
-	m_terrain.manipulate(m_d3dRenderer.getDisplayChunk(), m_d3dRenderer.getCamera(), &commands);
-
 	SceneObject* selected = getSelectedObject();
 	if (m_mode == EditorMode::CAMERA) {
 		m_d3dRenderer.setCameraLock(false);
+	}
+	else if (m_mode == EditorMode::TERRAIN_SCULPT) {
+		m_d3dRenderer.setCameraLock(false);
+		m_terrain.sculpt(m_d3dRenderer.getDisplayChunk(), m_d3dRenderer.getCamera(), &commands);
 	}
 	else {
 		// lock camera if we are not in camera mode 
