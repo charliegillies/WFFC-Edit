@@ -57,12 +57,13 @@ void Camera::handleInput(InputCommands const & input, const float deltaTime, con
 		Vector2 mVelocity = Vector2(input.mouseVelocityX, input.mouseVelocityY);
 		mVelocity.Normalize();
 		mVelocity = mVelocity * rotateSpeed * 12.5f;
-		m_camOrientation += Vector3(0.0f, mVelocity.x, 0.0f);
+		m_camOrientation += Vector3(mVelocity.y, mVelocity.x, 0.0f);
 	}
 
-	//create look direction from Euler angles in m_camOrientation
-	m_camLookDirection.x = sin((m_camOrientation.y)*3.1415 / 180);
-	m_camLookDirection.z = cos((m_camOrientation.y)*3.1415 / 180);
+	// Calculate the forward vector from our orientation
+	m_camLookDirection.x = sin((m_camOrientation.y)*3.1415 / 180.0f);
+	m_camLookDirection.y = tan((m_camOrientation.x)*3.1415 / 180.0f);
+	m_camLookDirection.z = cos((m_camOrientation.y)*3.1415 / 180.0f);
 	m_camLookDirection.Normalize();
 
 	//create right vector from look Direction
