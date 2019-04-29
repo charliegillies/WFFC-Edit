@@ -33,16 +33,14 @@ void Camera::handleInput(InputCommands const & input, const float deltaTime, con
 		moveTowards(obj, deltaTime);
 	}
 
-	static const float shift_speed_mult = 1.5f;
+	static const float alt_speed_mult = 1.5f;
 	Vector3 planarMotionVector = m_camLookDirection;
 	planarMotionVector.y = 0.0;
 
 	float moveSpeed = m_moveSpeed;
-	if (input.shift) moveSpeed *= shift_speed_mult;
 	moveSpeed *= deltaTime;
 
 	float rotateSpeed = m_camRotRate;
-	if (input.shift) rotateSpeed *= shift_speed_mult;
 	rotateSpeed *= deltaTime;
 
 	if (input.rotateRight) {
@@ -94,7 +92,7 @@ void Camera::handleInput(InputCommands const & input, const float deltaTime, con
 	m_camLookAt = m_camPosition + m_camLookDirection;
 }
 
-bool Camera::moveTowards(const SceneObject * obj, float time)
+bool Camera::moveTowards(const SceneObject * obj, const float time)
 {
 	Vector3 target = Vector3(obj->posX, obj->posY, obj->posZ);
 	Vector3 position = m_camPosition;
@@ -104,16 +102,13 @@ bool Camera::moveTowards(const SceneObject * obj, float time)
 		return true;
 	}
 
-	// move towards .. 
+	// move towards the target!
 	Vector3 delta = target - position;
 	delta.Normalize();
 	delta *= time;
-	delta *= m_moveSpeed * 2.0f;
+	delta *= m_moveSpeed * 4.0f;
 	m_camPosition += delta;
-
-	// now rotate to look at it .. 
-
-
+	
 	return false;
 }
 
