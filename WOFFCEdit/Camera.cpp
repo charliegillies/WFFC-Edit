@@ -139,6 +139,11 @@ DirectX::SimpleMath::Matrix Camera::createViewMatrix()
 	return DirectX::SimpleMath::Matrix::CreateLookAt(getPosition(), getLookAt(), getUp());
 }
 
+DirectX::SimpleMath::Vector3 Camera::getDirection() const
+{
+	return m_camLookDirection;
+}
+
 DirectX::SimpleMath::Vector3 Camera::getPosition() const
 {
 	return m_camPosition;

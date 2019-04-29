@@ -1,5 +1,7 @@
 #pragma once
+
 #include "pch.h"
+
 #include "DeviceResources.h"
 #include "ChunkObject.h"
 
@@ -25,6 +27,7 @@ public:
 	Microsoft::WRL::ComPtr<ID3D11InputLayout>   m_terrainInputLayout;
 
 	void Flatten();
+	void SetCoordinateHeight(int index, BYTE height);
 
 private:
 	

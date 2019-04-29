@@ -88,6 +88,8 @@ void ToolMain::Tick(MSG *msg, History* history)
 		}
 	}
 
+	m_terrain.manipulate(m_d3dRenderer.getDisplayChunk(), m_d3dRenderer.getCamera(), &commands);
+
 	SceneObject* selected = getSelectedObject();
 	if (m_mode == EditorMode::CAMERA) {
 		m_d3dRenderer.setCameraLock(false);

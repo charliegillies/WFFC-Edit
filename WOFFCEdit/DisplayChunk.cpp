@@ -196,6 +196,13 @@ void DisplayChunk::Flatten()
 	UpdateTerrain();
 }
 
+void DisplayChunk::SetCoordinateHeight(int index, BYTE height)
+{
+	if (index >= TERRAINRESOLUTION * TERRAINRESOLUTION) return;
+	m_heightMap[index] = height;
+	UpdateTerrain();
+}
+
 void DisplayChunk::CalculateTerrainNormals()
 {
 	int index1, index2, index3, index4;
